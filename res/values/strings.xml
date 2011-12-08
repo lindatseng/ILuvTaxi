@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, MPP_UI!</string>
+    <string name="app_name">ILuvTaxi</string>
+    <string name="gd_pin">大頭針</string>
+    <string name="gd_mylocation">我的位置</string>
+    <string name="gd_favorite">我的最愛</string>
+    <string name="gd_mySearch">搜尋</string>
+
+</resources>

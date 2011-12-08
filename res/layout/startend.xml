@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background3" >
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="60dp"
+            android:layout_height="48dp"
+            android:src="@drawable/start" />
+
+        <EditText
+            android:id="@+id/et_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:hint="起點" >
+
+        </EditText>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="wrap_content"
+        android:layout_height="2dp"
+        android:background="#ffffffff" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/background3"
+         >
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="60dp"
+            android:layout_height="48dp"
+            android:src="@drawable/end" />
+
+        <EditText
+            android:id="@+id/et_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical" 
+            android:hint="終點"/>
+
+    </LinearLayout>
+
+</LinearLayout>
