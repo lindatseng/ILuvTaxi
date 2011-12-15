@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:orientation="horizontal" 
-            android:background="@color/background3"
+            android:background="@color/layout_back"
             android:weightSum="8">
 
 
@@ -25,7 +25,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:text="←" 
-                    android:background="@color/background3"/>
+                    android:background="@color/trans"/>
 
 
 
@@ -76,7 +76,7 @@
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
                     android:text="→" 
-                    android:background="@color/background3"/>
+                    android:background="@color/trans"/>
 
         </LinearLayout>
         

@@ -3,68 +3,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
+    
 
-    <include layout="@layout/colorstrip" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout4"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        android:background="@color/background1" >
-
-        <Button
-            android:id="@+id/bt_show"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="show" />
-
-        <Button
-            android:id="@+id/bt_go"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="go" />
-
-        <Button
-            android:id="@+id/bt_result"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="result" />
-
-    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
-        <com.google.android.maps.MapView
-            android:id="@+id/mapview"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:apiKey="0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig"
-            android:clickable="true">
-        </com.google.android.maps.MapView>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <com.google.android.maps.MapView
+                android:id="@+id/mapview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:apiKey="0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig"
+                android:clickable="true" />
+
+            <ImageView
+                android:id="@+id/drag_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/startpoint"
+                android:visibility="gone" />
+            
+        </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/layout_startend"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" 
-            android:visibility="invisible">
+            android:layout_height="fill_parent"
+            android:visibility="invisible" >
 
-            <include layout="@layout/startend" android:id="@+id/view_startend"/>
+            <include
+                android:id="@+id/view_startend"
+                layout="@layout/startend" />
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/layout_result"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" 
-            android:visibility="invisible">
-            
-           <include layout="@layout/rresult" android:id="@+id/view_routeResult" />
+            android:layout_height="fill_parent"
+            android:visibility="invisible" >
 
-            
-         </LinearLayout>
-        
+            <include
+                android:id="@+id/view_routeResult"
+                layout="@layout/rresult" />
+        </LinearLayout>
     </FrameLayout>
 
 </LinearLayout>

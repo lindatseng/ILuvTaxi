@@ -3,12 +3,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-        <include layout="@layout/colorstrip"/>
-            <LinearLayout
-        android:id="@+id/linearLayout5"
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
-        android:background="#ff355689" >
+        android:orientation="horizontal"
+        android:paddingBottom="10dip"
+                android:paddingLeft="14dip"
+                android:paddingRight="14dip"
+                android:paddingTop="10dip"
+        android:background="@color/background1" >
+        
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+
+            android:text="我愛搭小黃"
+            android:textColor="@color/foreground1"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold" />
+
     </LinearLayout>
 
     

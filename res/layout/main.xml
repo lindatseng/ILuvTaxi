@@ -9,10 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
         android:orientation="horizontal"
-        android:paddingBottom="10dip"
+        android:paddingBottom="5dip"
                 android:paddingLeft="14dip"
                 android:paddingRight="14dip"
-                android:paddingTop="10dip"
+                android:paddingTop="5dip"
         android:background="@color/background1" >
         
         <TextView
@@ -25,160 +25,140 @@
             android:textColor="@color/foreground1"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold" />
+        
+         <Button
+            android:id="@+id/bt_show"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="set"
+           />
+
+        <Button
+            android:id="@+id/bt_go"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="go"
+            />
+
+        <Button
+            android:id="@+id/bt_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="result"
+           />
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+    <FrameLayout
+        android:id="@+id/frameLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="wrap_content" >
 
-        android:weightSum="1" >
-        <View
-                android:id="@+id/view1"
-                android:layout_width="wrap_content"
-                android:background="#ff000000"
-                android:layout_height="3px" />
-
-        <Button
-            android:id="@+id/home_bt_route"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            
-            android:layout_weight="0.5"
-            android:background="#ffeeeebb"
-            android:drawableTop="@drawable/route"
-            android:gravity="center"
-            android:text="Route"
-            android:textColor="#ff355689"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/home_bt_pricer"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="0.5"
-            android:background="#ffeeeebb"
-            android:text="Pricer" 
-            android:textStyle="bold"
-            android:textColor="#ff355689"
-            android:textSize="18sp"
-            android:drawableTop="@drawable/home_btn_starred_default"/>
-        <View
-
-                android:layout_width="wrap_content"
-                android:background="#ff000000"
-                android:layout_height="3px" />
-
-    </LinearLayout>
-    
-        
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
-        android:layout_width="match_parent"
-        android:layout_height="90dip"
-        android:layout_weight="2"
-        android:gravity="bottom" >
-        
         <LinearLayout
-        android:background="@color/background1"
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="2" >
 
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
-        
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:background="#ff335555"
-                android:orientation="vertical"
-                android:paddingBottom="10dip"
-                android:paddingLeft="14dip"
-                android:paddingRight="14dip"
-                android:paddingTop="10dip" >
-
-        <TextView
-            android:id="@+id/now_playing_title"
-            android:duplicateParentState="true"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_medium"
-            android:textColor="#ffffffff"
-            android:text="計費方式採用台北市"
-            android:maxLines="2"
-            android:ellipsize="end" />
-
-        <TextView
-            android:id="@+id/now_playing_subtitle"
-            android:gravity="left"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:duplicateParentState="true"
-            android:ellipsize="end"
-            android:paddingTop="3dip"
-            android:singleLine="true"
-            android:text="非夜間加成時段收費"
-            android:textStyle="bold"
-            android:textColor="#ffffffff"
-            android:textSize="@dimen/text_size_medium" />
-
-    </LinearLayout>
-
-            <View
-                android:id="@+id/view1"
-                android:layout_width="wrap_content"
-                android:background="#ff000000"
-                android:layout_height="5px" />
-
-            <LinearLayout
-                android:id="@+id/linearLayout4"
+            <TableRow
+                android:id="@+id/tableRow1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ff335555"
-                android:orientation="vertical"
-                android:paddingBottom="10dip"
-                android:paddingLeft="14dip"
-                android:paddingRight="14dip"
-                android:paddingTop="10dip" >
+                android:layout_weight="1" >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout3"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="2dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="4dp"
+                    android:weightSum="3" >
+
+                    <Button
+                        android:id="@+id/home_bt_route"
+                        style="@style/HomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/home_blue"
+                        android:text="@string/home_route" />
+
+                    <View
+                        android:id="@+id/view1"
+                        android:layout_width="4dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1" />
+
+                    <Button
+                        android:id="@+id/button2"
+                        style="@style/HomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@color/home_orange"
+                        android:text="@string/home_info" />
+                </LinearLayout>
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout4"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="2dp"
+                    android:weightSum="3" >
+
+                    <Button
+                        android:id="@+id/button3"
+                        style="@style/HomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:background="@color/home_orange"
+                        android:text="@string/home_call" />
+
+                    <View
+                        android:id="@+id/view2"
+                        android:layout_width="4dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2" />
+
+                    <Button
+                        android:id="@+id/home_bt_pricer"
+                        style="@style/HomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/home_green"
+                        android:text="@string/home_pricer" />
+                </LinearLayout>
+            </TableRow>
+        </LinearLayout>
         
-                <TextView
-            android:id="@+id/now_playing_subtitle"
-            android:duplicateParentState="true"
+            <LinearLayout
+            android:id="@+id/layout_map"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="3dip"
-            android:textColor="#ffffffff"
-            android:textSize="@dimen/text_size_small"
-            android:text="infomation"
-            android:singleLine="true"
-            android:ellipsize="end" />
-            </LinearLayout>
+            android:layout_height="fill_parent"
+             >
 
-    </LinearLayout>
-    
-    <View
-        android:layout_width="5px"
-        android:layout_height="fill_parent"
-        android:background="#ff000000" />
-    <ImageButton
-        android:background="#ff553355"
-        android:id="@+id/now_playing_more"
-        android:src="@drawable/call"
-        android:padding="12dip"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+            <include
+                android:id="@+id/view_map"
+                layout="@layout/route" />
+        </LinearLayout>
 
-        android:scaleType="center" />
-    
 
-    </LinearLayout>
 
+    </FrameLayout>
+ 
 </LinearLayout>

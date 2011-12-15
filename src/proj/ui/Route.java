@@ -25,18 +25,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 
-import proj.ui.R.anim;
-
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.LightingColorFilter;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -44,12 +45,16 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.gps.HelloItemizedOverlay;
 import com.android.gps.MyOverlay;
 import com.google.android.maps.GeoPoint;
+import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
@@ -75,7 +80,6 @@ public class Route extends MapActivity implements LocationListener {
 	private QuickActionWidget mGridStart,mGridEnd;
 
 	private LocationManager locationManager;
-//	private String bestProvider;
 	private List<GeoPoint> routePoints = new ArrayList<GeoPoint>();
 	
 	private int routeNow = 1 ;
@@ -274,6 +278,10 @@ public class Route extends MapActivity implements LocationListener {
 		OverlayItem endOverlay = new OverlayItem(destPoint, "", "");
 		endItem.addOverlay(endOverlay);		
 		mapOverlays.add(endItem);
+		
+		Drawable marker=getResources().getDrawable(R.drawable.startpoint);
+//		mapOverlays.add(new SitesOverlay(marker));
+
 
 		
     }
@@ -610,5 +618,140 @@ public class Route extends MapActivity implements LocationListener {
         }
         
     }
+    
+    private class SitesOverlay extends ItemizedOverlay<OverlayItem> {
+        private List<OverlayItem> items=new ArrayList<OverlayItem>();
+        private Drawable marker=null;
+        private OverlayItem inDrag=null;
+        private ImageView dragImage=null;
+        private int xDragImageOffset=0;
+        private int yDragImageOffset=0;
+        private int xDragTouchOffset=0;
+        private int yDragTouchOffset=0;
+        
+        public SitesOverlay(Drawable marker, OverlayItem overlay) {
+          super(marker);
+          this.marker=marker;
+          
+//          dragImage=(ImageView)findViewById(R.id.drag);
+          xDragImageOffset=dragImage.getDrawable().getIntrinsicWidth()/2;
+          yDragImageOffset=dragImage.getDrawable().getIntrinsicHeight();
+          GeoPoint testPoint = new GeoPoint(25039717,121528863);
+          items.add(new OverlayItem(testPoint,
+                                    "UN", "United Nations"));
+//          items.add(new OverlayItem(getPoint(40.76866299974387,
+//                                              -73.98268461227417),
+//                                    "Lincoln Center",
+//                                    "Home of Jazz at Lincoln Center"));
+//          items.add(new OverlayItem(getPoint(40.765136435316755,
+//                                              -73.97989511489868),
+//                                    "Carnegie Hall",
+//                  "Where you go with practice, practice, practice"));
+//          items.add(new OverlayItem(getPoint(40.70686417491799,
+//                                              -74.01572942733765),
+//                                    "The Downtown Club",
+//                            "Original home of the Heisman Trophy"));
+
+          populate();
+        }
+        
+        @Override
+        protected OverlayItem createItem(int i) {
+          return(items.get(i));
+        }
+        
+        @Override
+        public void draw(Canvas canvas, MapView mapView,
+                          boolean shadow) {
+          super.draw(canvas, mapView, shadow);
+          
+          boundCenterBottom(marker);
+        }
+        
+        @Override
+        public int size() {
+          return(items.size());
+        }
+        
+        @Override
+        public boolean onTouchEvent(MotionEvent event, MapView mapView) {
+          final int action=event.getAction();
+          final int x=(int)event.getX();
+          final int y=(int)event.getY();
+          boolean result=false;
+          
+          if (action==MotionEvent.ACTION_DOWN) {
+            for (OverlayItem item : items) {
+              Point p=new Point(0,0);
+              
+              mapView.getProjection().toPixels(item.getPoint(), p);
+              
+              if (hitTest(item, marker, x-p.x, y-p.y)) {
+                result=true;
+                inDrag=item;
+                items.remove(inDrag);
+                populate();
+
+                xDragTouchOffset=0;
+                yDragTouchOffset=0;
+                
+                setDragImagePosition(p.x, p.y);
+                dragImage.setVisibility(View.VISIBLE);
+
+                xDragTouchOffset=x-p.x;
+                yDragTouchOffset=y-p.y;
+                
+                break;
+              }
+            }
+          }
+          else if (action==MotionEvent.ACTION_MOVE && inDrag!=null) {
+            setDragImagePosition(x, y);
+            result=true;
+          }
+          else if (action==MotionEvent.ACTION_UP && inDrag!=null) {
+            dragImage.setVisibility(View.GONE);
+            
+            final GeoPoint pt=mapView.getProjection().fromPixels(x-xDragTouchOffset,
+                                                       y-yDragTouchOffset);
+            
+            Log.d(getPackageName(), "lat "+pt.getLatitudeE6()+" long "+pt.getLongitudeE6());
+//            Route.this.runOnUiThread(new Runnable() {
+//
+//				@Override
+//				public void run() {
+//					// TODO Auto-generated method stub
+//
+//					Toast.makeText(Route.class, "lat "+pt.getLatitudeE6()+" long "+pt.getLongitudeE6(), Toast.LENGTH_SHORT);
+//				}
+//			});
+
+            
+            OverlayItem toDrop=new OverlayItem(pt, inDrag.getTitle(),
+                                               inDrag.getSnippet());
+            
+            items.add(toDrop);
+            populate();
+            
+            inDrag=null;
+            result=true;
+          }
+          
+          return(result || super.onTouchEvent(event, mapView));
+        }
+        
+        private void setDragImagePosition(int x, int y) {
+          RelativeLayout.LayoutParams lp=
+            (RelativeLayout.LayoutParams)dragImage.getLayoutParams();
+                
+          lp.setMargins(x-xDragImageOffset-xDragTouchOffset,
+                          y-yDragImageOffset-yDragTouchOffset, 0, 0);
+          dragImage.setLayoutParams(lp);
+        }
+      }
+    
+    
+    
+    
 	
 }

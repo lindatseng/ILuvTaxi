@@ -7,5 +7,9 @@
     <string name="gd_mylocation">我的位置</string>
     <string name="gd_favorite">我的最愛</string>
     <string name="gd_mySearch">搜尋</string>
+    <string name="home_route">路線規劃\n\n暨\n\n資費預算</string>
+    <string name="home_info">計費方式</string>
+    <string name="home_pricer">行動計費器</string>
+    <string name="home_call">車隊查詢\n\n暨\n\n電話叫車</string>
 
 </resources>
