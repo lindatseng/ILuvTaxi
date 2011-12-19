@@ -22,6 +22,16 @@
         	<uses-library android:name="com.google.android.maps" />
         	<activity android:name="Route"></activity>
         	<activity android:name="Pricer"></activity>
+        <service android:name="com.android.gps.UserLocation">
+            <intent-filter>
+                <action android:name="com.android.gps.UserLocation" />
+            	<action android:name="lockercho.locationUpdate"></action>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        	
+        
+        	
     </application>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
 <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"></uses-permission>
