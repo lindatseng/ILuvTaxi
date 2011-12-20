@@ -503,6 +503,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							startItem.changeToCenter();
 							startItem.setMove(true);
 							type_start = 2;
+							onWindowFocusChanged(true);
 							break;
 						case 2:
 							try {

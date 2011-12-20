@@ -8,45 +8,40 @@
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/title_height"
+        android:background="@color/background1"
         android:orientation="horizontal"
         android:paddingBottom="5dip"
-                android:paddingLeft="14dip"
-                android:paddingRight="14dip"
-                android:paddingTop="5dip"
-        android:background="@color/background1" >
-        
+        android:paddingLeft="14dip"
+        android:paddingRight="14dip"
+        android:paddingTop="5dip" >
+
         <TextView
             android:id="@+id/app_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-
             android:text="我愛搭小黃"
             android:textColor="@color/foreground1"
             android:textSize="@dimen/text_size_large"
             android:textStyle="bold" />
-        
-         <Button
+
+        <Button
             android:id="@+id/bt_show"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="set"
-           />
+            android:text="set" />
 
         <Button
             android:id="@+id/bt_go"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="go"
-            />
+            android:text="go" />
 
         <Button
             android:id="@+id/bt_result"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="result"
-           />
-
+            android:text="result" />
     </LinearLayout>
 
     <FrameLayout
@@ -145,20 +140,61 @@
                 </LinearLayout>
             </TableRow>
         </LinearLayout>
-        
-            <LinearLayout
+
+        <LinearLayout
             android:id="@+id/layout_map"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-             >
+            android:layout_height="fill_parent" >
 
             <include
                 android:id="@+id/view_map"
                 layout="@layout/route" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layout_call"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="3"
+            android:visibility="gone" >
 
+            <LinearLayout
+                android:id="@+id/linearLayout6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical" 
+                android:weightSum="2">
 
+                <View
+                    android:id="@+id/view3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+                <Button
+                        android:id="@+id/bt_call_back"
+                        style="@style/HomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/home_orange"
+                        android:text="@string/home_call" />
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/scrollView1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1" >
+
+                <LinearLayout
+                    android:id="@+id/linearLayout7"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </LinearLayout>
+            </ScrollView>
+            
+        </LinearLayout>
     </FrameLayout>
- 
+
 </LinearLayout>

@@ -727,18 +727,16 @@ containing a value of this type.
     public static final class id {
         public static final int app_title=0x7f050032;
         public static final int bottom=0x7f050008;
-        public static final int bt_end=0x7f050056;
+        public static final int bt_call_back=0x7f050044;
+        public static final int bt_end=0x7f05005d;
         public static final int bt_go=0x7f050034;
-        public static final int bt_last=0x7f05004a;
-        public static final int bt_next=0x7f05004f;
+        public static final int bt_last=0x7f05004f;
+        public static final int bt_next=0x7f050054;
         public static final int bt_result=0x7f050035;
         public static final int bt_show=0x7f050033;
-<<<<<<< HEAD
-        public static final int bt_start=0x7f050051;
-=======
-        public static final int bt_start_service=0x7f050041;
-        public static final int bt_stop_service=0x7f050042;
->>>>>>> 9fa0232998cd8a26db45646587796b0957f9bea3
+        public static final int bt_start=0x7f050058;
+        public static final int bt_start_service=0x7f050046;
+        public static final int bt_stop_service=0x7f050047;
         public static final int button1=0x7f050031;
         public static final int button2=0x7f050030;
         public static final int button3=0x7f05003c;
@@ -746,16 +744,12 @@ containing a value of this type.
         public static final int center_horizontal=0x7f05000c;
         public static final int center_vertical=0x7f05000b;
         public static final int dashboard=0x7f050001;
-        public static final int drag_start=0x7f050045;
+        public static final int drag_start=0x7f05004a;
         public static final int empty=0x7f050002;
-        public static final int et_end=0x7f050054;
-<<<<<<< HEAD
-        public static final int et_start=0x7f05004f;
-=======
-        public static final int et_start=0x7f050052;
->>>>>>> 9fa0232998cd8a26db45646587796b0957f9bea3
+        public static final int et_end=0x7f05005b;
+        public static final int et_start=0x7f050056;
         public static final int frameLayout1=0x7f050036;
-        public static final int frameLayout2=0x7f050053;
+        public static final int frameLayout2=0x7f05005a;
         public static final int gd_action_bar=0x7f050012;
         public static final int gd_action_bar_content_view=0x7f050014;
         public static final int gd_action_bar_home_item=0x7f050015;
@@ -783,65 +777,54 @@ containing a value of this type.
         public static final int gdi_scroll=0x7f05001f;
         public static final int gdi_v_rack=0x7f050026;
         public static final int gdi_v_scroll=0x7f050025;
-        public static final int gpsInfo=0x7f05005a;
+        public static final int gpsInfo=0x7f050063;
         public static final int hdpi=0x7f050005;
         public static final int home_bt_pricer=0x7f05003e;
-<<<<<<< HEAD
-        public static final int home_bt_pricer1=0x7f050058;
+        public static final int home_bt_pricer1=0x7f05005f;
         public static final int home_bt_route=0x7f050038;
-        public static final int home_bt_route1=0x7f050057;
-        public static final int img_end=0x7f050052;
-        public static final int img_start=0x7f05004e;
-=======
-        public static final int home_bt_pricer1=0x7f050056;
-        public static final int home_bt_route=0x7f050038;
-        public static final int home_bt_route1=0x7f050055;
-        public static final int imageView1=0x7f050051;
-        public static final int imageView2=0x7f050053;
->>>>>>> 9fa0232998cd8a26db45646587796b0957f9bea3
+        public static final int home_bt_route1=0x7f05005e;
+        public static final int img_end=0x7f050059;
+        public static final int img_start=0x7f050055;
+        public static final int layout_call=0x7f050041;
         public static final int layout_map=0x7f05003f;
-        public static final int layout_result=0x7f050048;
-        public static final int layout_startend=0x7f050046;
+        public static final int layout_result=0x7f05004d;
+        public static final int layout_startend=0x7f05004b;
         public static final int ldpi=0x7f050003;
         public static final int left=0x7f050009;
         public static final int linearLayout1=0x7f05002b;
         public static final int linearLayout2=0x7f05002d;
         public static final int linearLayout3=0x7f05002f;
         public static final int linearLayout4=0x7f05003b;
-        public static final int listview=0x7f050043;
-        public static final int mapview=0x7f050044;
+        public static final int linearLayout6=0x7f050042;
+        public static final int linearLayout7=0x7f050045;
+        public static final int listview=0x7f050048;
+        public static final int mapview=0x7f050049;
         public static final int mdpi=0x7f050004;
         public static final int multiple=0x7f05000f;
         public static final int normal=0x7f050000;
-<<<<<<< HEAD
-        public static final int now_playing_more=0x7f05005b;
-        public static final int now_playing_subtitle=0x7f05005a;
-        public static final int now_playing_title=0x7f050059;
-        public static final int relativeLayout1=0x7f050050;
-        public static final int relativeLayout2=0x7f050055;
-=======
-        public static final int now_playing_more=0x7f050059;
-        public static final int now_playing_subtitle=0x7f050058;
-        public static final int now_playing_title=0x7f050057;
->>>>>>> 9fa0232998cd8a26db45646587796b0957f9bea3
+        public static final int now_playing_more=0x7f050062;
+        public static final int now_playing_subtitle=0x7f050061;
+        public static final int now_playing_title=0x7f050060;
+        public static final int relativeLayout1=0x7f050057;
+        public static final int relativeLayout2=0x7f05005c;
         public static final int right=0x7f05000a;
         public static final int scrollView1=0x7f05002e;
         public static final int single=0x7f05000e;
         public static final int tableRow1=0x7f050037;
         public static final int tableRow2=0x7f05003a;
         public static final int textView1=0x7f05002c;
-        public static final int timeInfo=0x7f05005b;
+        public static final int timeInfo=0x7f050064;
         public static final int top=0x7f050007;
-        public static final int tv_routeDist=0x7f05004c;
-        public static final int tv_routeNum=0x7f05004b;
-        public static final int tv_routePrice=0x7f05004e;
-        public static final int tv_routeTime=0x7f05004d;
+        public static final int tv_routeDist=0x7f050051;
+        public static final int tv_routeNum=0x7f050050;
+        public static final int tv_routePrice=0x7f050053;
+        public static final int tv_routeTime=0x7f050052;
         public static final int view1=0x7f050039;
         public static final int view2=0x7f05003d;
-        public static final int view3=0x7f050050;
+        public static final int view3=0x7f050043;
         public static final int view_map=0x7f050040;
-        public static final int view_routeResult=0x7f050049;
-        public static final int view_startend=0x7f050047;
+        public static final int view_routeResult=0x7f05004e;
+        public static final int view_startend=0x7f05004c;
         public static final int xhdpi=0x7f050006;
     }
     public static final class layout {
