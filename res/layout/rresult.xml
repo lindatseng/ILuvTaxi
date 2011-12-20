@@ -16,7 +16,7 @@
             android:orientation="horizontal" 
             android:background="@color/layout_back"
             android:weightSum="8">
-
+ 
 
                 <Button
                     android:id="@+id/bt_last"
