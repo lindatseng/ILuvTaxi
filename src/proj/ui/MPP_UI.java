@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -162,9 +163,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				// Intent intent = new Intent();
-				// intent.setClass(MPP_UI.this, Pricer.class);
-				// startActivity(intent);
+				Intent intent = new Intent();
+				intent.setClass(MPP_UI.this, Pricer.class);
+				startActivity(intent);
 
 			}
 		});
@@ -577,11 +578,19 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				.getSystemService(LOCATION_SERVICE);
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
 				0, this);
-
+		
 		Location mLocation = getLocation(this);
 
-		// Src_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
-		// Src_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+		if( mLocation == null ){
+			Toast.makeText(this, "location is null", Toast.LENGTH_LONG).show();
+			return ;
+		}
+		
+		
+		
+		Src_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
+		Src_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+
 
 		srcPoint = new GeoPoint(Src_LATITUDE, Src_LONGITUDE);
 		destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
