@@ -272,6 +272,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					mGridStart.show(v);
 				} else if(type_start == 2){
 					mapOverlays.remove(startItem);
+					startItem.doPopulate();
 					et_start.setText("");
 					isStartItem = false;
 				} else
@@ -488,6 +489,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							et_start.setText("我的位置");
 							et_start.setTextColor(android.graphics.Color.BLUE);
 							type_start = 2;
+							
 							break;
 
 						case 1:
@@ -1033,11 +1035,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				Point p = new Point(0, 0);
 
 				mapView.getProjection().toPixels(item.getPoint(), p);
-
 				inDrag = item;
 				items.remove(inDrag);
 				populate();
-
 			}
 
 			Log.d(getPackageName(), "lat "
@@ -1066,6 +1066,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				tmp = item.getPoint();
 			}
 			return tmp.getLongitudeE6();
+		}
+		
+		public void doPopulate(){
+			populate();
 		}
 
 	}
