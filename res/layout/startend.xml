@@ -11,20 +11,41 @@
         android:background="@color/layout_back" >
 
         <ImageView
-            android:id="@+id/imageView1"
+            android:id="@+id/img_start"
             android:layout_width="60dp"
             android:layout_height="48dp"
             android:src="@drawable/start" />
 
-        <EditText
-            android:id="@+id/et_start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:hint="起點" >
+        <FrameLayout
+            android:id="@+id/frameLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-        </EditText>
+            <EditText
+                android:id="@+id/et_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="起點" />
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageButton
+                    android:id="@+id/bt_start"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:background="#00ffffff"
+                    android:src="@drawable/pop" />
+            </RelativeLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -42,18 +63,44 @@
          >
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/img_end"
             android:layout_width="60dp"
             android:layout_height="48dp"
             android:src="@drawable/end" />
 
-        <EditText
-            android:id="@+id/et_end"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical" 
-            android:hint="終點"/>
+        <FrameLayout
+            android:id="@+id/frameLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <EditText
+                android:id="@+id/et_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="終點" >
+
+                <requestFocus />
+            </EditText>
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <ImageButton
+                    android:id="@+id/bt_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="5dp"
+                    android:background="#00ffffff"
+                    android:src="@drawable/pop" />
+
+            </RelativeLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 
