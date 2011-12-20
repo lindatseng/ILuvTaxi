@@ -1,6 +1,5 @@
 package proj.ui;
 
-import greendroid.widget.QuickAction;
 import greendroid.widget.QuickActionBar;
 import greendroid.widget.QuickActionWidget;
 import greendroid.widget.QuickActionWidget.OnQuickActionClickListener;
@@ -12,6 +11,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,27 +25,30 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.LightingColorFilter;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.gps.HelloItemizedOverlay;
 import com.android.gps.MyOverlay;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -62,8 +65,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	View view_map;
 	MapView mapView;
 	Button bt_show, bt_go, bt_result, bt_next, bt_last;
+	ImageButton bt_start, bt_end;
+	int type_start = 0, type_end = 0;
 	LinearLayout layout_startend, layout_result;
-	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice;
+	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
+			tv_copyrights;
 	View view_startend, view_routeresult;
 	EditText et_start, et_end;
 
@@ -77,17 +83,20 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	int MY_LATITUDE, MY_LONGITUDE;
 	static final double EARTH_RADIUS = 6378.137;
 	MapController mc;
-	SitesOverlay startItem,endItem;
+	SitesOverlay startItem, endItem;
 	Boolean isEndItem = false;
+	Boolean isStartItem = true;
 	private LocationManager locationManager;
 	private List<GeoPoint> routePoints = new ArrayList<GeoPoint>();
 
 	private int routeNow = 1;
 	private GeoPoint srcPoint;
-	private GeoPoint destPoint;
+	private GeoPoint destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
 	private JSONObject info;
 	private int routeNum = 1;
 	private HashMap<String, Object> routeInfo = new HashMap<String, Object>();
+	private HashMap<String, Object> searchInfo = new HashMap<String, Object>();
+	private int searchNum = 0;
 	List<Overlay> mapOverlays;
 
 	@Override
@@ -98,6 +107,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		findView();
 		setListener();
 		setMap();
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 
 	private void findView() {
@@ -109,6 +119,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		bt_show = (Button) findViewById(R.id.bt_show);
 		bt_go = (Button) findViewById(R.id.bt_go);
 		bt_result = (Button) findViewById(R.id.bt_result);
+		// tv_copyrights = (TextView) findViewById(R.id.tv_copyrights);
 		layout_startend = (LinearLayout) view_map
 				.findViewById(R.id.layout_startend);
 		layout_result = (LinearLayout) view_map
@@ -116,6 +127,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		view_startend = (View) view_map.findViewById(R.id.view_startend);
 		et_start = (EditText) view_startend.findViewById(R.id.et_start);
 		et_end = (EditText) view_startend.findViewById(R.id.et_end);
+		bt_start = (ImageButton) view_startend.findViewById(R.id.bt_start);
+		bt_end = (ImageButton) view_startend.findViewById(R.id.bt_end);
 		view_routeresult = (View) view_map.findViewById(R.id.view_routeResult);
 		tv_routeNum = (TextView) view_routeresult
 				.findViewById(R.id.tv_routeNum);
@@ -185,11 +198,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				Dest_LATITUDE = endItem.getLat();
 				Dest_LONGITUDE = endItem.getLon();
 
-				double srcLat = Src_LATITUDE/ 1E6;
+				double srcLat = Src_LATITUDE / 1E6;
 				double srcLon = Src_LONGITUDE / 1E6;
 				double desLat = Dest_LATITUDE / 1E6;
 				double desLon = Dest_LONGITUDE / 1E6;
-				
+
 				Log.d(getPackageName(), "yoyoyoyoyoyo");
 
 				try {
@@ -252,26 +265,209 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			}
 		});
 
-		et_start.setOnClickListener(new OnClickListener() {
+		bt_start.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				mGridStart.show(v);
-
+				if (type_start == 0) {
+					mGridStart.show(v);
+				} else if(type_start == 2){
+					mapOverlays.remove(startItem);
+					startItem.doPopulate();
+					et_start.setText("");
+					isStartItem = false;
+				} else
+					et_start.setText("");
 			}
 		});
-		et_start.setInputType(0);
 
-		et_end.setOnClickListener(new OnClickListener() {
+		et_start.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+				et_start.setTextColor(android.graphics.Color.BLACK);
+				
+				if (et_start.getText().length() == 0) {
+					bt_start.setImageDrawable(getResources().getDrawable(
+							R.drawable.pop));
+					type_start = 0;
+				} else {
+					bt_start.setImageDrawable(getResources().getDrawable(
+							R.drawable.close));
+					type_start = 1;
+				}
+				
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+
+		et_start.setOnKeyListener(new View.OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				if (event.getAction() == KeyEvent.ACTION_DOWN
+						&& keyCode == KeyEvent.KEYCODE_ENTER) {
+					Log.d(getPackageName(), "enter presseddddddddd  "
+							+ et_start.getText().toString());
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(et_start.getWindowToken(), 0);
+
+					if (et_start.getText().length() == 0) {
+						Toast toast = Toast.makeText(mapView.getContext(),
+								"請輸入關鍵字查詢", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+					} else {
+						try {
+							if(getGeo(et_start.getText().toString())==true){
+								Src_LATITUDE = Integer.valueOf(searchInfo.get(
+										"LAT" + searchNum).toString());
+								Src_LONGITUDE = Integer.valueOf(searchInfo.get(
+										"LNG" + searchNum).toString());
+								et_start.setText(searchInfo.get("ADDRESS" + searchNum)
+										.toString());
+								mc.setCenter(new GeoPoint(Src_LATITUDE, Src_LONGITUDE));
+								startItem.changePosition(Src_LATITUDE, Src_LONGITUDE);
+							}
+							else{
+								Toast toast = Toast.makeText(mapView.getContext(),
+										"查無結果，請重新輸入關鍵字查詢", Toast.LENGTH_SHORT);
+								toast.setGravity(Gravity.CENTER, 0, 0);
+								toast.show();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}						
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		et_end.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				et_end.setTextColor(android.graphics.Color.BLACK);
+				if (et_end.getText().length() == 0) {
+					bt_end.setImageDrawable(getResources().getDrawable(
+							R.drawable.pop));
+					type_end = 0;
+				} else {
+					bt_end.setImageDrawable(getResources().getDrawable(
+							R.drawable.close));
+					type_end = 1;
+				}
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+		});
+		
+		et_end.setOnKeyListener(new View.OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				// TODO Auto-generated method stub
+				if (event.getAction() == KeyEvent.ACTION_DOWN
+						&& keyCode == KeyEvent.KEYCODE_ENTER) {
+					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+					mgr.hideSoftInputFromWindow(et_end.getWindowToken(), 0);
+
+					if (et_end.getText().length() == 0) {
+						Toast toast = Toast.makeText(mapView.getContext(),
+								"請輸入關鍵字查詢", Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+					} else {
+						try {
+							if(getGeo(et_end.getText().toString())==true){
+								Dest_LATITUDE = Integer.valueOf(searchInfo.get(
+										"LAT" + searchNum).toString());
+								Dest_LONGITUDE = Integer.valueOf(searchInfo.get(
+										"LNG" + searchNum).toString());
+								et_end.setText(searchInfo.get("ADDRESS" + searchNum)
+										.toString());
+								mc.setCenter(new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE));
+								if (isEndItem == false) {
+									mapOverlays.add(endItem);
+									isEndItem = true;
+								}
+								endItem.changePosition(Dest_LATITUDE, Dest_LONGITUDE);
+							}
+							else{
+								Toast toast = Toast.makeText(mapView.getContext(),
+										"查無結果，請重新輸入關鍵字查詢", Toast.LENGTH_SHORT);
+								toast.setGravity(Gravity.CENTER, 0, 0);
+								toast.show();
+							}
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}						
+					}
+					return true;
+				}
+				return false;
+			}
+		});
+
+		bt_end.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				mGridEnd.show(v);
+				if (type_end == 0) {
+					mGridEnd.show(v);
+				} else if(type_end ==2){
+					mapOverlays.remove(endItem);
+					et_end.setText("");
+					isEndItem = false;
+				} else
+					et_end.setText("");
 			}
 		});
-		et_end.setInputType(0);
+
 
 		mGridStart
 				.setOnQuickActionClickListener(new OnQuickActionClickListener() {
@@ -282,21 +478,44 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						// TODO Auto-generated method stub
 						switch (position) {
 						case 0:
+							if (isStartItem == false) {
+								mapOverlays.add(startItem);
+								isStartItem = true;
+							}
 							Location mLocation = getLocation(MPP_UI.this);
 							MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
 							MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
 
 							mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
 							startItem.changePosition(MY_LATITUDE, MY_LONGITUDE);
+							et_start.setText("我的位置");
+							et_start.setTextColor(android.graphics.Color.BLUE);
+							type_start = 2;
+							
 							break;
 
 						case 1:
-							
-
+							if (isStartItem == false) {
+								mapOverlays.add(startItem);
+								isStartItem = true;
+							}
+							et_start.setText("地圖上的點");
+							et_start.setTextColor(android.graphics.Color.BLUE);
+							startItem.changeToCenter();
+							startItem.setMove(true);
+							type_start = 2;
+							onWindowFocusChanged(true);
 							break;
-
 						case 2:
-
+							try {
+								getGeo(et_start.getText().toString());
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 							break;
 
 						case 3:
@@ -318,7 +537,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				// TODO Auto-generated method stub
 				switch (position) {
 				case 0:
-					if(isEndItem == false) {
+					if (isEndItem == false) {
 						mapOverlays.add(endItem);
 						isEndItem = true;
 					}
@@ -328,27 +547,23 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 					mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
 					endItem.changePosition(MY_LATITUDE, MY_LONGITUDE);
-					Log.d(getPackageName(), "lat "+endItem.getLat()+"lon "+endItem.getLon());
-					
+					endItem.setMove(false);
+					et_end.setText("我的位置");
+					et_end.setTextColor(android.graphics.Color.BLUE);
+					type_end = 2;
 					break;
 
 				case 1:
-					if(isEndItem == false) {
+					if (isEndItem == false) {
 						mapOverlays.add(endItem);
 						isEndItem = true;
 					}
-						endItem.changeToCenter();
+					endItem.changeToCenter();
+					endItem.setMove(true);
+					et_end.setText("地圖上的點");
+					et_end.setTextColor(android.graphics.Color.BLUE);
+					type_end = 2;
 					break;
-
-				case 2:
-					et_end.setInputType(1);
-
-					break;
-
-				case 3:
-
-					break;
-
 				default:
 					break;
 				}
@@ -367,21 +582,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				0, this);
 		
 		Location mLocation = getLocation(this);
-		
-		/*
-		TODO: make sure location is not null, or it will crash
-		
-		When we are indoor and lastknownlocation is null (first time to call location)
-		hte obtained location will be null 
-		
-		pDialog = new ProgressDialog(context);
-		pDialog.setMax(1000);
-		pDialog.setTitle("GPS");
-		pDialog.show();
-		pDialog.dismiss();
-		*/
-		
-		// prevent crash
+
 		if( mLocation == null ){
 			Toast.makeText(this, "location is null", Toast.LENGTH_LONG).show();
 			return ;
@@ -391,6 +592,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		
 		Src_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
 		Src_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+
 
 		srcPoint = new GeoPoint(Src_LATITUDE, Src_LONGITUDE);
 		destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
@@ -406,14 +608,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 		mapOverlays = mapView.getOverlays();
 
-		// OverlayItem startOverlay = new OverlayItem(srcPoint, "", "");
-		// startItem.addOverlay(startOverlay);
-		// mapOverlays.add(startItem);
-		//
-		// OverlayItem endOverlay = new OverlayItem(destPoint, "", "");
-		// endItem.addOverlay(endOverlay);
-		// mapOverlays.add(endItem);
-
 		OverlayItem startOverlay = new OverlayItem(srcPoint, "", "");
 		OverlayItem endOverlay = new OverlayItem(destPoint, "", "");
 
@@ -425,11 +619,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		endItem = new SitesOverlay(marker_end, endOverlay);
 
 		mapOverlays.add(startItem);
-//		mapOverlays.add(endItem);
+		// mapOverlays.add(endItem);
 	}
 
 	private void setResultText() {
-		tv_routeNum.setText("路線 " + routeNow);
+		tv_routeNum.setText("路線 " + routeNow + " / " +routeNum);
 		tv_routeDist.setText("距離："
 				+ routeInfo.get("DISTANCE" + (routeNow - 1)).toString());
 		tv_routeTime.setText("時間："
@@ -501,13 +695,53 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				GeoPoint lastPoints = Points.get(0);
 
 				for (int i = 1; i < Points.size(); i++) {
-					mapOverlays.add(
-							new MyOverlay(lastPoints, Points.get(i), 3,
-									Color.CYAN));
+					mapOverlays.add(new MyOverlay(lastPoints, Points.get(i), 3,
+							Color.CYAN));
 					lastPoints = Points.get(i);
 				}
 			}
 		}
+	}
+
+	private Boolean getGeo(String searchText) throws JSONException,
+			IOException {
+		String text[] = searchText.split(" ");
+		String urlText = "";
+		for (int i = 0; i < text.length; i++) {
+			if (i != 0)
+				urlText = urlText + "+";
+			urlText = urlText + text[i];
+		}
+		String urlstring = "http://maps.google.com/maps/api/geocode/json?address="
+				+ URLEncoder.encode(urlText,"UTF-8")
+				+ "&bounds=20.5637908,116.7118602|26.3873532,122.006905&sensor=true&language=zh-TW";
+		Log.d(getPackageName(), urlstring);
+
+		JSONObject geo = new JSONObject(readStrFromUrl(urlstring));
+		
+		Log.d(getPackageName(), "yoooooooooo"+geo.getString("status"));
+		
+		if (geo.getString("status").equals("OK")) {
+			String address = geo.getJSONArray("results").getJSONObject(0)
+					.getString("formatted_address");
+			int lat = (int) ((geo.getJSONArray("results").getJSONObject(0)
+					.getJSONObject("geometry").getJSONObject("location")
+					.getDouble("lat")) * 1000000);
+			int lng = (int) ((geo.getJSONArray("results").getJSONObject(0)
+					.getJSONObject("geometry").getJSONObject("location")
+					.getDouble("lng")) * 1000000);
+			Log.d(getPackageName(), lat+" "+lng);
+
+			if (lat >= 20563790 && lat <= 26387364 && lng >= 116711860
+					&& lng <= 122006905) {
+				searchNum++;
+				searchInfo.put("ADDRESS" + searchNum, address);
+				searchInfo.put("LAT" + searchNum, lat);
+				searchInfo.put("LNG" + searchNum, lng);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	private void getInfo(double srcLat, double srcLon, double desLat,
@@ -515,7 +749,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 		try {
 			String urlstring = "http://maps.google.com/maps/api/directions/json?origin="
-
 					+ srcLat
 					+ ","
 					+ srcLon
@@ -523,15 +756,16 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					+ desLat
 					+ ","
 					+ desLon + "&sensor=true&alternatives=true&language=zh-TW";
-//			http://maps.google.com/maps/api/directions/json?origin=25.018641,121.542526&destination=25.039717,121.528863&sensor=true&alternatives=true&language=zh-TW
-			Log.d(getPackageName(), "yaaaaaaaaaaaaaa  "+urlstring);
-			
+			// http://maps.google.com/maps/api/directions/json?origin=25.018641,121.542526&destination=25.039717,121.528863&sensor=true&alternatives=true&language=zh-TW
+			Log.d(getPackageName(), "yaaaaaaaaaaaaaa  " + urlstring);
+
 			info = new JSONObject(readStrFromUrl(urlstring));
-			Log.d(getPackageName(),readStrFromUrl(urlstring) );
+			Log.d(getPackageName(), readStrFromUrl(urlstring));
 
 			routeNum = info.getJSONArray("routes").length();
 
 			for (int i = 0; i < routeNum; i++) {
+				// tv_copyrights.setText(info.getJSONArray("routes").getJSONObject(i).getString("copyrights"));
 				String distance = info.getJSONArray("routes").getJSONObject(i)
 						.getJSONArray("legs").getJSONObject(0)
 						.getJSONObject("distance").getString("text");
@@ -642,10 +876,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				R.drawable.gd_action_bar_locate, R.string.gd_mylocation));
 		mGridStart.addQuickAction(new MyQuickAction(this,
 				R.drawable.gd_action_bar_export, R.string.gd_pin));
-		mGridStart.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_search, R.string.gd_mySearch));
-		mGridStart.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_share, R.string.gd_favorite));
+//		mGridStart.addQuickAction(new MyQuickAction(this,
+//				R.drawable.gd_action_bar_search, R.string.gd_mySearch));
+		// mGridStart.addQuickAction(new MyQuickAction(this,
+		// R.drawable.gd_action_bar_share, R.string.gd_favorite));
 
 		// mGrid.addQuickAction(new MyQuickAction(this,
 		// R.drawable.gd_action_bar_edit, R.string.gd_edit));
@@ -657,10 +891,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				R.drawable.gd_action_bar_locate, R.string.gd_mylocation));
 		mGridEnd.addQuickAction(new MyQuickAction(this,
 				R.drawable.gd_action_bar_export, R.string.gd_pin));
-		mGridEnd.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_search, R.string.gd_mySearch));
-		mGridEnd.addQuickAction(new MyQuickAction(this,
-				R.drawable.gd_action_bar_share, R.string.gd_favorite));
+//		mGridEnd.addQuickAction(new MyQuickAction(this,
+//				R.drawable.gd_action_bar_search, R.string.gd_mySearch));
+//		mGridEnd.addQuickAction(new MyQuickAction(this,
+//				R.drawable.gd_action_bar_share, R.string.gd_favorite));
 
 		// mGrid.addQuickAction(new MyQuickAction(this,
 		// R.drawable.gd_action_bar_edit, R.string.gd_edit));
@@ -676,6 +910,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		private int yDragImageOffset = 0;
 		private int xDragTouchOffset = 0;
 		private int yDragTouchOffset = 0;
+		private Boolean isMove =  false;
 
 		public SitesOverlay(Drawable marker, OverlayItem overlay) {
 			super(marker);
@@ -715,7 +950,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			final int y = (int) event.getY();
 			boolean result = false;
 
-			if (action == MotionEvent.ACTION_DOWN) {
+			if (action == MotionEvent.ACTION_DOWN && isMove == true) {
 				for (OverlayItem item : items) {
 					Point p = new Point(0, 0);
 
@@ -774,75 +1009,80 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 
 		public void changePosition(int x, int y) {
-			
+
 			for (OverlayItem item : items) {
 				Point p = new Point(0, 0);
 
 				mapView.getProjection().toPixels(item.getPoint(), p);
-				
+
 				inDrag = item;
 				items.remove(inDrag);
 				populate();
 
 			}
-			
+
 			dragImage.setVisibility(View.GONE);
-			final GeoPoint pt = new GeoPoint(x,y);
+			final GeoPoint pt = new GeoPoint(x, y);
 
 			Log.d(getPackageName(),
 					"lat " + pt.getLatitudeE6() + " long "
 							+ pt.getLongitudeE6());
 
-			OverlayItem toDrop = new OverlayItem(pt, "",
-					"");
+			OverlayItem toDrop = new OverlayItem(pt, "", "");
 
 			items.add(toDrop);
 			populate();
 
 			inDrag = null;
-//			result = true;
+			// result = true;
 		}
 		
-		public void changeToCenter(){
+		public void setMove(Boolean b){
+			isMove = b;
+		}
+
+		public void changeToCenter() {
 			for (OverlayItem item : items) {
 				Point p = new Point(0, 0);
 
 				mapView.getProjection().toPixels(item.getPoint(), p);
-				
 				inDrag = item;
 				items.remove(inDrag);
 				populate();
-
 			}
 
-			Log.d(getPackageName(),
-					"lat " + mapView.getMapCenter().getLatitudeE6() + " long "
-							+ mapView.getMapCenter().getLongitudeE6());
+			Log.d(getPackageName(), "lat "
+					+ mapView.getMapCenter().getLatitudeE6() + " long "
+					+ mapView.getMapCenter().getLongitudeE6());
 
-			OverlayItem toDrop = new OverlayItem(mapView.getMapCenter(), "","");
+			OverlayItem toDrop = new OverlayItem(mapView.getMapCenter(), "", "");
 
 			items.add(toDrop);
 			populate();
 
 			inDrag = null;
 		}
-		
-		public int getLat(){
+
+		public int getLat() {
 			GeoPoint tmp = new GeoPoint(0, 0);
 			for (OverlayItem item : items) {
 				tmp = item.getPoint();
 			}
-			return tmp.getLatitudeE6();	
+			return tmp.getLatitudeE6();
 		}
-		
-		public int getLon(){
+
+		public int getLon() {
 			GeoPoint tmp = new GeoPoint(0, 0);
 			for (OverlayItem item : items) {
 				tmp = item.getPoint();
 			}
-			return tmp.getLongitudeE6();	
+			return tmp.getLongitudeE6();
 		}
 		
+		public void doPopulate(){
+			populate();
+		}
+
 	}
 
 }
