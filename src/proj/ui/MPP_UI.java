@@ -102,6 +102,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		setContentView(R.layout.main);
 		findView();
 		setListener();

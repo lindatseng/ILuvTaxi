@@ -1,3 +1,5 @@
 *.class
+*~
+R.java
 *bin/
 *gen/

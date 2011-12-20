@@ -20,7 +20,7 @@ public class LocationRunnable implements Runnable {
     private static final String TYPE_GPS =  "TYPE_GPS";
     private static final String TYPE_NULL = "TYPE_NULL";
 
-    private static final long LOCATION_TIMEOUT = 1000*3;  // 3 sec
+    private static final long LOCATION_TIMEOUT = 1000*3;  // 2 min
 
     private final UserLocation mService;
     private Location mBestLocation;
@@ -106,6 +106,7 @@ public class LocationRunnable implements Runnable {
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
+        	Log.e(TAG,"onLocationChanged: "+location.getLatitude()+", "+location.getLongitude());
             if(isBetterLocation(location, mBestLocation)) {
                 mBestLocation = location;
             }
