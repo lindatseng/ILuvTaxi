@@ -794,8 +794,6 @@ containing a value of this type.
         public static final int home_bt_route=0x7f050037;
         public static final int home_bt_route1=0x7f050066;
         public static final int home_button_call=0x7f05003c;
-        public static final int img_end=0x7f050061;
-        public static final int img_start=0x7f05005d;
         public static final int layout_call=0x7f050041;
         public static final int layout_info=0x7f050046;
         public static final int layout_inforeal=0x7f050047;
@@ -811,6 +809,8 @@ containing a value of this type.
         public static final int linearLayout6=0x7f050042;
         public static final int linearLayout7=0x7f050049;
         public static final int listview=0x7f050050;
+        public static final int map_bt_end=0x7f050061;
+        public static final int map_bt_start=0x7f05005d;
         public static final int mapview=0x7f050051;
         public static final int mdpi=0x7f050004;
         public static final int multiple=0x7f05000f;

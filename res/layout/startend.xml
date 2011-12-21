@@ -10,10 +10,11 @@
         android:layout_height="wrap_content"
         android:background="@color/layout_back" >
 
-        <ImageView
-            android:id="@+id/img_start"
+        <ImageButton
+            android:id="@+id/map_bt_start"
             android:layout_width="60dp"
             android:layout_height="48dp"
+            android:background="@color/trans"
             android:src="@drawable/start" />
  
         <FrameLayout
@@ -62,11 +63,12 @@
         android:background="@color/layout_back"
          >
 
-        <ImageView
-            android:id="@+id/img_end"
+        <ImageButton
+            android:id="@+id/map_bt_end"
             android:layout_width="60dp"
             android:layout_height="48dp"
-            android:src="@drawable/end" />
+            android:src="@drawable/end"
+            android:background="@color/trans" />
 
         <FrameLayout
             android:id="@+id/frameLayout2"
@@ -103,5 +105,8 @@
         </FrameLayout>
 
     </LinearLayout>
+
+    
+       
 
 </LinearLayout>
