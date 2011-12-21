@@ -23,8 +23,7 @@
             android:text="我愛搭小黃"
             android:textColor="#ffffffff"
             android:textSize="@dimen/text_size_large"
-            android:textStyle="bold"
-             />
+            android:textStyle="bold" />
 
         <View
             android:id="@+id/view3"
@@ -37,10 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/trans"
-            android:textColor="#ffffffff"
-            android:text="go" />
-
-
+            android:text="go"
+            android:textColor="#ffffffff" />
     </LinearLayout>
 
     <FrameLayout
@@ -154,119 +151,104 @@
             android:id="@+id/layout_call"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="3"
-            android:visibility="gone" >
+            android:visibility="gone"
+            android:weightSum="3" >
 
             <LinearLayout
                 android:id="@+id/linearLayout6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:orientation="vertical" 
-                android:weightSum="2">
+                android:orientation="vertical"
+                android:weightSum="2" >
 
                 <View
                     android:id="@+id/view_call_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#aa000000"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:background="#aa000000" />
+
                 <Button
-                        android:id="@+id/bt_call_back"
-                        style="@style/HomeText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/home_orange"
-                        android:text="@string/home_call" />
+                    android:id="@+id/bt_call_back"
+                    style="@style/HomeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/home_orange"
+                    android:text="@string/home_call" />
             </LinearLayout>
 
-            <!--  ScrollView
-                android:id="@+id/scrollView1"
+            <ListView
+                android:id="@+id/taxiInfoListview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-<<<<<<< HEAD
-                android:background="@color/layout_bg"
-                android:layout_weight="1" >
-
-                    <ListView
-                    android:id="@+id/listView1"
-                    android:background="@color/layout_bg"
-=======
-                android:background="#ffdff59b"
-                android:layout_weight="1" -->
-
-
-                <ListView
-                    android:id="@+id/taxiInfoListview"
-                    android:background="#ffdff59b"
->>>>>>> 75d7afdd1a296b292104893e7aaea3432c36e2b1
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-                </ListView>
-                
-            </ScrollView>
-            
+                android:background="#ffdff59b" >
+            </ListView>
         </LinearLayout>
-        
-    <LinearLayout
+
+        <LinearLayout
             android:id="@+id/layout_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:weightSum="3"
-            android:visibility="gone" >
+            android:visibility="gone"
+            android:weightSum="3" >
 
-         <ScrollView
-                android:id="@+id/scrollView2"
+            <LinearLayout
+                android:id="@+id/layout_inforeal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/layout_bg"
-                android:layout_weight="1" >
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:orientation="vertical"
+                android:background="@color/layout_bg" >
 
-                    <ListView
-                    android:id="@+id/listView2"
-                    android:background="@color/layout_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-                </ListView>
-                
-<<<<<<< HEAD
-            </ScrollView>
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="台北市"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="非夜間加成時段"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                <TextView
+                    android:id="@+id/textView1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="..."
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout7"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="2"
-                android:orientation="vertical" 
-                android:weightSum="2">
-                    
-                 <Button
-                        android:id="@+id/bt_info_back"
-                        style="@style/HomeText"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@color/home_orange"
-                        android:text="@string/home_info" />
+                android:orientation="vertical"
+                android:weightSum="2" >
+
+                <Button
+                    android:id="@+id/bt_info_back"
+                    style="@style/HomeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/home_orange"
+                    android:text="@string/home_info" />
 
                 <View
                     android:id="@+id/view_info_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#aa000000"
-                    android:layout_weight="1" />
-                
+                    android:layout_weight="1"
+                    android:background="#aa000000" />
             </LinearLayout>
-
-           
-=======
-
-            <!--/ScrollView-->
->>>>>>> 75d7afdd1a296b292104893e7aaea3432c36e2b1
-            
         </LinearLayout>
-            
     </FrameLayout>
 
 </LinearLayout>

@@ -88,7 +88,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	static int Src_LONGITUDE = 121542526;
 	int MY_LATITUDE, MY_LONGITUDE;
 	static final double EARTH_RADIUS = 6378.137;
-	MapController mc;
+	MapController mc; 
 	SitesOverlay startItem, endItem;
 	Boolean isEndItem = false;
 	Boolean isStartItem = true;
@@ -214,6 +214,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				layout_info.setVisibility(View.VISIBLE);
+				home_bt_route.setClickable(false);
+				home_bt_call.setClickable(false);
+				home_bt_pricer.setClickable(false);
 			}
 
 		});
@@ -224,6 +227,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				layout_info.setVisibility(View.GONE);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+				home_bt_pricer.setClickable(true);
 			}
 
 		});
@@ -243,6 +249,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				layout_info.setVisibility(View.GONE);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+				home_bt_pricer.setClickable(true);
 			}
 		});
 
@@ -732,6 +741,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		// super.onBackPressed();
 		if (view_map.getVisibility() == View.VISIBLE)
 			view_map.setVisibility(View.GONE);
+		else if (layout_call.getVisibility() == View.VISIBLE)
+			layout_call.setVisibility(View.GONE);
+		else if (layout_info.getVisibility() == View.VISIBLE){
+			layout_info.setVisibility(View.GONE);
+			home_bt_route.setClickable(true);
+			home_bt_call.setClickable(true);
+			home_bt_pricer.setClickable(true);
+		}
 		else
 			super.onBackPressed();
 
