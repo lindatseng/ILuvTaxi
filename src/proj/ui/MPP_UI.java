@@ -61,13 +61,13 @@ import com.google.android.maps.OverlayItem;
 public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
 
-	Button home_bt_route, home_bt_pricer;
-	View view_map;
+	Button home_bt_route, home_bt_pricer,home_bt_call,bt_call_back;
+	View view_map,view_call_back;
 	MapView mapView;
 	Button bt_show, bt_go, bt_result, bt_next, bt_last;
 	ImageButton bt_start, bt_end;
 	int type_start = 0, type_end = 0;
-	LinearLayout layout_startend, layout_result;
+	LinearLayout layout_startend, layout_result,layout_call;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
 			tv_copyrights;
 	View view_startend, view_routeresult;
@@ -113,17 +113,20 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	private void findView() {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
 		home_bt_pricer = (Button) findViewById(R.id.home_bt_pricer);
+		home_bt_call = (Button) findViewById(R.id.home_button_call);
+		bt_call_back = (Button) findViewById(R.id.bt_call_back);
+		view_call_back = (View) findViewById(R.id.view_call_back);
 		view_map = (View) findViewById(R.id.view_map);
 		view_map.setVisibility(View.GONE);
 		mapView = (MapView) view_map.findViewById(R.id.mapview);
 		bt_show = (Button) findViewById(R.id.bt_show);
 		bt_go = (Button) findViewById(R.id.bt_go);
 		bt_result = (Button) findViewById(R.id.bt_result);
-		// tv_copyrights = (TextView) findViewById(R.id.tv_copyrights);
 		layout_startend = (LinearLayout) view_map
 				.findViewById(R.id.layout_startend);
 		layout_result = (LinearLayout) view_map
 				.findViewById(R.id.layout_result);
+		layout_call = (LinearLayout)findViewById(R.id.layout_call);
 		view_startend = (View) view_map.findViewById(R.id.view_startend);
 		et_start = (EditText) view_startend.findViewById(R.id.et_start);
 		et_end = (EditText) view_startend.findViewById(R.id.et_end);
@@ -168,6 +171,35 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				intent.setClass(MPP_UI.this, Pricer.class);
 				startActivity(intent);
 
+			}
+		});
+		
+		home_bt_call.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_call.setVisibility(View.VISIBLE);
+			}
+			
+		});
+		
+		bt_call_back.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_call.setVisibility(View.GONE);
+			}
+			
+		});
+		
+		view_call_back.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_call.setVisibility(View.GONE);
 			}
 		});
 
@@ -233,6 +265,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						layout_startend.setVisibility(View.GONE);
 					layout_result.setVisibility(View.VISIBLE);
 				}
+				MPP_UI.this.clear();
 			}
 		});
 
@@ -276,6 +309,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					mapOverlays.remove(startItem);
 					startItem.doPopulate();
 					et_start.setText("");
+					onWindowFocusChanged(true);
 					isStartItem = false;
 				} else
 					et_start.setText("");
@@ -462,6 +496,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				} else if(type_end ==2){
 					mapOverlays.remove(endItem);
 					et_end.setText("");
+					onWindowFocusChanged(true);
 					isEndItem = false;
 				} else
 					et_end.setText("");
@@ -573,6 +608,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	}
 
+	private void clear() {
+		
+		mapOverlays.clear();
+	}
+	
 	private void setMap() {
 		mapView.setBuiltInZoomControls(true);
 
@@ -600,7 +640,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		mc = mapView.getController();
 		mc.setZoom(INITIAL_ZOOM_LEVEL);
 		mc.setCenter(srcPoint);
-
+		
 		// HelloItemizedOverlay startItem = new
 		// HelloItemizedOverlay(this.getResources().getDrawable(R.drawable.startpoint));
 		// HelloItemizedOverlay endItem = new
@@ -718,8 +758,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		Log.d(getPackageName(), urlstring);
 
 		JSONObject geo = new JSONObject(readStrFromUrl(urlstring));
-		
-		Log.d(getPackageName(), "yoooooooooo"+geo.getString("status"));
 		
 		if (geo.getString("status").equals("OK")) {
 			String address = geo.getJSONArray("results").getJSONObject(0)

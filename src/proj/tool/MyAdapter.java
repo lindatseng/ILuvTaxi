@@ -1,6 +1,7 @@
 package proj.tool;
 
 import com.cyrilmottier.android.greendroid.R;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
