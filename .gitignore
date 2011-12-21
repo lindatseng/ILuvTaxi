@@ -6,3 +6,5 @@ R.java
 gen/*
 parse.py
 taxilist.txt
+gen/com/cyrilmottier/android/greendroid/R.java
+gen/proj/ui/R.java

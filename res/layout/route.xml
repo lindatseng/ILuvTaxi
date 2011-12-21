@@ -22,6 +22,8 @@
                 android:layout_height="match_parent"
                 android:apiKey="0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig"
                 android:clickable="true" />
+            <!-- linda key: 0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig -->
+            <!-- chiu key: 0WtK_7nOt5RYPSaYq-RoADuam-r_dBU6PnEvePw -->
 
             <ImageView
                 android:id="@+id/drag_start"

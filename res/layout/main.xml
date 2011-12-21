@@ -182,16 +182,16 @@
                         android:text="@string/home_call" />
             </LinearLayout>
 
-            <ScrollView
+            <!--  ScrollView
                 android:id="@+id/scrollView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#ffdff59b"
-                android:layout_weight="1" >
+                android:layout_weight="1" -->
 
 
-                    <ListView
-                    android:id="@+id/listView1"
+                <ListView
+                    android:id="@+id/taxiInfoListview"
                     android:background="#ffdff59b"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
@@ -200,7 +200,7 @@
 
                 
 
-            </ScrollView>
+            <!--/ScrollView-->
             
         </LinearLayout>
     </FrameLayout>
