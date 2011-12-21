@@ -333,7 +333,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 					if (et_start.getText().length() == 0) {
 						Toast toast = Toast.makeText(mapView.getContext(),
-								"請輸入關鍵字查詢", Toast.LENGTH_SHORT);
+								"隢�撓�仿��萄��亥岷", Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 					} else {
@@ -350,7 +350,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							}
 							else{
 								Toast toast = Toast.makeText(mapView.getContext(),
-										"查無結果，請重新輸入關鍵字查詢", Toast.LENGTH_SHORT);
+										"�亦�蝯��嚗�����頛詨����摮��閰�", Toast.LENGTH_SHORT);
 								toast.setGravity(Gravity.CENTER, 0, 0);
 								toast.show();
 							}
@@ -413,7 +413,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 					if (et_end.getText().length() == 0) {
 						Toast toast = Toast.makeText(mapView.getContext(),
-								"請輸入關鍵字查詢", Toast.LENGTH_SHORT);
+								"隢�撓�仿��萄��亥岷", Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 					} else {
@@ -434,7 +434,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							}
 							else{
 								Toast toast = Toast.makeText(mapView.getContext(),
-										"查無結果，請重新輸入關鍵字查詢", Toast.LENGTH_SHORT);
+										"�亦�蝯��嚗�����頛詨����摮��閰�", Toast.LENGTH_SHORT);
 								toast.setGravity(Gravity.CENTER, 0, 0);
 								toast.show();
 							}
@@ -488,7 +488,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 							mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
 							startItem.changePosition(MY_LATITUDE, MY_LONGITUDE);
-							et_start.setText("我的位置");
+							et_start.setText("���雿�蔭");
 							et_start.setTextColor(android.graphics.Color.BLUE);
 							type_start = 2;
 							
@@ -499,7 +499,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 								mapOverlays.add(startItem);
 								isStartItem = true;
 							}
-							et_start.setText("地圖上的點");
+							et_start.setText("�啣�銝��暺�");
 							et_start.setTextColor(android.graphics.Color.BLUE);
 							startItem.changeToCenter();
 							startItem.setMove(true);
@@ -548,7 +548,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
 					endItem.changePosition(MY_LATITUDE, MY_LONGITUDE);
 					endItem.setMove(false);
-					et_end.setText("我的位置");
+					et_end.setText("���雿�蔭");
 					et_end.setTextColor(android.graphics.Color.BLUE);
 					type_end = 2;
 					break;
@@ -560,7 +560,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					}
 					endItem.changeToCenter();
 					endItem.setMove(true);
-					et_end.setText("地圖上的點");
+					et_end.setText("�啣�銝��暺�");
 					et_end.setTextColor(android.graphics.Color.BLUE);
 					type_end = 2;
 					break;
@@ -623,12 +623,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	private void setResultText() {
-		tv_routeNum.setText("路線 " + routeNow + " / " +routeNum);
-		tv_routeDist.setText("距離："
+		tv_routeNum.setText("頝舐� " + routeNow + " / " +routeNum);
+		tv_routeDist.setText("頝��嚗�"
 				+ routeInfo.get("DISTANCE" + (routeNow - 1)).toString());
-		tv_routeTime.setText("時間："
+		tv_routeTime.setText("���嚗�"
 				+ routeInfo.get("DURATION" + (routeNow - 1)).toString());
-		tv_routePrice.setText("價錢："
+		tv_routePrice.setText("�寥�嚗�"
 				+ routeInfo.get("PRICE" + (routeNow - 1)).toString());
 	}
 

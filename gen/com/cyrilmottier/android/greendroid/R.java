@@ -24,6 +24,11 @@ public final class R {
         public static final int gd_shrink_from_topright_to_bottomleft=0x7f04000c;
         public static final int tran_anim=0x7f04000d;
     }
+    public static final class array {
+        public static final int name=0x7f0b0001;
+        public static final int phoneNum=0x7f0b0002;
+        public static final int region=0x7f0b0000;
+    }
     public static final class attr {
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
@@ -871,7 +876,8 @@ containing a value of this type.
         public static final int tmplistviewitem=0x7f030027;
     }
     public static final class raw {
-        public static final int taxilist=0x7f050000;
+        public static final int parse=0x7f050000;
+        public static final int taxilist=0x7f050001;
     }
     public static final class string {
         public static final int app_name=0x7f09001d;
