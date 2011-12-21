@@ -68,8 +68,7 @@ public class Pricer extends Activity {
 			start.setEnabled(true);
 			stop.setEnabled(false);
 		}
-		
-        
+
     }
     
     public void onPause(){

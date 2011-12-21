@@ -99,17 +99,14 @@ public class LocationRunnable implements Runnable {
     }
 
     private void notifyFinish(String type, double lat, double lng, float accuracy) {
-        mService.locationCallBack(type, lat, lng, accuracy);
-        mService.getHandler().sendEmptyMessage(UserLocation.MESSAGE_LOCATION);
+        //mService.locationCallBack(type, lat, lng, accuracy);
+        //mService.getHandler().sendEmptyMessage(UserLocation.MESSAGE_LOCATION);
     }
 
     private class MyLocationListener implements LocationListener {
         @Override
         public void onLocationChanged(Location location) {
-        	Log.e(TAG,"onLocationChanged: "+location.getLatitude()+", "+location.getLongitude());
-            if(isBetterLocation(location, mBestLocation)) {
-                mBestLocation = location;
-            }
+        	mService.locationCallBack();
         }
         @Override
         public void onProviderDisabled(String provider) {}

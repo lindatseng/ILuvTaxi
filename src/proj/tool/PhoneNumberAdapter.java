@@ -42,8 +42,8 @@ public class PhoneNumberAdapter extends SimpleAdapter {
 		 tv1.setText(mList.get(position).get("region")+"\n"
 				 	+mList.get(position).get("name") +"\n"
 				 	+mList.get(position).get("phoneNum"));
-		 ImageView call = (ImageView) v.findViewById(R.id.bt_call);
-		 call.setOnClickListener(
+//		 ImageView call = (ImageView) v.findViewById(R.id.bt_call);
+		 v.setOnClickListener(
 				 new ClickListener("tel:"+mList.get(position).get("phoneNum").trim() , context));
 
 		 return v;
