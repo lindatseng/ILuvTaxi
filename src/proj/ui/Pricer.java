@@ -7,6 +7,7 @@ import java.util.List;
 
 import proj.tool.LoggerHelper;
 import proj.tool.MyAdapter;
+import proj.tool.TaxiData;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -38,11 +39,14 @@ public class Pricer extends Activity {
 	private List<ContentValues> record;
 	Context context;
 	
+	private TaxiData taxidata;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.pricer);
         context = this;
+        taxidata = new TaxiData(this);
         record = new ArrayList<ContentValues>();
         findView();
         setListener();
@@ -73,7 +77,7 @@ public class Pricer extends Activity {
     	loggerDB.close();
     	loggerHelper.close();
     	
-    }
+    } 
     
     private void findView(){
     	start = (Button) findViewById(R.id.bt_start_service);
@@ -103,22 +107,14 @@ public class Pricer extends Activity {
 			}
     	});	
     	
-    	/*seeLogger.setOnClickListener(new OnClickListener(){
+    	seeLogger.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
 				
-				Cursor c = loggerDB.query("GPSLog", null, null, null, null, null, null);
-				c.moveToFirst();
-				for(int i=0 ; i<c.getCount() ; i++){
-					long unixtime = Long.parseLong(c.getString(c.getColumnIndex("unixTime")));
-					Date d = new Date(unixtime);  
-					Log.e("Logger", d.toString()+": "+c.getString(c.getColumnIndex("latitude"))+", "+c.getString(c.getColumnIndex("longitude")));
-					c.moveToNext();
-				}
-				
+				taxidata.printDataInLogCat();
 			}
     	
-    	});*/
+    	});
     	clearDB.setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View arg0) {
