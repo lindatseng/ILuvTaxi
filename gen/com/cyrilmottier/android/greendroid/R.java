@@ -693,45 +693,44 @@ containing a value of this type.
         public static final int gd_page_indicator_dot_selected_pressed=0x7f02002d;
         public static final int gd_quick_action_arrow_up=0x7f02002e;
         public static final int gd_quick_action_bar_arrow_down=0x7f02002f;
-        public static final int gd_quick_action_bar_arrow_up=0x7f020030;
-        public static final int gd_quick_action_bar_background=0x7f020031;
-        public static final int gd_quick_action_bar_bottom_frame=0x7f020032;
-        public static final int gd_quick_action_bar_grip_left=0x7f020033;
-        public static final int gd_quick_action_bar_grip_right=0x7f020034;
-        public static final int gd_quick_action_bar_item=0x7f020035;
-        public static final int gd_quick_action_bar_item_normal=0x7f020036;
-        public static final int gd_quick_action_bar_item_pressed=0x7f020037;
-        public static final int gd_quick_action_bar_item_selected=0x7f020038;
-        public static final int gd_quick_action_grid_arrow_down=0x7f020039;
-        public static final int gd_quick_action_grid_bg=0x7f02003a;
-        public static final int gd_quick_action_grid_bottom_frame=0x7f02003b;
-        public static final int gd_quick_action_grid_selector=0x7f02003c;
-        public static final int gd_quick_action_grid_selector_focused=0x7f02003d;
-        public static final int gd_quick_action_grid_selector_pressed=0x7f02003e;
-        public static final int gd_quick_action_top_frame=0x7f02003f;
-        public static final int gd_segment_checkmark=0x7f020040;
-        public static final int gd_segment_checkmark_off=0x7f020041;
-        public static final int gd_segment_checkmark_on=0x7f020042;
-        public static final int gd_segment_divider=0x7f020043;
-        public static final int gd_segment_label=0x7f020044;
-        public static final int gd_segment_label_focused=0x7f020045;
-        public static final int gd_segment_label_normal=0x7f020046;
-        public static final int gd_segment_label_pressed=0x7f020047;
-        public static final int gd_shadow_bottom=0x7f020048;
-        public static final int gd_shadow_top=0x7f020049;
-        public static final int gd_tab_indicator=0x7f02004a;
-        public static final int gd_tab_indicator_normal=0x7f02004b;
-        public static final int gd_tab_indicator_pressed=0x7f02004c;
-        public static final int gd_tab_indicator_selected=0x7f02004d;
-        public static final int gd_tab_indicator_unselected=0x7f02004e;
-        public static final int home_btn_map_default=0x7f02004f;
-        public static final int home_btn_starred_default=0x7f020050;
-        public static final int ic_launcher=0x7f020051;
-        public static final int pop=0x7f020052;
-        public static final int route=0x7f020053;
-        public static final int start=0x7f020054;
-        public static final int startpoint=0x7f020055;
-        public static final int taxi_strip=0x7f020056;
+        public static final int gd_quick_action_bar_background=0x7f020030;
+        public static final int gd_quick_action_bar_bottom_frame=0x7f020031;
+        public static final int gd_quick_action_bar_grip_left=0x7f020032;
+        public static final int gd_quick_action_bar_grip_right=0x7f020033;
+        public static final int gd_quick_action_bar_item=0x7f020034;
+        public static final int gd_quick_action_bar_item_normal=0x7f020035;
+        public static final int gd_quick_action_bar_item_pressed=0x7f020036;
+        public static final int gd_quick_action_bar_item_selected=0x7f020037;
+        public static final int gd_quick_action_grid_arrow_down=0x7f020038;
+        public static final int gd_quick_action_grid_bg=0x7f020039;
+        public static final int gd_quick_action_grid_bottom_frame=0x7f02003a;
+        public static final int gd_quick_action_grid_selector=0x7f02003b;
+        public static final int gd_quick_action_grid_selector_focused=0x7f02003c;
+        public static final int gd_quick_action_grid_selector_pressed=0x7f02003d;
+        public static final int gd_quick_action_top_frame=0x7f02003e;
+        public static final int gd_segment_checkmark=0x7f02003f;
+        public static final int gd_segment_checkmark_off=0x7f020040;
+        public static final int gd_segment_checkmark_on=0x7f020041;
+        public static final int gd_segment_divider=0x7f020042;
+        public static final int gd_segment_label=0x7f020043;
+        public static final int gd_segment_label_focused=0x7f020044;
+        public static final int gd_segment_label_normal=0x7f020045;
+        public static final int gd_segment_label_pressed=0x7f020046;
+        public static final int gd_shadow_bottom=0x7f020047;
+        public static final int gd_shadow_top=0x7f020048;
+        public static final int gd_tab_indicator=0x7f020049;
+        public static final int gd_tab_indicator_normal=0x7f02004a;
+        public static final int gd_tab_indicator_pressed=0x7f02004b;
+        public static final int gd_tab_indicator_selected=0x7f02004c;
+        public static final int gd_tab_indicator_unselected=0x7f02004d;
+        public static final int home_btn_map_default=0x7f02004e;
+        public static final int home_btn_starred_default=0x7f02004f;
+        public static final int ic_launcher=0x7f020050;
+        public static final int pop=0x7f020051;
+        public static final int route=0x7f020052;
+        public static final int start=0x7f020053;
+        public static final int startpoint=0x7f020054;
+        public static final int taxi_strip=0x7f020055;
     }
     public static final class id {
         public static final int app_title=0x7f060032;
@@ -828,7 +827,10 @@ containing a value of this type.
         public static final int tableRow1=0x7f060036;
         public static final int tableRow2=0x7f06003a;
         public static final int textView1=0x7f06002c;
+<<<<<<< HEAD
         public static final int timeInfo=0x7f06006c;
+=======
+>>>>>>> 75d7afdd1a296b292104893e7aaea3432c36e2b1
         public static final int top=0x7f060007;
         public static final int tv_routeDist=0x7f060059;
         public static final int tv_routeNum=0x7f060058;
@@ -887,7 +889,8 @@ containing a value of this type.
         public static final int tmplistviewitem=0x7f030027;
     }
     public static final class raw {
-        public static final int taxilist=0x7f050000;
+        public static final int parse=0x7f050000;
+        public static final int taxilist=0x7f050001;
     }
     public static final class string {
         public static final int app_name=0x7f09001d;

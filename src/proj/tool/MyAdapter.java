@@ -1,6 +1,7 @@
 package proj.tool;
 
 import com.cyrilmottier.android.greendroid.R;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.view.LayoutInflater;
@@ -23,11 +24,11 @@ public class MyAdapter extends CursorAdapter {
 		String timeval = c.getString(c.getColumnIndex("timeval"));
 		String unixTime = c.getString(c.getColumnIndex("unixTime"));
 			
-		TextView gpsInfo = (TextView) v.findViewById(R.id.gpsInfo);
-		TextView timeInfo = (TextView) v.findViewById(R.id.timeInfo);
+		//TextView gpsInfo = (TextView) v.findViewById(R.id.gpsInfo);
+		//TextView timeInfo = (TextView) v.findViewById(R.id.timeInfo);
 			
-		gpsInfo.setText("lat: "+latitude+", long: "+longitude);
-		timeInfo.setText("unix: "+unixTime+", val:"+timeval);	
+		//gpsInfo.setText("lat: "+latitude+", long: "+longitude);
+		//timeInfo.setText("unix: "+unixTime+", val:"+timeval);	
 
 	}
 

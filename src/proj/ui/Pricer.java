@@ -7,6 +7,7 @@ import java.util.List;
 
 import proj.tool.LoggerHelper;
 import proj.tool.MyAdapter;
+import proj.tool.PhoneNumberAdapter;
 import proj.tool.TaxiData;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -85,6 +86,7 @@ public class Pricer extends Activity {
     	seeLogger = (Button) findViewById(R.id.bt_see_logger);
     	clearDB = (Button) findViewById(R.id.bt_clear_db);
     	listview = (ListView) findViewById(R.id.listview);
+    	listview.setAdapter(new PhoneNumberAdapter(context, taxidata.getAllData() , 1 , new String[]{ } , new int[]{} ));
     }
     
     private void setListener(){
