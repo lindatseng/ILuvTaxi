@@ -24,6 +24,11 @@ public final class R {
         public static final int gd_shrink_from_topright_to_bottomleft=0x7f04000c;
         public static final int tran_anim=0x7f04000d;
     }
+    public static final class array {
+        public static final int name=0x7f0b0001;
+        public static final int phoneNum=0x7f0b0002;
+        public static final int region=0x7f0b0000;
+    }
     public static final class attr {
         /** <p>Must be an integer value, such as "<code>100</code>".
 <p>This may also be a reference to a resource (in the form
@@ -729,14 +734,14 @@ containing a value of this type.
         public static final int bottom=0x7f060008;
         public static final int bt_call_back=0x7f060044;
         public static final int bt_clear_db=0x7f060049;
-        public static final int bt_end=0x7f06005f;
+        public static final int bt_end=0x7f060060;
         public static final int bt_go=0x7f060034;
         public static final int bt_last=0x7f060051;
         public static final int bt_next=0x7f060056;
         public static final int bt_result=0x7f060035;
         public static final int bt_see_logger=0x7f060048;
         public static final int bt_show=0x7f060033;
-        public static final int bt_start=0x7f06005a;
+        public static final int bt_start=0x7f06005b;
         public static final int bt_start_service=0x7f060046;
         public static final int bt_stop_service=0x7f060047;
         public static final int button1=0x7f060031;
@@ -747,10 +752,10 @@ containing a value of this type.
         public static final int dashboard=0x7f060001;
         public static final int drag_start=0x7f06004c;
         public static final int empty=0x7f060002;
-        public static final int et_end=0x7f06005d;
-        public static final int et_start=0x7f060058;
+        public static final int et_end=0x7f06005e;
+        public static final int et_start=0x7f060059;
         public static final int frameLayout1=0x7f060036;
-        public static final int frameLayout2=0x7f06005c;
+        public static final int frameLayout2=0x7f06005d;
         public static final int gd_action_bar=0x7f060012;
         public static final int gd_action_bar_content_view=0x7f060014;
         public static final int gd_action_bar_home_item=0x7f060015;
@@ -778,15 +783,15 @@ containing a value of this type.
         public static final int gdi_scroll=0x7f06001f;
         public static final int gdi_v_rack=0x7f060026;
         public static final int gdi_v_scroll=0x7f060025;
-        public static final int gpsInfo=0x7f060065;
+        public static final int gpsInfo=0x7f060066;
         public static final int hdpi=0x7f060005;
         public static final int home_bt_pricer=0x7f06003e;
-        public static final int home_bt_pricer1=0x7f060061;
+        public static final int home_bt_pricer1=0x7f060062;
         public static final int home_bt_route=0x7f060038;
-        public static final int home_bt_route1=0x7f060060;
+        public static final int home_bt_route1=0x7f060061;
         public static final int home_button_call=0x7f06003c;
-        public static final int img_end=0x7f06005b;
-        public static final int img_start=0x7f060057;
+        public static final int img_end=0x7f06005c;
+        public static final int img_start=0x7f060058;
         public static final int layout_call=0x7f060041;
         public static final int layout_map=0x7f06003f;
         public static final int layout_result=0x7f06004f;
@@ -804,18 +809,18 @@ containing a value of this type.
         public static final int mdpi=0x7f060004;
         public static final int multiple=0x7f06000f;
         public static final int normal=0x7f060000;
-        public static final int now_playing_more=0x7f060064;
-        public static final int now_playing_subtitle=0x7f060063;
-        public static final int now_playing_title=0x7f060062;
-        public static final int relativeLayout1=0x7f060059;
-        public static final int relativeLayout2=0x7f06005e;
+        public static final int now_playing_more=0x7f060065;
+        public static final int now_playing_subtitle=0x7f060064;
+        public static final int now_playing_title=0x7f060063;
+        public static final int relativeLayout1=0x7f06005a;
+        public static final int relativeLayout2=0x7f06005f;
         public static final int right=0x7f06000a;
         public static final int scrollView1=0x7f06002e;
         public static final int single=0x7f06000e;
         public static final int tableRow1=0x7f060037;
         public static final int tableRow2=0x7f06003a;
         public static final int textView1=0x7f06002c;
-        public static final int timeInfo=0x7f060066;
+        public static final int timeInfo=0x7f060067;
         public static final int top=0x7f060007;
         public static final int tv_routeDist=0x7f060053;
         public static final int tv_routeNum=0x7f060052;
@@ -823,7 +828,8 @@ containing a value of this type.
         public static final int tv_routeTime=0x7f060054;
         public static final int view1=0x7f060039;
         public static final int view2=0x7f06003d;
-        public static final int view3=0x7f060043;
+        public static final int view3=0x7f060057;
+        public static final int view_call_back=0x7f060043;
         public static final int view_map=0x7f060040;
         public static final int view_routeResult=0x7f060050;
         public static final int view_startend=0x7f06004e;

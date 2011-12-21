@@ -167,7 +167,7 @@
                 android:weightSum="2">
 
                 <View
-                    android:id="@+id/view3"
+                    android:id="@+id/view_call_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#aa000000"
@@ -184,14 +184,15 @@
 
             <ScrollView
                 android:id="@+id/scrollView1"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="#ffdff59b"
                 android:layout_weight="1" >
 
 
                     <ListView
                     android:id="@+id/listView1"
-                    android:background="#ffffffff"
+                    android:background="#ffdff59b"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
                 </ListView>

@@ -61,8 +61,8 @@ import com.google.android.maps.OverlayItem;
 public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
 
-	Button home_bt_route, home_bt_pricer,home_bt_call;
-	View view_map;
+	Button home_bt_route, home_bt_pricer,home_bt_call,bt_call_back;
+	View view_map,view_call_back;
 	MapView mapView;
 	Button bt_show, bt_go, bt_result, bt_next, bt_last;
 	ImageButton bt_start, bt_end;
@@ -114,13 +114,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
 		home_bt_pricer = (Button) findViewById(R.id.home_bt_pricer);
 		home_bt_call = (Button) findViewById(R.id.home_button_call);
+		bt_call_back = (Button) findViewById(R.id.bt_call_back);
+		view_call_back = (View) findViewById(R.id.view_call_back);
 		view_map = (View) findViewById(R.id.view_map);
 		view_map.setVisibility(View.GONE);
 		mapView = (MapView) view_map.findViewById(R.id.mapview);
 		bt_show = (Button) findViewById(R.id.bt_show);
 		bt_go = (Button) findViewById(R.id.bt_go);
 		bt_result = (Button) findViewById(R.id.bt_result);
-		// tv_copyrights = (TextView) findViewById(R.id.tv_copyrights);
 		layout_startend = (LinearLayout) view_map
 				.findViewById(R.id.layout_startend);
 		layout_result = (LinearLayout) view_map
@@ -181,6 +182,25 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				layout_call.setVisibility(View.VISIBLE);
 			}
 			
+		});
+		
+		bt_call_back.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_call.setVisibility(View.GONE);
+			}
+			
+		});
+		
+		view_call_back.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_call.setVisibility(View.GONE);
+			}
 		});
 
 		prepareQuickActionGrid();
