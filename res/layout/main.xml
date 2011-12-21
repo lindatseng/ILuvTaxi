@@ -184,8 +184,10 @@
                 android:id="@+id/taxiInfoListview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+
                 android:background="#ffdff59b" >
             </ListView>
+
         </LinearLayout>
 
         <LinearLayout
@@ -203,6 +205,7 @@
                 android:padding="8dp"
                 android:orientation="vertical"
                 android:background="@color/layout_bg" >
+
 
                 <TextView
                     android:id="@+id/textView1"
@@ -249,6 +252,7 @@
                     android:layout_weight="1"
                     android:background="#aa000000" />
             </LinearLayout>
+
         </LinearLayout>
     </FrameLayout>
 
