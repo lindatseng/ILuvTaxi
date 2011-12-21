@@ -3,5 +3,6 @@
 R.java
 *bin/
 *gen/
+gen/*
 parse.py
 taxilist.txt
