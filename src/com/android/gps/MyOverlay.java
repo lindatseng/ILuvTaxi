@@ -77,15 +77,30 @@ public class MyOverlay extends Overlay {
 				Point point2 = new Point();
 				projection.toPixels(gp2, point2);
 				paint.setStrokeWidth(6);
-				paint.setAlpha(250);
+				paint.setAlpha(180);
 				canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
 				RectF oval = new RectF(point2.x - mRadius, point2.y - mRadius,
 						point2.x + mRadius, point2.y + mRadius);
 				/* end point */
-				paint.setAlpha(250);
+				paint.setAlpha(130); 
 				canvas.drawOval(oval, paint);
 			}
 			else if (mode ==4){
+				
+				if (defaultColor == 999)
+					paint.setColor(Color.GREEN);
+				else
+					paint.setColor(defaultColor);
+				Point point2 = new Point();
+				projection.toPixels(gp2, point2);
+				paint.setStrokeWidth(6);
+				paint.setAlpha(255);
+				canvas.drawLine(point.x, point.y, point2.x, point2.y, paint);
+				RectF oval = new RectF(point2.x - mRadius, point2.y - mRadius,
+						point2.x + mRadius, point2.y + mRadius);
+				/* end point */
+				paint.setAlpha(255);
+				canvas.drawOval(oval, paint);
 				
 			}
 		}

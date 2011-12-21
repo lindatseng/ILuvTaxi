@@ -111,9 +111,9 @@ public class Route extends MapActivity implements LocationListener {
     
     private void findView(){
     	mapView = (MapView) findViewById(R.id.mapview);
-    	bt_show = (Button) findViewById(R.id.bt_show);
+//    	bt_show = (Button) findViewById(R.id.bt_show);
     	bt_go = (Button) findViewById(R.id.bt_go);
-    	bt_result = (Button) findViewById(R.id.bt_result);
+//    	bt_result = (Button) findViewById(R.id.bt_result);
     	layout_startend = (LinearLayout) findViewById(R.id.layout_startend);
     	layout_result = (LinearLayout) findViewById(R.id.layout_result);
     	view_startend = (View) findViewById(R.id.view_startend);
@@ -172,10 +172,10 @@ public class Route extends MapActivity implements LocationListener {
 //				DrawPath(srcPoint, destPoint, Color.BLUE, mapView);
 				
 				drawMyPath();
-				tv_routeNum.setText("¸ô½u "+routeNow);
-				tv_routeDist.setText("¶ZÂ÷¡G"+routeInfo.get("DISTANCE"+(routeNow-1)).toString());
-				tv_routeTime.setText("®É¶¡¡G"+routeInfo.get("DURATION"+(routeNow-1)).toString());
-				tv_routePrice.setText("»ù¿ú¡G"+routeInfo.get("PRICE"+(routeNow-1)).toString());
+				tv_routeNum.setText("ï¿½ï¿½ï¿½u "+routeNow);
+				tv_routeDist.setText("ï¿½Zï¿½ï¿½ï¿½G"+routeInfo.get("DISTANCE"+(routeNow-1)).toString());
+				tv_routeTime.setText("ï¿½É¶ï¿½ï¿½G"+routeInfo.get("DURATION"+(routeNow-1)).toString());
+				tv_routePrice.setText("ï¿½ï¿½ï¿½G"+routeInfo.get("PRICE"+(routeNow-1)).toString());
 			}
 		});
     	
@@ -199,10 +199,10 @@ public class Route extends MapActivity implements LocationListener {
 				if(routeNow<routeNum) routeNow++;
 				else routeNow = 1;
 				
-				tv_routeNum.setText("¸ô½u "+routeNow);
-				tv_routeDist.setText("¶ZÂ÷¡G"+routeInfo.get("DISTANCE"+(routeNow-1)).toString());
-				tv_routeTime.setText("®É¶¡¡G"+routeInfo.get("DURATION"+(routeNow-1)).toString());
-				tv_routePrice.setText("»ù¿ú¡G"+routeInfo.get("PRICE"+(routeNow-1)).toString());
+				tv_routeNum.setText("ï¿½ï¿½ï¿½u "+routeNow);
+				tv_routeDist.setText("ï¿½Zï¿½ï¿½ï¿½G"+routeInfo.get("DISTANCE"+(routeNow-1)).toString());
+				tv_routeTime.setText("ï¿½É¶ï¿½ï¿½G"+routeInfo.get("DURATION"+(routeNow-1)).toString());
+				tv_routePrice.setText("ï¿½ï¿½ï¿½G"+routeInfo.get("PRICE"+(routeNow-1)).toString());
 //				clearMyPath(routeNow);
 				
 			}
@@ -216,10 +216,10 @@ public class Route extends MapActivity implements LocationListener {
 				if(routeNow>1) routeNow--;
 				else routeNow = routeNum;
 				
-				tv_routeNum.setText("¸ô½u "+routeNow);
-				tv_routeDist.setText("¶ZÂ÷¡G"+routeInfo.get("DISTANCE"+(routeNow-1)).toString());
-				tv_routeTime.setText("®É¶¡¡G"+routeInfo.get("DURATION"+(routeNow-1)).toString());
-				tv_routePrice.setText("»ù¿ú¡G"+routeInfo.get("PRICE"+(routeNow-1)).toString());
+				tv_routeNum.setText("ï¿½ï¿½ï¿½u "+routeNow);
+				tv_routeDist.setText("ï¿½Zï¿½ï¿½ï¿½G"+routeInfo.get("DISTANCE"+(routeNow-1)).toString());
+				tv_routeTime.setText("ï¿½É¶ï¿½ï¿½G"+routeInfo.get("DURATION"+(routeNow-1)).toString());
+				tv_routePrice.setText("ï¿½ï¿½ï¿½G"+routeInfo.get("PRICE"+(routeNow-1)).toString());
 			}
 		});
     	

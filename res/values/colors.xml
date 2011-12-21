@@ -34,4 +34,8 @@
     <color name="home_text">#ffffffff</color>
     <color name="layout_back">#aaffffff</color>
     <color name="trans">#00000000</color>
+    <color name="dark_blue">#ff3232ff</color>
+    <color name="myCyan">#ff64c8ed</color>
+    <color name="home_pink">#ffff32c8</color>
+    <color name="layout_bg">#fffcf283</color>
 </resources>
