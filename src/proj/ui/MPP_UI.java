@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -77,7 +78,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	int type_start = 0, type_end = 0;
 	LinearLayout layout_startend, layout_result, layout_call, layout_info;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
-			tv_copyrights;
+			tv_copyrights, tv_entry, tv_time,tv_city;
 	View view_startend, view_routeresult;
 	EditText et_start, et_end;
 
@@ -142,6 +143,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				.findViewById(R.id.layout_result);
 		layout_call = (LinearLayout) findViewById(R.id.layout_call);
 		layout_info = (LinearLayout) findViewById(R.id.layout_info);
+		tv_entry = (TextView) findViewById(R.id.tv_entry);
+		tv_time = (TextView) findViewById(R.id.tv_time);
+		tv_city = (TextView) findViewById(R.id.tv_city);
 		view_startend = (View) view_map.findViewById(R.id.view_startend);
 		et_start = (EditText) view_startend.findViewById(R.id.et_start);
 		et_end = (EditText) view_startend.findViewById(R.id.et_end);
@@ -174,7 +178,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				// TODO Auto-generated method stub
 				view_map.setVisibility(View.VISIBLE);
 				bt_go.setText(">>開始規劃<<");
-				bt_go.setBackgroundColor(getResources().getColor(R.color.home_pink));
+				bt_go.setBackgroundColor(getResources().getColor(
+						R.color.home_pink));
 				bt_go.setClickable(true);
 
 			}
@@ -223,6 +228,27 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_route.setClickable(false);
 				home_bt_call.setClickable(false);
 				home_bt_pricer.setClickable(false);
+
+				Calendar c = Calendar.getInstance();
+
+				int hour = c.get(Calendar.HOUR_OF_DAY);
+				if (hour >= 23 || hour <= 5) {
+					tv_time.setText("夜間加成時段");
+				} else {
+					tv_time.setText("非夜間加成時段");
+				}
+				
+				 tv_entry.setText(getResources().getString(R.string.entry_taipei));
+				 try {
+					 Log.d(getPackageName(), getCity());
+					tv_city.setText(getCity());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -672,7 +698,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			dismissDialog(DIALOG_LOADING);
 
 		}
-	}; 
+	};
 
 	OnClickListener resetPath = new OnClickListener() {
 
@@ -708,8 +734,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			Toast.makeText(this, "location is null", Toast.LENGTH_LONG).show();
 			return;
 		}
-		Src_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
-		Src_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+		MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
+		MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+		Src_LATITUDE = MY_LATITUDE;
+		Src_LONGITUDE = MY_LONGITUDE;
 		srcPoint = new GeoPoint(Src_LATITUDE, Src_LONGITUDE);
 		destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
 
@@ -977,6 +1005,38 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			return false;
 	}
 
+	private String getCity() throws IOException, JSONException {
+		double lat,lng;
+		lat = MY_LATITUDE/1E6;
+		lng = MY_LONGITUDE/1E6;
+		String urlstring = "http://maps.google.com/maps/api/geocode/json?latlng="
+				+ lat
+				+ ","
+				+ lng
+				+ "&sensor=true&language=zh-TW";
+		Log.d(getPackageName(), urlstring);
+		String urlJSON = readStrFromUrl(urlstring);
+		Log.d(getPackageName(), urlJSON);
+
+		if (urlJSON.equals("null")) {
+			return "台北市";
+		} else {
+			JSONObject myCity = new JSONObject(urlJSON);
+			int num = myCity.getJSONArray("results").getJSONObject(0)
+					.getJSONArray("address_components").length();
+			for (int i = 0; i < num; i++) {
+				if (myCity.getJSONArray("results").getJSONObject(0)
+						.getJSONArray("address_components").getJSONObject(i)
+						.getJSONArray("types").getString(0)
+						.equals("administrative_area_level_2")) {
+					return myCity.getJSONArray("results").getJSONObject(0)
+							.getJSONArray("address_components").getJSONObject(i).getString("long_name");
+				}
+			}
+		}
+		return null;
+	}
+
 	private Boolean getGeo(String searchText) throws JSONException, IOException {
 		String text[] = searchText.split(" ");
 		String urlText = "";
@@ -990,26 +1050,35 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				+ "&bounds=20.5637908,116.7118602|26.3873532,122.006905&sensor=true&language=zh-TW";
 		Log.d(getPackageName(), urlstring);
 
-		JSONObject geo = new JSONObject(readStrFromUrl(urlstring));
+		String urlJSON = readStrFromUrl(urlstring);
 
-		if (geo.getString("status").equals("OK")) {
-			for (int i = 0; i < geo.getJSONArray("results").length(); i++) {
-				String address = geo.getJSONArray("results").getJSONObject(i)
-						.getString("formatted_address");
-				int lat = (int) ((geo.getJSONArray("results").getJSONObject(i)
-						.getJSONObject("geometry").getJSONObject("location")
-						.getDouble("lat")) * 1000000);
-				int lng = (int) ((geo.getJSONArray("results").getJSONObject(i)
-						.getJSONObject("geometry").getJSONObject("location")
-						.getDouble("lng")) * 1000000);
-				Log.d(getPackageName(), lat + " " + lng);
+		if (urlJSON.equals("null")) {
+			Toast toast = Toast.makeText(this, "請開啟3G或wifi以搜尋資料",
+					Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+		} else {
+			JSONObject geo = new JSONObject(urlJSON);
 
-				if (inTaiwan(lat, lng)) {
-					searchNum++;
-					searchInfo.put("ADDRESS" + searchNum, address);
-					searchInfo.put("LAT" + searchNum, lat);
-					searchInfo.put("LNG" + searchNum, lng);
-					return true;
+			if (geo.getString("status").equals("OK")) {
+				for (int i = 0; i < geo.getJSONArray("results").length(); i++) {
+					String address = geo.getJSONArray("results")
+							.getJSONObject(i).getString("formatted_address");
+					int lat = (int) ((geo.getJSONArray("results")
+							.getJSONObject(i).getJSONObject("geometry")
+							.getJSONObject("location").getDouble("lat")) * 1000000);
+					int lng = (int) ((geo.getJSONArray("results")
+							.getJSONObject(i).getJSONObject("geometry")
+							.getJSONObject("location").getDouble("lng")) * 1000000);
+					Log.d(getPackageName(), lat + " " + lng);
+
+					if (inTaiwan(lat, lng)) {
+						searchNum++;
+						searchInfo.put("ADDRESS" + searchNum, address);
+						searchInfo.put("LAT" + searchNum, lat);
+						searchInfo.put("LNG" + searchNum, lng);
+						return true;
+					}
 				}
 			}
 		}

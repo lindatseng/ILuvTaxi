@@ -11,5 +11,7 @@
     <string name="home_info">計費方式</string>
     <string name="home_pricer">行動計費器</string>
     <string name="home_call">車隊查詢\n\n暨\n\n電話叫車</string>
+    <string name="entry_taipei">\n\n起程：70元 (1.25公里)\n\n續程：5元 (每250公尺)\n\n延滯計時：5元 \n(時速5公里以下\n 累計100秒)</string>
+    <string name="entry_taipei_night">起程：70元 (1.25公里)\n續程：5元 (每250公尺)\n延滯計時：5元 \n(時速5公里以下累計100秒)\n夜間加成：加收20元</string>
 
 </resources>
