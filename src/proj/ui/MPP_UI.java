@@ -22,8 +22,10 @@ import org.json.JSONObject;
 
 import proj.tool.PhoneNumberAdapter;
 import proj.tool.TaxiData;
-
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
@@ -42,6 +44,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,6 +90,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	static int Src_LONGITUDE = 0;
 	int MY_LATITUDE, MY_LONGITUDE;
 	static final double EARTH_RADIUS = 6378.137;
+	protected static final int DIALOG_LOADING = 0;
 	MapController mc;
 	SitesOverlay startItem, endItem;
 	Boolean isEndItem = false;
@@ -169,7 +173,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				view_map.setVisibility(View.VISIBLE);
-				bt_go.setText("開始規劃");
+				bt_go.setText(">>開始規劃<<");
+				bt_go.setBackgroundColor(getResources().getColor(R.color.home_pink));
 				bt_go.setClickable(true);
 
 			}
@@ -594,6 +599,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			showDialog(DIALOG_LOADING);
+
 			Src_LATITUDE = startItem.getLat();
 			Src_LONGITUDE = startItem.getLon();
 			Dest_LATITUDE = endItem.getLat();
@@ -615,47 +622,57 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 			if (inTaiwan(Src_LATITUDE, Src_LONGITUDE)
 					&& inTaiwan(Dest_LATITUDE, Dest_LONGITUDE)) {
-
-				double srcLat = Src_LATITUDE / 1E6;
-				double srcLon = Src_LONGITUDE / 1E6;
-				double desLat = Dest_LATITUDE / 1E6;
-				double desLon = Dest_LONGITUDE / 1E6;
-
-				try {
-					getInfo(srcLat, srcLon, desLat, desLon);
-					Log.d(getPackageName(), routeInfo.toString());
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				if (routeNum != 0) {
-					drawMyPath();
-					setResultText();
-					selMyPath(routeNow);
-					mc.setCenter(new GeoPoint(
-							(Src_LATITUDE + Dest_LATITUDE) / 2,
-							(Src_LONGITUDE + Dest_LONGITUDE) / 2));
-					mc.setZoom(15);
-					layout_startend.setVisibility(View.GONE);
-					layout_result.setVisibility(View.VISIBLE);
-					bt_go.setOnClickListener(resetPath);
-					bt_go.setText("重新查詢");
-				} else {
+				if (Src_LATITUDE == Dest_LATITUDE
+						&& Src_LONGITUDE == Dest_LONGITUDE) {
 					Toast toast = Toast.makeText(mapView.getContext(),
-							"請輸入正確的起點及終點查詢\n若無地圖顯示，\n請開啟3G或wifi以獲取地圖資料", Toast.LENGTH_SHORT);
+							"請設定不同的起點和終點", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
 					toast.show();
+				} else {
+					double srcLat = Src_LATITUDE / 1E6;
+					double srcLon = Src_LONGITUDE / 1E6;
+					double desLat = Dest_LATITUDE / 1E6;
+					double desLon = Dest_LONGITUDE / 1E6;
+
+					try {
+						getInfo(srcLat, srcLon, desLat, desLon);
+						Log.d(getPackageName(), routeInfo.toString());
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					if (routeNum != 0) {
+						drawMyPath();
+						setResultText();
+						selMyPath(routeNow);
+						mc.setCenter(new GeoPoint(
+								(Src_LATITUDE + Dest_LATITUDE) / 2,
+								(Src_LONGITUDE + Dest_LONGITUDE) / 2));
+						mc.setZoom(15);
+						layout_startend.setVisibility(View.GONE);
+						layout_result.setVisibility(View.VISIBLE);
+						bt_go.setOnClickListener(resetPath);
+						bt_go.setText(">>重新查詢<<");
+					} else {
+						Toast toast = Toast.makeText(mapView.getContext(),
+								"請輸入正確的起點及終點查詢\n若無地圖顯示，\n請開啟3G或wifi以獲取地圖資料",
+								Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+					}
 				}
 			} else {
 				Toast toast = Toast.makeText(mapView.getContext(),
-						"請輸入正確的起點及終點查詢\n若無地圖顯示\n請開啟3G或wifi以獲取地圖資料", Toast.LENGTH_SHORT);
+						"請輸入正確的起點及終點查詢\n若無地圖顯示\n請開啟3G或wifi以獲取地圖資料",
+						Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}
+			dismissDialog(DIALOG_LOADING);
 
 		}
-	};
+	}; 
 
 	OnClickListener resetPath = new OnClickListener() {
 
@@ -670,7 +687,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			layout_startend.setVisibility(View.VISIBLE);
 			layout_result.setVisibility(View.GONE);
 			bt_go.setOnClickListener(goPath);
-			bt_go.setText("開始規劃");
+			bt_go.setText(">>開始規劃<<");
 
 			routeNow = 1;
 		}
@@ -783,14 +800,35 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DIALOG_LOADING:
+			final Dialog dialog = new Dialog(this,
+					android.R.style.Theme_Translucent);
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			dialog.setContentView(R.layout.loading);
+			dialog.setCancelable(true);
+			dialog.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					// onBackPressed();
+				}
+			});
+			return dialog;
+
+		default:
+			return null;
+		}
+	};
+
+	@Override
 	public void onBackPressed() {
 		// super.onBackPressed();
-		if (view_map.getVisibility() == View.VISIBLE){
+		if (view_map.getVisibility() == View.VISIBLE) {
 			view_map.setVisibility(View.GONE);
 			bt_go.setText("");
 			bt_go.setClickable(false);
-		}
-		else if (layout_call.getVisibility() == View.VISIBLE)
+		} else if (layout_call.getVisibility() == View.VISIBLE)
 			layout_call.setVisibility(View.GONE);
 		else if (layout_info.getVisibility() == View.VISIBLE) {
 			layout_info.setVisibility(View.GONE);
@@ -874,7 +912,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	private void drawMyPath() {
 
-		if (routeNum!=0) {
+		if (routeNum != 0) {
 			for (int j = 0; j < routeNum; j++) {
 				if (routeInfo.get("POLYLINE" + j).toString().length() > 0) {
 					List<GeoPoint> Points = new ArrayList<GeoPoint>();
@@ -1000,7 +1038,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
-				routeNum=0;
+				routeNum = 0;
 			} else {
 
 				info = new JSONObject(readStrFromUrl(urlstring));
