@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import proj.tool.PhoneNumberAdapter;
+import proj.tool.PriceCounter;
 import proj.tool.TaxiData;
 
 import android.content.Context;
@@ -106,11 +107,13 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	ListView taxiInfoListView;
 	TaxiData taxidata;
+	private PriceCounter counter;
+	Context context;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		context = this;
 		setContentView(R.layout.main);
 		findView();
 		setListener();
@@ -118,6 +121,17 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		setTaxiInfo(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
+	
+	public void setPriceCounter(){
+		counter = new PriceCounter();
+	}
+	
+	@Override 
+	public void onDestroy(){
+		stopService(new Intent ("com.android.gps.UserLocation" ));
+		super.onDestroy();
+	}
+	
 
 	private void findView() {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
@@ -777,6 +791,15 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 		return location;
 	}
+	
+	// for price counter
+	public void LocationCallBack(){
+		Location location = getLocation(context);
+		counter.addLocation(location,  System.currentTimeMillis());
+		
+		/* refresh price counter */
+		
+	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -786,8 +809,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
-
+		LocationCallBack();
 	}
 
 	@Override
