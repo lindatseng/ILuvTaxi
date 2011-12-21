@@ -185,27 +185,18 @@
                 android:id="@+id/scrollView1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-<<<<<<< HEAD
                 android:background="@color/layout_bg"
-                android:layout_weight="1" >
-
-                    <ListView
-                    android:id="@+id/listView1"
-                    android:background="@color/layout_bg"
-=======
-                android:background="#ffdff59b"
                 android:layout_weight="1" -->
 
-
-                <ListView
+                    <ListView
                     android:id="@+id/taxiInfoListview"
-                    android:background="#ffdff59b"
->>>>>>> 75d7afdd1a296b292104893e7aaea3432c36e2b1
+                    android:background="@color/layout_bg"
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" >
                 </ListView>
                 
-            </ScrollView>
+            <!--  /ScrollView-->
             
         </LinearLayout>
         
@@ -230,7 +221,6 @@
                     android:layout_height="match_parent" >
                 </ListView>
                 
-<<<<<<< HEAD
             </ScrollView>
 
             <LinearLayout
@@ -259,11 +249,7 @@
                 
             </LinearLayout>
 
-           
-=======
 
-            <!--/ScrollView-->
->>>>>>> 75d7afdd1a296b292104893e7aaea3432c36e2b1
             
         </LinearLayout>
             
