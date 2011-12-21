@@ -23,6 +23,7 @@ import org.json.JSONObject;
 
 import proj.tool.PhoneNumberAdapter;
 import proj.tool.TaxiData;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,6 +47,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,20 +71,24 @@ import com.google.android.maps.OverlayItem;
 public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
 
-	Button home_bt_route, home_bt_pricer, home_bt_call, bt_call_back,
-			home_bt_info, bt_info_back;
+	Button home_bt_route, home_bt_call, bt_call_back, home_bt_info,
+			bt_info_back, bt_pricer;
 	View view_map, view_call_back, view_info_back;
 	MapView mapView;
 	Button bt_go, bt_next, bt_last;
 	ImageButton bt_start, bt_end, map_bt_start, map_bt_end;
 	int type_start = 0, type_end = 0;
-	LinearLayout layout_startend, layout_result, layout_call, layout_info;
+	LinearLayout layout_startend, layout_result, layout_call, layout_info,
+			home_bt_pricer;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
-			tv_copyrights, tv_entry, tv_time,tv_city;
+			tv_copyrights, tv_entry, tv_time, tv_city, tv_pricer_time,
+			tv_pricer_dis, tv_pricer_price;
 	View view_startend, view_routeresult;
 	EditText et_start, et_end;
 
 	private QuickActionWidget mGridStart, mGridEnd;
+	String pricerState = "開始";
+	int pricerStateNum = 1;
 
 	static final int INITIAL_ZOOM_LEVEL = 16;
 	static int Dest_LATITUDE = 0;
@@ -96,6 +102,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	SitesOverlay startItem, endItem;
 	Boolean isEndItem = false;
 	Boolean isStartItem = true;
+	Boolean onPricer = false;
 	private LocationManager locationManager;
 	private List<GeoPoint> routePoints = new ArrayList<GeoPoint>();
 
@@ -126,7 +133,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	private void findView() {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
-		home_bt_pricer = (Button) findViewById(R.id.home_bt_pricer);
+		home_bt_pricer = (LinearLayout) findViewById(R.id.home_bt_pricer);
+		bt_pricer = (Button) findViewById(R.id.bt_pricer);
+		tv_pricer_dis = (TextView) findViewById(R.id.tv_pricer_dis);
+		tv_pricer_time = (TextView) findViewById(R.id.tv_pricer_time);
+		tv_pricer_price = (TextView) findViewById(R.id.tv_pricer_price);
 		home_bt_call = (Button) findViewById(R.id.home_button_call);
 		bt_call_back = (Button) findViewById(R.id.bt_call_back);
 		home_bt_info = (Button) findViewById(R.id.home_bt_info);
@@ -177,6 +188,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				view_map.setVisibility(View.VISIBLE);
+				layout_startend.setVisibility(View.VISIBLE);
 				bt_go.setText(">>開始規劃<<");
 				bt_go.setBackgroundColor(getResources().getColor(
 						R.color.home_pink));
@@ -192,11 +204,62 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				Intent intent = new Intent();
-				intent.setClass(MPP_UI.this, Pricer.class);
-				startActivity(intent);
+				// Intent intent = new Intent();
+				// intent.setClass(MPP_UI.this, Pricer.class);
+				// startActivity(intent);
+				RotateAnimation rotate = new RotateAnimation(0, 180,
+						home_bt_pricer.getWidth() / 2.0f, home_bt_pricer
+								.getHeight() / 2.0f);
+				rotate.setDuration(500);
+				home_bt_pricer.startAnimation(rotate);
+
+				if (onPricer) {
+					tv_pricer_dis.setText("");
+					tv_pricer_time.setText("行動計費器");
+					if (pricerStateNum == 2) {
+						tv_pricer_price.setText("計費中..");
+					} else {
+						tv_pricer_price.setText("");
+					}
+					onPricer = false;
+					bt_pricer.setText("");
+					bt_pricer.setClickable(false);
+					bt_pricer.setBackgroundColor(getResources().getColor(
+							R.color.home_green));
+				} else {
+					tv_pricer_dis.setText("距離： " + "0" + " 公尺");
+					tv_pricer_time.setText("時間： " + "0" + " 秒");
+					tv_pricer_price.setText("價錢： " + "0" + " 元");
+					onPricer = true;
+					bt_pricer.setText(pricerState);
+					bt_pricer.setBackgroundColor(getResources().getColor(
+							R.color.home_blue));
+					bt_pricer.setClickable(true);
+				}
 
 			}
+		});
+
+		bt_pricer.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (pricerStateNum == 1) {
+					pricerStateNum = 2;
+					pricerState = "停止";
+					bt_pricer.setText(pricerState);
+				} else if (pricerStateNum == 2) {
+					pricerStateNum = 3;
+					pricerState = "重設";
+					bt_pricer.setText(pricerState);
+				} else {
+					pricerStateNum = 1;
+					pricerState = "開始";
+					bt_pricer.setText(pricerState);
+				}
+			}
+
 		});
 
 		home_bt_call.setOnClickListener(new Button.OnClickListener() {
@@ -237,10 +300,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				} else {
 					tv_time.setText("非夜間加成時段");
 				}
-				
-				 tv_entry.setText(getResources().getString(R.string.entry_taipei));
-				 try {
-					 Log.d(getPackageName(), getCity());
+
+				tv_entry.setText(getResources()
+						.getString(R.string.entry_taipei));
+				try {
+					Log.d(getPackageName(), getCity());
 					tv_city.setText(getCity());
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -539,19 +603,50 @@ public class MPP_UI extends MapActivity implements LocationListener {
 								isStartItem = true;
 							}
 							Location mLocation = getLocation(MPP_UI.this);
-							MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
-							MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+							if (mLocation == null) {
+								// Toast.makeText(this, "location is null",
+								// Toast.LENGTH_LONG).show();
 
-							Src_LATITUDE = MY_LATITUDE;
-							Src_LONGITUDE = MY_LONGITUDE;
+								final AlertDialog.Builder builder = new AlertDialog.Builder(
+										MPP_UI.this);
 
-							mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
-							startItem.changePosition(Src_LATITUDE,
-									Src_LONGITUDE);
-							et_start.setText("我的位置");
-							et_start.setTextColor(android.graphics.Color.BLUE);
-							type_start = 2;
-							mc.setZoom(mapView.getZoomLevel());
+								builder.setCancelable(false);
+								builder.setIcon(null);
+								builder.setMessage("請開啟gps定位");
+								builder.setPositiveButton("設定",
+										new DialogInterface.OnClickListener() {
+
+											@Override
+											public void onClick(
+													DialogInterface dialog,
+													int which) {
+												// TODO Auto-generated method
+												// stub
+												Intent in = new Intent(
+														android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+												startActivity(in);
+											}
+										});
+								builder.show();
+								return;
+							} else {
+								MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
+								MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+								
+								Log.d(getPackageName(), " "+MY_LATITUDE+" "+MY_LONGITUDE);
+
+								Src_LATITUDE = MY_LATITUDE;
+								Src_LONGITUDE = MY_LONGITUDE;
+
+								mc.setCenter(new GeoPoint(Src_LATITUDE,
+										Src_LONGITUDE));
+								startItem.changePosition(Src_LATITUDE,
+										Src_LONGITUDE);
+								et_start.setText("我的位置");
+								et_start.setTextColor(android.graphics.Color.BLUE);
+								type_start = 2;
+								mc.setZoom(mapView.getZoomLevel());
+							}
 							break;
 						case 1:
 							if (isStartItem == false) {
@@ -587,16 +682,45 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						isEndItem = true;
 					}
 					Location mLocation = getLocation(MPP_UI.this);
-					MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
-					MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+					if (mLocation == null) {
+						// Toast.makeText(this, "location is null",
+						// Toast.LENGTH_LONG).show();
 
-					mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
-					endItem.changePosition(MY_LATITUDE, MY_LONGITUDE);
-					endItem.setMove(false);
-					et_end.setText("我的位置");
-					et_end.setTextColor(android.graphics.Color.BLUE);
-					type_end = 2;
-					mc.setZoom(mapView.getZoomLevel());
+						final AlertDialog.Builder builder = new AlertDialog.Builder(
+								MPP_UI.this);
+
+						builder.setCancelable(false);
+						builder.setIcon(null);
+						builder.setMessage("請開啟gps定位");
+						builder.setPositiveButton("設定",
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										// TODO Auto-generated method stub
+										Intent in = new Intent(
+												android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+										startActivity(in);
+									}
+								});
+						builder.show();
+						return;
+					} else {
+						MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
+						MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+						
+						Dest_LATITUDE = MY_LATITUDE;
+						Dest_LONGITUDE = MY_LONGITUDE;
+
+						mc.setCenter(new GeoPoint(MY_LATITUDE, MY_LONGITUDE));
+						endItem.changePosition(MY_LATITUDE, MY_LONGITUDE);
+						endItem.setMove(false);
+						et_end.setText("我的位置");
+						et_end.setTextColor(android.graphics.Color.BLUE);
+						type_end = 2;
+						mc.setZoom(mapView.getZoomLevel());
+					}
 					break;
 
 				case 1:
@@ -732,6 +856,25 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 		if (mLocation == null) {
 			Toast.makeText(this, "location is null", Toast.LENGTH_LONG).show();
+
+			final AlertDialog.Builder builder = new AlertDialog.Builder(
+					MPP_UI.this);
+
+			builder.setCancelable(false);
+			builder.setIcon(null);
+			builder.setMessage("請開啟gps定位");
+			builder.setPositiveButton("設定",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							Intent in = new Intent(
+									android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+							startActivity(in);
+						}
+					});
+			builder.show();
 			return;
 		}
 		MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
@@ -1006,14 +1149,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	private String getCity() throws IOException, JSONException {
-		double lat,lng;
-		lat = MY_LATITUDE/1E6;
-		lng = MY_LONGITUDE/1E6;
+		double lat, lng;
+		lat = MY_LATITUDE / 1E6;
+		lng = MY_LONGITUDE / 1E6;
 		String urlstring = "http://maps.google.com/maps/api/geocode/json?latlng="
-				+ lat
-				+ ","
-				+ lng
-				+ "&sensor=true&language=zh-TW";
+				+ lat + "," + lng + "&sensor=true&language=zh-TW";
 		Log.d(getPackageName(), urlstring);
 		String urlJSON = readStrFromUrl(urlstring);
 		Log.d(getPackageName(), urlJSON);
@@ -1030,7 +1170,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						.getJSONArray("types").getString(0)
 						.equals("administrative_area_level_2")) {
 					return myCity.getJSONArray("results").getJSONObject(0)
-							.getJSONArray("address_components").getJSONObject(i).getString("long_name");
+							.getJSONArray("address_components")
+							.getJSONObject(i).getString("long_name");
 				}
 			}
 		}
