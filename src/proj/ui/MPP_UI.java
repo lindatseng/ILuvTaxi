@@ -14,6 +14,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,8 +24,10 @@ import org.json.JSONObject;
 import proj.tool.PhoneNumberAdapter;
 import proj.tool.PriceCounter;
 import proj.tool.TaxiData;
-
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Canvas;
@@ -43,6 +46,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,7 +79,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	int type_start = 0, type_end = 0;
 	LinearLayout layout_startend, layout_result, layout_call, layout_info;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
-			tv_copyrights;
+			tv_copyrights, tv_entry, tv_time,tv_city;
 	View view_startend, view_routeresult;
 	EditText et_start, et_end;
 
@@ -88,6 +92,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	static int Src_LONGITUDE = 0;
 	int MY_LATITUDE, MY_LONGITUDE;
 	static final double EARTH_RADIUS = 6378.137;
+	protected static final int DIALOG_LOADING = 0;
 	MapController mc;
 	SitesOverlay startItem, endItem;
 	Boolean isEndItem = false;
@@ -99,7 +104,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	private GeoPoint srcPoint;
 	private GeoPoint destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
 	private JSONObject info;
-	private int routeNum = 1;
+	private int routeNum = 0;
 	private HashMap<String, Object> routeInfo = new HashMap<String, Object>();
 	private HashMap<String, Object> searchInfo = new HashMap<String, Object>();
 	private int searchNum = 0;
@@ -152,6 +157,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				.findViewById(R.id.layout_result);
 		layout_call = (LinearLayout) findViewById(R.id.layout_call);
 		layout_info = (LinearLayout) findViewById(R.id.layout_info);
+		tv_entry = (TextView) findViewById(R.id.tv_entry);
+		tv_time = (TextView) findViewById(R.id.tv_time);
+		tv_city = (TextView) findViewById(R.id.tv_city);
 		view_startend = (View) view_map.findViewById(R.id.view_startend);
 		et_start = (EditText) view_startend.findViewById(R.id.et_start);
 		et_end = (EditText) view_startend.findViewById(R.id.et_end);
@@ -183,7 +191,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				view_map.setVisibility(View.VISIBLE);
-				bt_go.setText("開始規劃");
+				bt_go.setText(">>開始規劃<<");
+				bt_go.setBackgroundColor(getResources().getColor(
+						R.color.home_pink));
 				bt_go.setClickable(true);
 
 			}
@@ -232,6 +242,27 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_route.setClickable(false);
 				home_bt_call.setClickable(false);
 				home_bt_pricer.setClickable(false);
+
+				Calendar c = Calendar.getInstance();
+
+				int hour = c.get(Calendar.HOUR_OF_DAY);
+				if (hour >= 23 || hour <= 5) {
+					tv_time.setText("夜間加成時段");
+				} else {
+					tv_time.setText("非夜間加成時段");
+				}
+				
+				 tv_entry.setText(getResources().getString(R.string.entry_taipei));
+				 try {
+					 Log.d(getPackageName(), getCity());
+					tv_city.setText(getCity());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 		});
@@ -282,8 +313,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				if (inTaiwan(Src_LATITUDE, Src_LONGITUDE)) {
 					srcPoint = new GeoPoint(Src_LATITUDE, Src_LONGITUDE);
 					mc.setCenter(srcPoint);
-				}
-				else{
+				} else {
 					Toast toast = Toast.makeText(mapView.getContext(),
 							"請設定正確的起點", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
@@ -300,10 +330,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				Dest_LATITUDE = endItem.getLat();
 				Dest_LONGITUDE = endItem.getLon();
 				if (inTaiwan(Dest_LATITUDE, Dest_LONGITUDE)) {
-				destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
-				mc.setCenter(destPoint);
-				}
-				else{
+					destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
+					mc.setCenter(destPoint);
+				} else {
 					Toast toast = Toast.makeText(mapView.getContext(),
 							"請設定正確的終點", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.CENTER, 0, 0);
@@ -362,8 +391,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					et_start.setText("");
 					mc.setZoom(mapView.getZoomLevel());
 					isStartItem = false;
-				} else
+				} else {
+					if (isStartItem) {
+						mapOverlays.remove(startItem);
+						Src_LATITUDE = 0;
+						Src_LONGITUDE = 0;
+						startItem.changePosition(0, 0);
+						et_start.setText("");
+						mc.setZoom(mapView.getZoomLevel());
+						isStartItem = false;
+					}
 					et_start.setText("");
+				}
 			}
 		});
 
@@ -414,40 +453,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							+ et_start.getText().toString());
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					mgr.hideSoftInputFromWindow(et_start.getWindowToken(), 0);
-
-					if (et_start.getText().length() == 0) {
-						Toast toast = Toast.makeText(mapView.getContext(),
-								"請輸入地址查詢", Toast.LENGTH_SHORT);
-						toast.setGravity(Gravity.CENTER, 0, 0);
-						toast.show();
-					} else {
-						try {
-							if (getGeo(et_start.getText().toString()) == true) {
-								Src_LATITUDE = Integer.valueOf(searchInfo.get(
-										"LAT" + searchNum).toString());
-								Src_LONGITUDE = Integer.valueOf(searchInfo.get(
-										"LNG" + searchNum).toString());
-								et_start.setText(searchInfo.get(
-										"ADDRESS" + searchNum).toString());
-								mc.setCenter(new GeoPoint(Src_LATITUDE,
-										Src_LONGITUDE));
-								startItem.changePosition(Src_LATITUDE,
-										Src_LONGITUDE);
-							} else {
-								Toast toast = Toast.makeText(
-										mapView.getContext(), "查無資料，請重新輸入地址查詢",
-										Toast.LENGTH_SHORT);
-								toast.setGravity(Gravity.CENTER, 0, 0);
-								toast.show();
-							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
+					getStartGeo();
 					return true;
 				}
 				return false;
@@ -496,44 +502,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						&& keyCode == KeyEvent.KEYCODE_ENTER) {
 					InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 					mgr.hideSoftInputFromWindow(et_end.getWindowToken(), 0);
-
-					if (et_end.getText().length() == 0) {
-						Toast toast = Toast.makeText(mapView.getContext(),
-								"請輸入地址查詢", Toast.LENGTH_SHORT);
-						toast.setGravity(Gravity.CENTER, 0, 0);
-						toast.show();
-					} else {
-						try {
-							if (getGeo(et_end.getText().toString()) == true) {
-								Dest_LATITUDE = Integer.valueOf(searchInfo.get(
-										"LAT" + searchNum).toString());
-								Dest_LONGITUDE = Integer.valueOf(searchInfo
-										.get("LNG" + searchNum).toString());
-								et_end.setText(searchInfo.get(
-										"ADDRESS" + searchNum).toString());
-								mc.setCenter(new GeoPoint(Dest_LATITUDE,
-										Dest_LONGITUDE));
-								if (isEndItem == false) {
-									mapOverlays.add(endItem);
-									isEndItem = true;
-								}
-								endItem.changePosition(Dest_LATITUDE,
-										Dest_LONGITUDE);
-							} else {
-								Toast toast = Toast.makeText(
-										mapView.getContext(), "查無資料，請重新輸入地址查詢",
-										Toast.LENGTH_SHORT);
-								toast.setGravity(Gravity.CENTER, 0, 0);
-								toast.show();
-							}
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
+					getEndGeo();
 					return true;
 				}
 				return false;
@@ -555,8 +524,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					endItem.changePosition(0, 0);
 					mc.setZoom(mapView.getZoomLevel());
 					isEndItem = false;
-				} else
+				} else {
+					if (isEndItem) {
+						mapOverlays.remove(endItem);
+						Dest_LATITUDE = 0;
+						Dest_LONGITUDE = 0;
+						et_end.setText("");
+						endItem.changePosition(0, 0);
+						mc.setZoom(mapView.getZoomLevel());
+						isEndItem = false;
+					}
 					et_end.setText("");
+				}
 			}
 		});
 
@@ -660,43 +639,77 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			showDialog(DIALOG_LOADING);
+
 			Src_LATITUDE = startItem.getLat();
 			Src_LONGITUDE = startItem.getLon();
 			Dest_LATITUDE = endItem.getLat();
 			Dest_LONGITUDE = endItem.getLon();
 
+			if (inTaiwan(Src_LATITUDE, Src_LONGITUDE) == false
+					&& et_start.getText().length() != 0) {
+				getStartGeo();
+				Src_LATITUDE = startItem.getLat();
+				Src_LONGITUDE = startItem.getLon();
+			}
+
+			if (inTaiwan(Dest_LATITUDE, Dest_LONGITUDE) == false
+					&& et_end.getText().length() != 0) {
+				getEndGeo();
+				Dest_LATITUDE = endItem.getLat();
+				Dest_LONGITUDE = endItem.getLon();
+			}
+
 			if (inTaiwan(Src_LATITUDE, Src_LONGITUDE)
 					&& inTaiwan(Dest_LATITUDE, Dest_LONGITUDE)) {
+				if (Src_LATITUDE == Dest_LATITUDE
+						&& Src_LONGITUDE == Dest_LONGITUDE) {
+					Toast toast = Toast.makeText(mapView.getContext(),
+							"請設定不同的起點和終點", Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+				} else {
+					double srcLat = Src_LATITUDE / 1E6;
+					double srcLon = Src_LONGITUDE / 1E6;
+					double desLat = Dest_LATITUDE / 1E6;
+					double desLon = Dest_LONGITUDE / 1E6;
 
-				double srcLat = Src_LATITUDE / 1E6;
-				double srcLon = Src_LONGITUDE / 1E6;
-				double desLat = Dest_LATITUDE / 1E6;
-				double desLon = Dest_LONGITUDE / 1E6;
+					try {
+						getInfo(srcLat, srcLon, desLat, desLon);
+						Log.d(getPackageName(), routeInfo.toString());
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-				try {
-					getInfo(srcLat, srcLon, desLat, desLon);
-					Log.d(getPackageName(), routeInfo.toString());
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if (routeNum != 0) {
+						drawMyPath();
+						setResultText();
+						selMyPath(routeNow);
+						mc.setCenter(new GeoPoint(
+								(Src_LATITUDE + Dest_LATITUDE) / 2,
+								(Src_LONGITUDE + Dest_LONGITUDE) / 2));
+						mc.setZoom(15);
+						layout_startend.setVisibility(View.GONE);
+						layout_result.setVisibility(View.VISIBLE);
+						bt_go.setOnClickListener(resetPath);
+						bt_go.setText(">>重新查詢<<");
+					} else {
+						Toast toast = Toast.makeText(mapView.getContext(),
+								"請輸入正確的起點及終點查詢\n若無地圖顯示，\n請開啟3G或wifi以獲取地圖資料",
+								Toast.LENGTH_SHORT);
+						toast.setGravity(Gravity.CENTER, 0, 0);
+						toast.show();
+					}
 				}
-
-				drawMyPath();
-				setResultText();
-				selMyPath(routeNow);
-				mc.setCenter(new GeoPoint((Src_LATITUDE + Dest_LATITUDE) / 2,
-						(Src_LONGITUDE + Dest_LONGITUDE) / 2));
-				mc.setZoom(15);
-				layout_startend.setVisibility(View.GONE);
-				layout_result.setVisibility(View.VISIBLE);
-				bt_go.setOnClickListener(resetPath);
-				bt_go.setText("重新查詢");
 			} else {
 				Toast toast = Toast.makeText(mapView.getContext(),
-						"請輸入正確的起點及終點查詢", Toast.LENGTH_SHORT);
+						"請輸入正確的起點及終點查詢\n若無地圖顯示\n請開啟3G或wifi以獲取地圖資料",
+						Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
 			}
+			dismissDialog(DIALOG_LOADING);
 
 		}
 	};
@@ -714,7 +727,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			layout_startend.setVisibility(View.VISIBLE);
 			layout_result.setVisibility(View.GONE);
 			bt_go.setOnClickListener(goPath);
-			bt_go.setText("開始規劃");
+			bt_go.setText(">>開始規劃<<");
+
+			routeNow = 1;
 		}
 	};
 
@@ -733,8 +748,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			Toast.makeText(this, "location is null", Toast.LENGTH_LONG).show();
 			return;
 		}
-		Src_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
-		Src_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+		MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
+		MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
+		Src_LATITUDE = MY_LATITUDE;
+		Src_LONGITUDE = MY_LONGITUDE;
 		srcPoint = new GeoPoint(Src_LATITUDE, Src_LONGITUDE);
 		destPoint = new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE);
 
@@ -771,13 +788,15 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	private void setResultText() {
-		tv_routeNum.setText("路線 " + routeNow + " / " + routeNum);
-		tv_routeDist.setText("距離："
-				+ routeInfo.get("DISTANCE" + (routeNow - 1)).toString());
-		tv_routeTime.setText("時間："
-				+ routeInfo.get("DURATION" + (routeNow - 1)).toString());
-		tv_routePrice.setText("價錢："
-				+ routeInfo.get("PRICE" + (routeNow - 1)).toString());
+		if (routeNum != 0) {
+			tv_routeNum.setText("路線 " + routeNow + " / " + routeNum);
+			tv_routeDist.setText("距離："
+					+ routeInfo.get("DISTANCE" + (routeNow - 1)).toString());
+			tv_routeTime.setText("時間："
+					+ routeInfo.get("DURATION" + (routeNow - 1)).toString());
+			tv_routePrice.setText("價錢："
+					+ routeInfo.get("PRICE" + (routeNow - 1)).toString());
+		}
 	}
 
 	public Location getLocation(Context context) {
@@ -831,11 +850,35 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DIALOG_LOADING:
+			final Dialog dialog = new Dialog(this,
+					android.R.style.Theme_Translucent);
+			dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+			dialog.setContentView(R.layout.loading);
+			dialog.setCancelable(true);
+			dialog.setOnCancelListener(new OnCancelListener() {
+				@Override
+				public void onCancel(DialogInterface dialog) {
+					// onBackPressed();
+				}
+			});
+			return dialog;
+
+		default:
+			return null;
+		}
+	};
+
+	@Override
 	public void onBackPressed() {
 		// super.onBackPressed();
-		if (view_map.getVisibility() == View.VISIBLE)
+		if (view_map.getVisibility() == View.VISIBLE) {
 			view_map.setVisibility(View.GONE);
-		else if (layout_call.getVisibility() == View.VISIBLE)
+			bt_go.setText("");
+			bt_go.setClickable(false);
+		} else if (layout_call.getVisibility() == View.VISIBLE)
 			layout_call.setVisibility(View.GONE);
 		else if (layout_info.getVisibility() == View.VISIBLE) {
 			layout_info.setVisibility(View.GONE);
@@ -847,27 +890,99 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	}
 
-	private void drawMyPath() {
-
-		for (int j = 0; j < routeNum; j++) {
-			if (routeInfo.get("POLYLINE" + j).toString().length() > 0) {
-				List<GeoPoint> Points = new ArrayList<GeoPoint>();
-				Points = decodePolylines(routeInfo.get("POLYLINE" + j)
-						.toString());
-
-				GeoPoint lastPoints = Points.get(0);
-
-				for (int i = 1; i < Points.size(); i++) {
-					mapOverlays.add(new MyOverlay(lastPoints, Points.get(i), 3,
-							Color.CYAN));
-					lastPoints = Points.get(i);
+	private void getStartGeo() {
+		if (et_start.getText().length() == 0) {
+			Toast toast = Toast.makeText(mapView.getContext(), "請輸入地址查詢",
+					Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+		} else {
+			try {
+				if (getGeo(et_start.getText().toString()) == true) {
+					Src_LATITUDE = Integer.valueOf(searchInfo.get(
+							"LAT" + searchNum).toString());
+					Src_LONGITUDE = Integer.valueOf(searchInfo.get(
+							"LNG" + searchNum).toString());
+					et_start.setText(searchInfo.get("ADDRESS" + searchNum)
+							.toString());
+					mc.setCenter(new GeoPoint(Src_LATITUDE, Src_LONGITUDE));
+					startItem.changePosition(Src_LATITUDE, Src_LONGITUDE);
+				} else {
+					Toast toast = Toast.makeText(mapView.getContext(),
+							"查無資料，\n請重新輸入地址查詢設定起點", Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
 				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		mapOverlays.remove(startItem);
-		mapOverlays.remove(endItem);
-		mapOverlays.add(startItem);
-		mapOverlays.add(endItem);
+	}
+
+	private void getEndGeo() {
+		if (et_end.getText().length() == 0) {
+			Toast toast = Toast.makeText(mapView.getContext(), "請輸入地址查詢",
+					Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+		} else {
+			try {
+				if (getGeo(et_end.getText().toString()) == true) {
+					Dest_LATITUDE = Integer.valueOf(searchInfo.get(
+							"LAT" + searchNum).toString());
+					Dest_LONGITUDE = Integer.valueOf(searchInfo.get(
+							"LNG" + searchNum).toString());
+					et_end.setText(searchInfo.get("ADDRESS" + searchNum)
+							.toString());
+					mc.setCenter(new GeoPoint(Dest_LATITUDE, Dest_LONGITUDE));
+					if (isEndItem == false) {
+						mapOverlays.add(endItem);
+						isEndItem = true;
+					}
+					endItem.changePosition(Dest_LATITUDE, Dest_LONGITUDE);
+				} else {
+					Toast toast = Toast.makeText(mapView.getContext(),
+							"查無資料，\n請重新輸入地址查詢設定終點", Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.CENTER, 0, 0);
+					toast.show();
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void drawMyPath() {
+
+		if (routeNum != 0) {
+			for (int j = 0; j < routeNum; j++) {
+				if (routeInfo.get("POLYLINE" + j).toString().length() > 0) {
+					List<GeoPoint> Points = new ArrayList<GeoPoint>();
+					Points = decodePolylines(routeInfo.get("POLYLINE" + j)
+							.toString());
+
+					GeoPoint lastPoints = Points.get(0);
+
+					for (int i = 1; i < Points.size(); i++) {
+						mapOverlays.add(new MyOverlay(lastPoints,
+								Points.get(i), 3, Color.CYAN));
+						lastPoints = Points.get(i);
+					}
+				}
+			}
+			mapOverlays.remove(startItem);
+			mapOverlays.remove(endItem);
+			mapOverlays.add(startItem);
+			mapOverlays.add(endItem);
+		}
 	}
 
 	private void selMyPath(int n) {
@@ -912,6 +1027,38 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			return false;
 	}
 
+	private String getCity() throws IOException, JSONException {
+		double lat,lng;
+		lat = MY_LATITUDE/1E6;
+		lng = MY_LONGITUDE/1E6;
+		String urlstring = "http://maps.google.com/maps/api/geocode/json?latlng="
+				+ lat
+				+ ","
+				+ lng
+				+ "&sensor=true&language=zh-TW";
+		Log.d(getPackageName(), urlstring);
+		String urlJSON = readStrFromUrl(urlstring);
+		Log.d(getPackageName(), urlJSON);
+
+		if (urlJSON.equals("null")) {
+			return "台北市";
+		} else {
+			JSONObject myCity = new JSONObject(urlJSON);
+			int num = myCity.getJSONArray("results").getJSONObject(0)
+					.getJSONArray("address_components").length();
+			for (int i = 0; i < num; i++) {
+				if (myCity.getJSONArray("results").getJSONObject(0)
+						.getJSONArray("address_components").getJSONObject(i)
+						.getJSONArray("types").getString(0)
+						.equals("administrative_area_level_2")) {
+					return myCity.getJSONArray("results").getJSONObject(0)
+							.getJSONArray("address_components").getJSONObject(i).getString("long_name");
+				}
+			}
+		}
+		return null;
+	}
+
 	private Boolean getGeo(String searchText) throws JSONException, IOException {
 		String text[] = searchText.split(" ");
 		String urlText = "";
@@ -925,27 +1072,37 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				+ "&bounds=20.5637908,116.7118602|26.3873532,122.006905&sensor=true&language=zh-TW";
 		Log.d(getPackageName(), urlstring);
 
-		JSONObject geo = new JSONObject(readStrFromUrl(urlstring));
+		String urlJSON = readStrFromUrl(urlstring);
 
-		if (geo.getString("status").equals("OK")) {
-			String address = geo.getJSONArray("results").getJSONObject(0)
-					.getString("formatted_address");
-			int lat = (int) ((geo.getJSONArray("results").getJSONObject(0)
-					.getJSONObject("geometry").getJSONObject("location")
-					.getDouble("lat")) * 1000000);
-			int lng = (int) ((geo.getJSONArray("results").getJSONObject(0)
-					.getJSONObject("geometry").getJSONObject("location")
-					.getDouble("lng")) * 1000000);
-			Log.d(getPackageName(), lat + " " + lng);
+		if (urlJSON.equals("null")) {
+			Toast toast = Toast.makeText(this, "請開啟3G或wifi以搜尋資料",
+					Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.CENTER, 0, 0);
+			toast.show();
+		} else {
+			JSONObject geo = new JSONObject(urlJSON);
 
-			if (lat >= 20563790 && lat <= 26387364 && lng >= 116711860
-					&& lng <= 122006905) {
-				searchNum++;
-				searchInfo.put("ADDRESS" + searchNum, address);
-				searchInfo.put("LAT" + searchNum, lat);
-				searchInfo.put("LNG" + searchNum, lng);
+			if (geo.getString("status").equals("OK")) {
+				for (int i = 0; i < geo.getJSONArray("results").length(); i++) {
+					String address = geo.getJSONArray("results")
+							.getJSONObject(i).getString("formatted_address");
+					int lat = (int) ((geo.getJSONArray("results")
+							.getJSONObject(i).getJSONObject("geometry")
+							.getJSONObject("location").getDouble("lat")) * 1000000);
+					int lng = (int) ((geo.getJSONArray("results")
+							.getJSONObject(i).getJSONObject("geometry")
+							.getJSONObject("location").getDouble("lng")) * 1000000);
+					Log.d(getPackageName(), lat + " " + lng);
+
+					if (inTaiwan(lat, lng)) {
+						searchNum++;
+						searchInfo.put("ADDRESS" + searchNum, address);
+						searchInfo.put("LAT" + searchNum, lat);
+						searchInfo.put("LNG" + searchNum, lng);
+						return true;
+					}
+				}
 			}
-			return true;
 		}
 		return false;
 	}
@@ -965,34 +1122,49 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			// http://maps.google.com/maps/api/directions/json?origin=25.018641,121.542526&destination=25.039717,121.528863&sensor=true&alternatives=true&language=zh-TW
 			Log.d(getPackageName(), "yaaaaaaaaaaaaaa  " + urlstring);
 
-			info = new JSONObject(readStrFromUrl(urlstring));
-			Log.d(getPackageName(), readStrFromUrl(urlstring));
+			String urlJSON = readStrFromUrl(urlstring);
 
-			routeNum = info.getJSONArray("routes").length();
+			if (urlJSON.equals("null")) {
+				Toast toast = Toast.makeText(this, "請開啟3G或wifi以讀取地圖資料",
+						Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.CENTER, 0, 0);
+				toast.show();
+				routeNum = 0;
+			} else {
 
-			for (int i = 0; i < routeNum; i++) {
-				// tv_copyrights.setText(info.getJSONArray("routes").getJSONObject(i).getString("copyrights"));
-				String distance = info.getJSONArray("routes").getJSONObject(i)
-						.getJSONArray("legs").getJSONObject(0)
-						.getJSONObject("distance").getString("text");
-				String duration = info.getJSONArray("routes").getJSONObject(i)
-						.getJSONArray("legs").getJSONObject(0)
-						.getJSONObject("duration").getString("text");
-				String polyline = info.getJSONArray("routes").getJSONObject(i)
-						.getJSONObject("overview_polyline").getString("points");
-				int dist = info.getJSONArray("routes").getJSONObject(i)
-						.getJSONArray("legs").getJSONObject(0)
-						.getJSONObject("distance").getInt("value");
-				int time = info.getJSONArray("routes").getJSONObject(i)
-						.getJSONArray("legs").getJSONObject(0)
-						.getJSONObject("duration").getInt("value");
-				int price = getPrice(dist, time);
-				routeInfo.put("DISTANCE" + i, distance);
-				routeInfo.put("DURATION" + i, duration);
-				routeInfo.put("POLYLINE" + i, polyline);
-				routeInfo.put("DIST" + i, dist);
-				routeInfo.put("TIME" + i, time);
-				routeInfo.put("PRICE" + i, price);
+				info = new JSONObject(readStrFromUrl(urlstring));
+				Log.d(getPackageName(), readStrFromUrl(urlstring));
+
+				routeNum = info.getJSONArray("routes").length();
+
+				for (int i = 0; i < routeNum; i++) {
+					// tv_copyrights.setText(info.getJSONArray("routes").getJSONObject(i).getString("copyrights"));
+					String distance = info.getJSONArray("routes")
+							.getJSONObject(i).getJSONArray("legs")
+							.getJSONObject(0).getJSONObject("distance")
+							.getString("text");
+					String duration = info.getJSONArray("routes")
+							.getJSONObject(i).getJSONArray("legs")
+							.getJSONObject(0).getJSONObject("duration")
+							.getString("text");
+					String polyline = info.getJSONArray("routes")
+							.getJSONObject(i)
+							.getJSONObject("overview_polyline")
+							.getString("points");
+					int dist = info.getJSONArray("routes").getJSONObject(i)
+							.getJSONArray("legs").getJSONObject(0)
+							.getJSONObject("distance").getInt("value");
+					int time = info.getJSONArray("routes").getJSONObject(i)
+							.getJSONArray("legs").getJSONObject(0)
+							.getJSONObject("duration").getInt("value");
+					int price = getPrice(dist, time);
+					routeInfo.put("DISTANCE" + i, distance);
+					routeInfo.put("DURATION" + i, duration);
+					routeInfo.put("POLYLINE" + i, polyline);
+					routeInfo.put("DIST" + i, dist);
+					routeInfo.put("TIME" + i, time);
+					routeInfo.put("PRICE" + i, price);
+				}
 			}
 
 		} catch (MalformedURLException e) {
@@ -1051,18 +1223,25 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		return routePoints;
 	}
 
-	public static String readStrFromUrl(String url) throws IOException,
-			JSONException {
-		InputStream is = new URL(url).openStream();
+	public String readStrFromUrl(String url) throws IOException, JSONException {
 		try {
-			BufferedReader rd = new BufferedReader(new InputStreamReader(is,
-					Charset.forName("UTF-8")));
-			String jsonText = readAll(rd);
-			Log.d("json", jsonText);
-			return jsonText;
-		} finally {
-			is.close();
+			InputStream is = new URL(url).openStream();
+			try {
+				BufferedReader rd = new BufferedReader(new InputStreamReader(
+						is, Charset.forName("UTF-8")));
+				String jsonText = readAll(rd);
+				Log.d("json", jsonText);
+				return jsonText;
+			} finally {
+				is.close();
+			}
+		} catch (Exception UnknownHostRxception) {
+			// TODO: handle exception
+
+			Log.d(getPackageName(), "no internetttttttttttttttttttttttttttt");
 		}
+
+		return "null";
 	}
 
 	private static String readAll(Reader rd) throws IOException {
