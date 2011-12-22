@@ -9,6 +9,7 @@ import java.util.List;
 
 import proj.ui.R;
 
+
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.Log;
@@ -27,7 +28,7 @@ public class TaxiData {
 		String[] region = r.getStringArray(R.array.region);
 		String[] name = r.getStringArray(R.array.name);
 		String[] phoneNum = r.getStringArray(R.array.phoneNum);
-		
+		 
 		for(int i=0 ; i<region.length ; i++){
 			map = new HashMap<String, String>();
 			if(region[i].length() > 2){

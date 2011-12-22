@@ -114,6 +114,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	TaxiData taxidata;
 	private PriceCounter counter;
 	Context context;
+	private int price_status;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -129,12 +130,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	
 	public void setPriceCounter(){
 		counter = new PriceCounter();
-	}
-	
-	@Override 
-	public void onDestroy(){
-		stopService(new Intent ("com.android.gps.UserLocation" ));
-		super.onDestroy();
+		price_status = PriceCounter.IDLE;
 	}
 	
 
@@ -631,6 +627,39 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 			}
 		});
+		
+		Button price_start = new Button(context);
+		Button price_stop = new Button(context);
+		Button price_reset = new Button(context);
+		price_start.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				price_status = PriceCounter.COUNTING;
+			}
+			
+		});
+		
+		price_stop.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				price_status = PriceCounter.IDLE;
+			}
+			
+		});
+		price_reset.setOnClickListener(new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(price_status == PriceCounter.COUNTING){
+					Toast.makeText(context, "請先停止計費", Toast.LENGTH_SHORT).show();
+				}else{
+					counter.reset();
+				}
+			}
+			
+		});
 
 	}
 
@@ -813,10 +842,19 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	
 	// for price counter
 	public void LocationCallBack(){
+		Log.e("MPP_UI","LocationCallBack invoked!");
 		Location location = getLocation(context);
-		counter.addLocation(location,  System.currentTimeMillis());
-		
+		if( price_status == PriceCounter.COUNTING ){
+			counter.addLocation(location,  System.currentTimeMillis());
+			int price = counter.getPrice();
+			float dis = counter.getTotalDistance();
+			long tval = counter.getTotalTime() / 1000;
+			String disstr = ""+ dis / 1000 +"km"+dis%1000+"m";
+			String tstr = ""+tval/60+"分"+tval%60+"秒" ;
+ 		}
 		/* refresh price counter */
+		
+		
 		
 	}
 
