@@ -1047,7 +1047,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			counter.addLocation(location,  System.currentTimeMillis());
 
 			/* refresh price counter view*/
-			tv_pricer_price.setText(""+counter.getPrice());
+			tv_pricer_price.setText(""+counter.getPrice(infoID,(int)counter.getTotalDistance(),(int)counter.getTotalTime()));
 			float dis = counter.getTotalDistance();
 			StringBuilder sb = new StringBuilder();
 			sb.append("距離： ");
@@ -1396,7 +1396,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					int time = info.getJSONArray("routes").getJSONObject(i)
 							.getJSONArray("legs").getJSONObject(0)
 							.getJSONObject("duration").getInt("value");
-					int price = getPrice(dist, time);
+					int price = counter.getPrice(infoID,dist, time);
 					routeInfo.put("DISTANCE" + i, distance);
 					routeInfo.put("DURATION" + i, duration);
 					routeInfo.put("POLYLINE" + i, polyline);
@@ -1415,18 +1415,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 	}
 
-	private int getPrice(int distance, int duration) {
-
-		int distancePrice = 70;
-		int durationPrice = 0;
-
-		if (distance > 1250) {
-			distancePrice += 5 * (1 + (distance - 1250) / 250);
-		}
-
-		return (distancePrice + durationPrice);
-
-	}
+//	private int getPrice(int distance, int duration) {
+//
+//		int distancePrice = 70;
+//		int durationPrice = 0;
+//
+//		if (distance > 1250) {
+//			distancePrice += 5 * (1 + (distance - 1250) / 250);
+//		}
+//
+//		return (distancePrice + durationPrice);
+//
+//	}
 
 	private List<GeoPoint> decodePolylines(String poly) {
 		int len = poly.length();
