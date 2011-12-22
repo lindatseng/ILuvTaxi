@@ -656,6 +656,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					Toast.makeText(context, "請先停止計費", Toast.LENGTH_SHORT).show();
 				}else{
 					counter.reset();
+					/* TODO reset the price view */
 				}
 			}
 			

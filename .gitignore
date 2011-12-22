@@ -1,6 +1,6 @@
 *.class
 *~
-R.java
+*/R.java
 *bin/
 *gen/
 gen/*
