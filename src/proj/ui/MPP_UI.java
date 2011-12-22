@@ -1396,7 +1396,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					int time = info.getJSONArray("routes").getJSONObject(i)
 							.getJSONArray("legs").getJSONObject(0)
 							.getJSONObject("duration").getInt("value");
-					int price = counter.getPrice(infoID,dist, time);
+					Log.d(getPackageName(), "time eeee "+ polyline.length());
+					int delayTime = polyline.length()*3;
+					int price = counter.getPrice(infoID,dist, delayTime);
 					routeInfo.put("DISTANCE" + i, distance);
 					routeInfo.put("DURATION" + i, duration);
 					routeInfo.put("POLYLINE" + i, polyline);
