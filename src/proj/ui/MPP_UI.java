@@ -90,7 +90,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	private QuickActionWidget mGridStart, mGridEnd;
 	String[] pricerState = new String[]{"開始","停止","重設" };
-	int pricerStateNum = 1;
+	int pricerStateNum ;
 
 	static final int INITIAL_ZOOM_LEVEL = 16;
 	static int Dest_LATITUDE = 0;
@@ -142,12 +142,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		setTaxiInfo(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
-	
+
 	public void setPriceCounter(){
 		counter = new PriceCounter();
 		price_status = PriceCounter.IDLE;
 	}
-	
+
 
 	private void findView() {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
@@ -197,12 +197,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		bt_last = (Button) view_routeresult.findViewById(R.id.bt_last);
 
 		taxiInfoListView = (ListView) findViewById(R.id.taxiInfoListview);
-		
+
 		/*bt_pricer = (Button) findViewById(R.id.bt_pricer);
 		tv_pricer_time = (TextView) findViewById(R.id.tv_pricer_time);
 		tv_pricer_dis = (TextView) findViewById(R.id.tv_pricer_dis);
 		tv_pricer_price = (TextView) findViewById(R.id.tv_pricer_price);*/
-		
+
 	}
 
 	private void setListener() {
@@ -241,7 +241,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				if (onPricer) {
 					tv_pricer_dis.setText("");
 					tv_pricer_time.setText("行動計費器");
-					if (pricerStateNum == 2) {
+					if (price_status == PriceCounter.COUNTING) {
 						tv_pricer_price.setText("計費中..");
 					} else {
 						tv_pricer_price.setText("");
@@ -256,7 +256,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					tv_pricer_time.setText("時間： " + "0" + " 秒");
 					tv_pricer_price.setText("價錢： " + "0" + " 元");
 					onPricer = true;
-					bt_pricer.setText(pricerState[0]);
+					Log.d(getPackageName(), "  state  "+price_status);
+					bt_pricer.setText(pricerState[price_status]);
 					bt_pricer.setBackgroundColor(getResources().getColor(
 							R.color.home_blue));
 					bt_pricer.setClickable(true);
@@ -265,7 +266,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			}
 		});
 
-		
+
 		home_bt_call.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
@@ -301,7 +302,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				} else {
 					tv_time.setText("非夜間加成時段");
 				}
-				
+
 				if(isSpecial){
 					tv_special.setText(R.string.time_special);
 					tv_special.setVisibility(View.VISIBLE);
@@ -313,7 +314,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				tv_city.setText(city);
 				String entry[] = getResources().getStringArray(R.array.info_entry);
 				tv_entry.setText(entry[infoID]);
-				
+
 			}
 
 		});
@@ -633,7 +634,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							} else {
 								MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
 								MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
-								
+
 								Log.d(getPackageName(), " "+MY_LATITUDE+" "+MY_LONGITUDE);
 
 								Src_LATITUDE = MY_LATITUDE;
@@ -710,7 +711,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					} else {
 						MY_LATITUDE = (int) (mLocation.getLatitude() * 1000000);
 						MY_LONGITUDE = (int) (mLocation.getLongitude() * 1000000);
-						
+
 						Dest_LATITUDE = MY_LATITUDE;
 						Dest_LONGITUDE = MY_LONGITUDE;
 
@@ -742,9 +743,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 			}
 		});
-		
-		
-		
+
+
+
 		bt_pricer.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -753,6 +754,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					case PriceCounter.IDLE:
 						price_status = PriceCounter.COUNTING;
 						bt_pricer.setText(pricerState[price_status]);
+						tv_pricer_time.setText("時間： 0 秒");
 						counter.start();
 						pricer_start_time = System.currentTimeMillis();
 						pricer_handler.removeCallbacks(updateTimer);
@@ -765,16 +767,15 @@ public class MPP_UI extends MapActivity implements LocationListener {
 						counter.stop();
 						break;
 					case PriceCounter.STOP:
-						tv_pricer_time.setText("時間： 0 秒");
 						price_status = PriceCounter.IDLE;
 						bt_pricer.setText(pricerState[price_status]);
 						counter.reset();
 						break;
 				}
 			}
-			
+
 		});
-		
+
 	}
 
 	OnClickListener goPath = new OnClickListener() {
@@ -941,7 +942,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		type_start = 2;
 		layout_startend.setVisibility(View.VISIBLE);
 	}
-	
+
 	private void setInfo(){
 		Calendar c = Calendar.getInstance();
 		int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -950,7 +951,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		} else {
 			isNight = false;
 		}
-		
+
 		isSpecial = false ;
 
 		try {
@@ -962,7 +963,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		if(city.equals("台北市")||city.equals("新北市")||city.equals("基隆市")){
 			city = "大台北地區";
 			if(isNight){
@@ -1037,14 +1038,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 		return location;
 	}
-	
+
 	// for price counter
 	public void LocationCallBack(){
 		Log.e("MPP_UI","LocationCallBack invoked!");
 		Location location = getLocation(context);
 		if( price_status == PriceCounter.COUNTING ){
 			counter.addLocation(location,  System.currentTimeMillis());
-			
+
 			/* refresh price counter view*/
 			tv_pricer_price.setText(""+counter.getPrice());
 			float dis = counter.getTotalDistance();
@@ -1055,9 +1056,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			}
 			sb.append(""+dis%1000+" 公尺");
 			tv_pricer_dis.setText(sb.toString());
-			
+
 		}
-		
+
 	}
 
 	@Override
@@ -1707,20 +1708,26 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 
 	}
-	
+
 	private Runnable updateTimer = new Runnable() {
         public void run() {
  //       final TextView time = (TextView) findViewById(R.id.tv_pricer_time);
         Long spentTime = System.currentTimeMillis() - pricer_start_time;
 
             Long minius = (spentTime/1000)/60;
-		
+
 		    Long seconds = (spentTime/1000) % 60;
-		    if(minius > 0){
-		    	tv_pricer_time.setText("時間： "+minius+" 分 "+seconds+" 秒");
-		    }else{
-		    	tv_pricer_time.setText("時間： "+seconds+" 秒");
+		    if(onPricer){
+		    	if(minius > 0){
+			    	tv_pricer_time.setText("時間： "+minius+" 分 "+seconds+" 秒");
+			    }else{
+			    	tv_pricer_time.setText("時間： "+seconds+" 秒");
+			    }
 		    }
+		    else {
+		    	tv_pricer_time.setText("行動計費器");
+		    }
+		    
 	        pricer_handler.postDelayed(this, 1000);
          }
 	 };
