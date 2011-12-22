@@ -2,9 +2,9 @@ package com.android.gps;
 
 import java.util.List;
 
-import proj.ui.R;
+import proj.ui.R; 
 import proj.ui.R.id;
-import proj.ui.R.layout;
+import proj.ui.R.layout; 
 
 import android.app.Activity;
 import android.location.Criteria;

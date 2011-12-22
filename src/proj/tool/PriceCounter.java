@@ -18,7 +18,13 @@ public class PriceCounter {
 	
 	private float distance_total;
 	private long time_total;
-
+	
+	public static final int IDLE = 0;
+	public static final int COUNTING = 1;
+	public static final int STOP = 2;
+	
+	private boolean isRunning = false;
+	
 	public PriceCounter(){
 		init();
 	}
@@ -30,6 +36,9 @@ public class PriceCounter {
 		time_prev = 0;
 		distance_sum = 0;
 		time_sum = 0;
+		distance_total = 0;
+		time_total = 0;
+		isRunning = false;
 	}
 	public void reset(){
 		init();
@@ -37,9 +46,18 @@ public class PriceCounter {
 	public int getPrice(){
 		return price; 
 	}
+	public void start(){
+		isRunning = true;
+	}
+	public void stop(){
+		isRunning = false;
+	}
+	
+	
 	public long getTotalTime(){
 		return time_total;
 	}
+	
 	public float getTotalDistance(){
 		return distance_total;
 	}
@@ -67,14 +85,14 @@ public class PriceCounter {
 		if(speed > 5){
 			distance_sum += distance;
 			distance_total += distance;
-			if( distance_sum >= 1250 ){
+			if( distance_sum >= 250 && distance_total >= 1250){
 				price += ((int)(distance_sum/1250))*5;
 				distance_sum = distance_sum % 1250;
 			}
 		}else{
 			time_sum += timeval;
-			time_total += time_total;
-			if( time_sum > 100 * 1000){  // 1 min 40 sec -> 100 sec
+			time_total += timeval;
+			if( time_sum > 100 * 1000 && distance_total >= 1250){  // 1 min 40 sec -> 100 sec
 				price += ((int)(time_sum/(100*1000)))*5;
 				time_sum = time_sum % (100*1000);
 			}

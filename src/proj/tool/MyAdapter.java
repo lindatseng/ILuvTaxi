@@ -30,7 +30,7 @@ public class MyAdapter extends CursorAdapter {
 		//gpsInfo.setText("lat: "+latitude+", long: "+longitude);
 		//timeInfo.setText("unix: "+unixTime+", val:"+timeval);	
 
-	}
+	} 
 
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {

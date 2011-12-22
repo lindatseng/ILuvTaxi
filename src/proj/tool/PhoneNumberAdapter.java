@@ -32,7 +32,7 @@ public class PhoneNumberAdapter extends SimpleAdapter {
 		inflater = LayoutInflater.from(context);
 		
 	}
-	
+	 
 	 @Override
 	 public View getView(int position, View convertView, ViewGroup parent) {
 	 

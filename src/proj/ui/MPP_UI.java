@@ -22,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import proj.tool.PhoneNumberAdapter;
+import proj.tool.PriceCounter;
 import proj.tool.TaxiData;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -38,6 +39,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -87,7 +89,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	EditText et_start, et_end;
 
 	private QuickActionWidget mGridStart, mGridEnd;
-	String pricerState = "開始";
+	String[] pricerState = new String[]{"開始","停止","重設" };
 	int pricerStateNum = 1;
 
 	static final int INITIAL_ZOOM_LEVEL = 16;
@@ -121,19 +123,31 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	ListView taxiInfoListView;
 	TaxiData taxidata;
+	private PriceCounter counter;
+	Context context;
+	private int price_status;
+	private long pricer_start_time;
+	private Handler pricer_handler = new Handler();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		context = this;
 		setContentView(R.layout.main);
 		findView();
+		setPriceCounter();
 		setListener();
 		setMap();
 		setInfo();
 		setTaxiInfo(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
+	
+	public void setPriceCounter(){
+		counter = new PriceCounter();
+		price_status = PriceCounter.IDLE;
+	}
+	
 
 	private void findView() {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
@@ -183,6 +197,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		bt_last = (Button) view_routeresult.findViewById(R.id.bt_last);
 
 		taxiInfoListView = (ListView) findViewById(R.id.taxiInfoListview);
+		
+		/*bt_pricer = (Button) findViewById(R.id.bt_pricer);
+		tv_pricer_time = (TextView) findViewById(R.id.tv_pricer_time);
+		tv_pricer_dis = (TextView) findViewById(R.id.tv_pricer_dis);
+		tv_pricer_price = (TextView) findViewById(R.id.tv_pricer_price);*/
+		
 	}
 
 	private void setListener() {
@@ -236,7 +256,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					tv_pricer_time.setText("時間： " + "0" + " 秒");
 					tv_pricer_price.setText("價錢： " + "0" + " 元");
 					onPricer = true;
-					bt_pricer.setText(pricerState);
+					bt_pricer.setText(pricerState[0]);
 					bt_pricer.setBackgroundColor(getResources().getColor(
 							R.color.home_blue));
 					bt_pricer.setClickable(true);
@@ -245,28 +265,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			}
 		});
 
-		bt_pricer.setOnClickListener(new Button.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				if (pricerStateNum == 1) {
-					pricerStateNum = 2;
-					pricerState = "停止";
-					bt_pricer.setText(pricerState);
-				} else if (pricerStateNum == 2) {
-					pricerStateNum = 3;
-					pricerState = "重設";
-					bt_pricer.setText(pricerState);
-				} else {
-					pricerStateNum = 1;
-					pricerState = "開始";
-					bt_pricer.setText(pricerState);
-				}
-			}
-
-		});
-
+		
 		home_bt_call.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
@@ -743,7 +742,39 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 			}
 		});
+		
+		
+		
+		bt_pricer.setOnClickListener(new OnClickListener(){
 
+			@Override
+			public void onClick(View v) {
+				switch(price_status){
+					case PriceCounter.IDLE:
+						price_status = PriceCounter.COUNTING;
+						bt_pricer.setText(pricerState[price_status]);
+						counter.start();
+						pricer_start_time = System.currentTimeMillis();
+						pricer_handler.removeCallbacks(updateTimer);
+						pricer_handler.postDelayed(updateTimer, 1000);
+						break;
+					case PriceCounter.COUNTING:
+						price_status = PriceCounter.STOP;
+						pricer_handler.removeCallbacks(updateTimer);
+						bt_pricer.setText(pricerState[price_status]);
+						counter.stop();
+						break;
+					case PriceCounter.STOP:
+						tv_pricer_time.setText("時間： 0 秒");
+						price_status = PriceCounter.IDLE;
+						bt_pricer.setText(pricerState[price_status]);
+						counter.reset();
+						break;
+				}
+			}
+			
+		});
+		
 	}
 
 	OnClickListener goPath = new OnClickListener() {
@@ -1006,6 +1037,28 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 		return location;
 	}
+	
+	// for price counter
+	public void LocationCallBack(){
+		Log.e("MPP_UI","LocationCallBack invoked!");
+		Location location = getLocation(context);
+		if( price_status == PriceCounter.COUNTING ){
+			counter.addLocation(location,  System.currentTimeMillis());
+			
+			/* refresh price counter view*/
+			tv_pricer_price.setText(""+counter.getPrice());
+			float dis = counter.getTotalDistance();
+			StringBuilder sb = new StringBuilder();
+			sb.append("距離： ");
+			if( dis/1000 >0 ){
+				sb.append(""+dis/1000+" 公里 ");
+			}
+			sb.append(""+dis%1000+" 公尺");
+			tv_pricer_dis.setText(sb.toString());
+			
+		}
+		
+	}
 
 	@Override
 	protected boolean isRouteDisplayed() {
@@ -1015,8 +1068,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location arg0) {
-		// TODO Auto-generated method stub
-
+		LocationCallBack();
 	}
 
 	@Override
@@ -1655,5 +1707,22 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 
 	}
+	
+	private Runnable updateTimer = new Runnable() {
+        public void run() {
+ //       final TextView time = (TextView) findViewById(R.id.tv_pricer_time);
+        Long spentTime = System.currentTimeMillis() - pricer_start_time;
+
+            Long minius = (spentTime/1000)/60;
+		
+		    Long seconds = (spentTime/1000) % 60;
+		    if(minius > 0){
+		    	tv_pricer_time.setText("時間： "+minius+" 分 "+seconds+" 秒");
+		    }else{
+		    	tv_pricer_time.setText("時間： "+seconds+" 秒");
+		    }
+	        pricer_handler.postDelayed(this, 1000);
+         }
+	 };
 
 }
