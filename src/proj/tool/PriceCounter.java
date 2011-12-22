@@ -18,8 +18,12 @@ public class PriceCounter {
 	
 	private float distance_total;
 	private long time_total;
+	
 	public static final int IDLE = 0;
 	public static final int COUNTING = 1;
+	public static final int STOP = 2;
+	
+	private boolean isRunning = false;
 	
 	public PriceCounter(){
 		init();
@@ -34,6 +38,7 @@ public class PriceCounter {
 		time_sum = 0;
 		distance_total = 0;
 		time_total = 0;
+		isRunning = false;
 	}
 	public void reset(){
 		init();
@@ -41,6 +46,13 @@ public class PriceCounter {
 	public int getPrice(){
 		return price; 
 	}
+	public void start(){
+		isRunning = true;
+	}
+	public void stop(){
+		isRunning = false;
+	}
+	
 	
 	public long getTotalTime(){
 		return time_total;
