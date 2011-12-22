@@ -264,9 +264,19 @@
                     android:id="@+id/tv_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="非夜間加成時段"
+                    android:text="@string/time_normal"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />  
+                   
+                <TextView
+                    android:id="@+id/tv_special"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_special"
+                    android:visibility="gone"
                     android:textAppearance="?android:attr/textAppearanceLarge" />
-
+                
+                
+             
                 <TextView
                     android:id="@+id/tv_entry"
                     android:layout_width="wrap_content"

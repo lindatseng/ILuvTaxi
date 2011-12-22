@@ -82,7 +82,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			home_bt_pricer;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
 			tv_copyrights, tv_entry, tv_time, tv_city, tv_pricer_time,
-			tv_pricer_dis, tv_pricer_price;
+			tv_pricer_dis, tv_pricer_price,tv_special;
 	View view_startend, view_routeresult;
 	EditText et_start, et_end;
 
@@ -103,6 +103,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	Boolean isEndItem = false;
 	Boolean isStartItem = true;
 	Boolean onPricer = false;
+	Boolean isNight,isSpecial;
+	String city="台北市";
+	int infoID = 0;
 	private LocationManager locationManager;
 	private List<GeoPoint> routePoints = new ArrayList<GeoPoint>();
 
@@ -127,6 +130,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		findView();
 		setListener();
 		setMap();
+		setInfo();
 		setTaxiInfo(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
@@ -157,6 +161,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		tv_entry = (TextView) findViewById(R.id.tv_entry);
 		tv_time = (TextView) findViewById(R.id.tv_time);
 		tv_city = (TextView) findViewById(R.id.tv_city);
+		tv_special = (TextView)findViewById(R.id.tv_special);
 		view_startend = (View) view_map.findViewById(R.id.view_startend);
 		et_start = (EditText) view_startend.findViewById(R.id.et_start);
 		et_end = (EditText) view_startend.findViewById(R.id.et_end);
@@ -292,27 +297,24 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_call.setClickable(false);
 				home_bt_pricer.setClickable(false);
 
-				Calendar c = Calendar.getInstance();
-
-				int hour = c.get(Calendar.HOUR_OF_DAY);
-				if (hour >= 23 || hour <= 5) {
+				if (isNight) {
 					tv_time.setText("夜間加成時段");
 				} else {
 					tv_time.setText("非夜間加成時段");
 				}
-
-				tv_entry.setText(getResources()
-						.getString(R.string.entry_taipei));
-				try {
-					Log.d(getPackageName(), getCity());
-					tv_city.setText(getCity());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				if(isSpecial){
+					tv_special.setText(R.string.time_special);
+					tv_special.setVisibility(View.VISIBLE);
 				}
+				else{
+					tv_special.setVisibility(View.GONE);
+				}
+
+				tv_city.setText(city);
+				String entry[] = getResources().getStringArray(R.array.info_entry);
+				tv_entry.setText(entry[infoID]);
+				
 			}
 
 		});
@@ -907,6 +909,71 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		et_start.setTextColor(android.graphics.Color.BLUE);
 		type_start = 2;
 		layout_startend.setVisibility(View.VISIBLE);
+	}
+	
+	private void setInfo(){
+		Calendar c = Calendar.getInstance();
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		if (hour >= 23 || hour <= 5) {
+			isNight = true;
+		} else {
+			isNight = false;
+		}
+		
+		isSpecial = false ;
+
+		try {
+			city = getCity();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(city.equals("台北市")||city.equals("新北市")||city.equals("基隆市")){
+			city = "大台北地區";
+			if(isNight){
+				if(isSpecial) infoID = 3;
+				else infoID = 1;
+			}
+			else{
+				if(isSpecial) infoID = 2;
+				else infoID = 0;
+			}
+		}
+		else if(city.equals("高雄市")){
+			if(isNight){
+				if(isSpecial) infoID = 7;
+				else infoID = 5;
+			}
+			else{
+				if(isSpecial) infoID = 6;
+				else infoID = 4;
+			}
+		}
+		else if(city.equals("台中市")){
+			if(isNight){
+				if(isSpecial) infoID = 11;
+				else infoID = 9;
+			}
+			else{
+				if(isSpecial) infoID = 10;
+				else infoID = 8;
+			}
+		}
+		else if(city.equals("新竹市")||city.equals("新竹縣")||city.equals("苗栗縣")){
+			city = "大新竹地區";
+			if(isNight){
+				if(isSpecial) infoID = 15;
+				else infoID = 13;
+			}
+			else{
+				if(isSpecial) infoID = 14;
+				else infoID = 12;
+			}
+		}
 	}
 
 	private void setTaxiInfo(Context context) {
