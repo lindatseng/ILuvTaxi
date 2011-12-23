@@ -1774,7 +1774,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			} else {
 				tv_pricer_time.setText("行動計費器");
 			}
-
+			tv_pricer_price.setText("價錢： "
+					+ counter.getPrice(infoID,
+							(int) counter.getTotalDistance(),
+							(int) counter.getTotalTime()));
 			pricer_handler.postDelayed(this, 1000);
 		}
 	};
