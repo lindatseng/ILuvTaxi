@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import proj.ui.R;
+import proj.main.R;
 
 
 import android.content.Context;

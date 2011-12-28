@@ -5,16 +5,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.location.Location;
+import android.util.Log;
 
 public class PriceCounter {
 	int pathLength;
 	List<Location> locationlist;
 	private long time_now;
 	private long time_prev;
-	private int price;
 	private Location lastLocation;
-	private float distance_sum;
-	private long time_sum;
+	
+	private double lat_last,lng_last;
+//	private long time_sum;
 
 	private float distance_total;
 	private long time_total;
@@ -22,6 +23,8 @@ public class PriceCounter {
 	public static final int IDLE = 0;
 	public static final int COUNTING = 1;
 	public static final int STOP = 2;
+	
+	static final double EARTH_RADIUS = 6378.137;
 
 	private boolean isRunning = false;
 
@@ -31,14 +34,14 @@ public class PriceCounter {
 
 	void init() {
 		locationlist = new ArrayList<Location>();
-		price = 70;
 		time_now = 0;
 		time_prev = 0;
-		distance_sum = 0;
-		time_sum = 0;
+//		time_sum = 0;
 		distance_total = 0;
 		time_total = 0;
 		isRunning = false;
+		lat_last = 0;
+		lng_last = 0;
 	}
 
 	public void reset() {
@@ -50,11 +53,16 @@ public class PriceCounter {
 	// }
 	public void start() {
 		isRunning = true;
+		time_now = System.currentTimeMillis();
 	}
 
 	public void stop() {
 		isRunning = false;
 	}
+	
+//	public void timePause(){
+//		
+//	}
 
 	public long getTotalTime() {
 		return time_total;
@@ -63,6 +71,22 @@ public class PriceCounter {
 	public float getTotalDistance() {
 		return distance_total;
 	}
+	
+	public void timeChange(Location location){
+		time_total = System.currentTimeMillis() - time_now;
+		if(location!=null){
+			if( lat_last != 0 && lng_last != 0 ){
+				distance_total += GetDistance(lat_last, lng_last, location.getLatitude(), location.getLongitude());
+Log.d("proj.main", "lat "+location.getLatitude()+" lng "+location.getLongitude());
+				Log.d("proj.main", "dis "+distance_total);
+			}
+			lat_last = location.getLatitude();
+			lng_last = location.getLongitude();
+		}
+		
+	} 
+	
+	
 
 	public void addLocation(Location newLocation, long unixTime) {
 		// record the path
@@ -74,33 +98,32 @@ public class PriceCounter {
 		locationlist.add(newLocation);
 		time_now = unixTime;
 
-		if (time_prev == 0) {
-			/* first call addLocation */
-			time_prev = time_now;
-			return;
-		}
-		long timeval = time_now - time_prev; // in millisecond
-		float distance = lastLocation.distanceTo(newLocation);
-
-		// float speed = newLocation.getSpeed();
-		float speed = (distance / timeval) * 1000;
-		if (speed > 5) {
-			distance_sum += distance;
-			distance_total += distance;
-			if (distance_sum >= 250 && distance_total >= 1250) {
-				price += ((int) (distance_sum / 1250)) * 5;
-				distance_sum = distance_sum % 1250;
-			}
-		} else {
-			time_sum += timeval;
-			time_total += timeval;
-			if (time_sum > 100 * 1000 && distance_total >= 1250) { // 1 min 40
-																	// sec ->
-																	// 100 sec
-				price += ((int) (time_sum / (100 * 1000))) * 5;
-				time_sum = time_sum % (100 * 1000);
-			}
-		}
+		
+		
+		
+//		if (time_prev == 0) {
+//			/* first call addLocation */
+//			time_prev = time_now;
+//			return;
+//		}
+//		long timeval = time_now - time_prev; // in millisecond
+//		float distance = lastLocation.distanceTo(newLocation);
+//
+//		// float speed = newLocation.getSpeed();
+//		float speed = (distance / timeval) * 1000;
+//		if (speed < 5) {
+//			
+//
+//		} else {
+////			time_sum += timeval;
+//			time_total += timeval;
+////			if (time_sum > 100 * 1000 && distance_total >= 1250) { // 1 min 40
+////																	// sec ->
+////																	// 100 sec
+////				time_sum = time_sum % (100 * 1000);
+////			}
+//		}
+//		distance_total += distance;
 	}
 
 	public int getPrice(int type, int dis, int time) {
@@ -220,7 +243,7 @@ public class PriceCounter {
 		if (dis < 1250) {
 			price_dis = price_init;
 		} else {
-			price_dis = price_init + ((dis - 1250) / dis_per + 1) * 5;
+			price_dis = price_init + ((dis - dis_threshold) / dis_per + 1) * 5;
 		}
 
 		price_time = (time / time_per) * 5;
@@ -232,5 +255,24 @@ public class PriceCounter {
 
 		return price_sum;
 
+	}
+	
+	private static double rad(double d) {
+		return d * Math.PI / 180.0;
+	}
+
+	public static double GetDistance(double lat1, double lng1, double lat2,
+			double lng2) {
+		double radLat1 = rad(lat1);
+		double radLat2 = rad(lat2);
+		double a = radLat1 - radLat2;
+		double b = rad(lng1) - rad(lng2);
+		double s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2)
+				+ Math.cos(radLat1) * Math.cos(radLat2)
+				* Math.pow(Math.sin(b / 2), 2)));
+		s = s * EARTH_RADIUS;
+		// s = Math.round(s * 10000) / 10000;
+		Log.d("xxxxxx", "         " + s);
+		return s;
 	}
 }

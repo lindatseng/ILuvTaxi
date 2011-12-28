@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="proj.ui"
+    package="proj.main"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -12,7 +12,7 @@
         android:theme="@style/Theme.GreenDroid.Light.NoTitleBar">
         <activity 
             android:label="@string/app_name"
-            android:name=".MPP_UI">
+            android:name="MPP_UI">
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
 
@@ -21,7 +21,7 @@
         </activity>
         	<uses-library android:name="com.google.android.maps" />
         	<activity android:name="Route"></activity>
-        	<activity android:name="Pricer"></activity>
+        	<activity android:name="proj.main.Pricer"></activity>
         <service android:name="com.android.gps.UserLocation">
             <intent-filter>
                 <action android:name="com.android.gps.UserLocation" />

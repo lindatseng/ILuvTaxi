@@ -20,7 +20,7 @@
                 android:id="@+id/mapview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:apiKey="0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig"
+                android:apiKey="0fSZ-xyT3gzskqheL3GnY0JlxeAqzd8RvRrOdkw"
                 android:clickable="true" />
             <!-- market key: 0fSZ-xyT3gzskqheL3GnY0JlxeAqzd8RvRrOdkw -->
             <!-- linda key: 0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig -->

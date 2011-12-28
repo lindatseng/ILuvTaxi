@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import proj.ui.R;
+import proj.main.R;
 
 
 import android.content.Context;
