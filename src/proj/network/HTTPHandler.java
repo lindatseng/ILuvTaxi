@@ -19,7 +19,7 @@ public class HTTPHandler {
 	
 	public static String doPost() {
 	    // Create HttpClient and Post Header
-	    String url = "http://iluvtaxi.appspot.com/route";
+	    String url = "http://iluvtaxi.appspot.com/upload";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(url);
 
