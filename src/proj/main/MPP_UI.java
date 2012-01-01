@@ -45,6 +45,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -74,7 +75,6 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-
 public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
 
@@ -134,6 +134,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	private long pricer_start_time;
 	private Handler pricer_handler = new Handler();
 
+	
+	Boolean isDrawing;
+	String android_id;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -146,11 +149,15 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		setInfo();
 		setTaxiInfo(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
+		setID();
 		String res = HTTPHandler.doPost();
 		Log.e("debug",res);
 	}
-
+	public void setID(){
+		TelephonyManager tManager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+		android_id = tManager.getDeviceId();
+		isDrawing = false;
+	}
 	public void setPriceCounter() {
 		counter = new PriceCounter();
 		price_status = PriceCounter.IDLE;
@@ -216,7 +223,15 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	private void setListener() {
+		home_bt_checkin.setOnClickListener(new Button.OnClickListener(){
 
+			@Override
+			public void onClick(View arg0) {
+				// TODO Auto-generated method stub
+				isDrawing = true;
+			}
+			
+		});
 		home_bt_route.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
@@ -1800,42 +1815,47 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		public void run() {
 			// final TextView time = (TextView)
 			// findViewById(R.id.tv_pricer_time);
-			Location mLocation = getLocation(MPP_UI.this);
-			counter.timeChange(mLocation);
-			Long spentTime = counter.getTotalTime();
-			Long minius = (spentTime / 1000) / 60; 
-			Long seconds = (spentTime / 1000) % 60;
+			if(price_status==PriceCounter.COUNTING){
+				Location mLocation = getLocation(MPP_UI.this);
+				counter.timeChange(mLocation);
+				Long spentTime = counter.getTotalTime();
+				Long minius = (spentTime / 1000) / 60; 
+				Long seconds = (spentTime / 1000) % 60;
 			
-			float spentDist = counter.getTotalDistance();
-			float meter = spentDist % 1000;
-			float kilo = spentDist / 1000;
+				float spentDist = counter.getTotalDistance();
+				float meter = spentDist % 1000;
+				float kilo = spentDist / 1000;
 			
-			if (onPricer) {
-				if (kilo > 0) {
-					tv_pricer_dis.setText("距離： " + kilo + " 公里 " + meter
+				if (onPricer) {
+					if (kilo > 0) {
+						tv_pricer_dis.setText("距離： " + kilo + " 公里 " + meter
 							+ " 公尺");
+					} else {
+						tv_pricer_dis.setText("距離： " + meter + " 公尺");
+					}
 				} else {
-					tv_pricer_dis.setText("距離： " + meter + " 公尺");
+					tv_pricer_dis.setText("");
 				}
-			} else {
-				tv_pricer_dis.setText("");
-			}
 			
-			if (onPricer) {
-				if (minius > 0) {
-					tv_pricer_time.setText("時間： " + minius + " 分 " + seconds
+				if (onPricer) {
+					if (minius > 0) {
+						tv_pricer_time.setText("時間： " + minius + " 分 " + seconds
 							+ " 秒");
+					} else {
+						tv_pricer_time.setText("時間： " + seconds + " 秒");
+					}
 				} else {
-					tv_pricer_time.setText("時間： " + seconds + " 秒");
+					tv_pricer_time.setText("行動計費器");
 				}
-			} else {
-				tv_pricer_time.setText("行動計費器");
-			}
-			tv_pricer_price.setText("價錢： "
+				tv_pricer_price.setText("價錢： "
 					+ counter.getPrice(infoID,
 							(int) counter.getTotalDistance(),
 							(int) counter.getTotalTime()/1000));
-			pricer_handler.postDelayed(this, 1000);
+				pricer_handler.postDelayed(this, 1000);
+			}
+			if(isDrawing){
+				pricer_handler.postDelayed(this, 1000);
+			}
 		}
 	};
 
