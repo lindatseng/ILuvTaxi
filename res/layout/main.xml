@@ -3,7 +3,14 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
+<LinearLayout
+ 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="0dp"
+                    android:paddingLeft="4dp"
+                    android:paddingRight="4dp"
+                    android:paddingTop="4dp">
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
@@ -40,6 +47,7 @@
             android:padding="5dp"
             android:text=""
             android:textColor="#ffffffff" />
+    </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
@@ -83,16 +91,16 @@
                         android:id="@+id/view1"
                         android:layout_width="4dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1" />
+                        />
 
                     <Button
-                        android:id="@+id/home_bt_info"
+                        android:id="@+id/home_bt_checkin"
                         style="@style/HomeText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_weight="2"
                         android:background="@color/home_orange"
-                        android:text="@string/home_info" />
+                        android:text="@string/home_checkin" />
                 </LinearLayout>
             </TableRow>
 
@@ -111,21 +119,40 @@
                     android:paddingRight="4dp"
                     android:paddingTop="2dp"
                     android:weightSum="3" >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="2"
+                        android:orientation="vertical"
+                        android:weightSum="2">
 
                     <Button
                         android:id="@+id/home_button_call"
                         style="@style/HomeText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
                         android:background="@color/home_orange"
                         android:text="@string/home_call" />
+                    <View
+                        android:layout_width="wrap_content"
+                        android:layout_height="4dp"
+                         />
+                    <Button
+                        android:id="@+id/home_bt_info"
+                        style="@style/HomeText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@color/home_orange"
+                        android:text="@string/home_info" />
+                    </LinearLayout>
 
                     <View
                         android:id="@+id/view2"
                         android:layout_width="4dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2" />
+                        />
 
                     <LinearLayout
                         android:id="@+id/home_bt_pricer"
@@ -134,7 +161,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:layout_gravity="center_horizontal|center_vertical"
-                        android:padding="8dp"
                         android:background="@color/home_green"
                         android:weightSum="4"
                         android:orientation="vertical"
@@ -201,6 +227,7 @@
             android:id="@+id/layout_call"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:padding="4dp"
             android:visibility="gone"
             android:weightSum="3" >
 
@@ -218,6 +245,12 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="#aa000000" />
+                <LinearLayout 
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="2">
 
                 <Button
                     android:id="@+id/bt_call_back"
@@ -227,6 +260,13 @@
                     android:layout_weight="1"
                     android:background="@color/home_orange"
                     android:text="@string/home_call" />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aa000000" />
+                
+                </LinearLayout>
             </LinearLayout>
 
             <ListView
@@ -241,8 +281,51 @@
             android:id="@+id/layout_info"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:paddingTop="4dp"
+            android:paddingLeft="4dp"
+            android:paddingBottom="4dp"
+            android:paddingRight="4dp"
             android:visibility="gone"
             android:weightSum="3" >
+            
+             <LinearLayout
+                android:id="@+id/linearLayout7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:weightSum="2" >
+                 <View
+                    android:id="@+id/view_info_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aa000000" />
+                 <LinearLayout 
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:weightSum="2">
+                 <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aa000000" />
+                 
+
+                <Button
+                    android:id="@+id/bt_info_b"
+                    style="@style/HomeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/home_orange"
+                    android:text="@string/home_info" />
+                </LinearLayout>
+
+               
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/layout_inforeal"
@@ -276,7 +359,6 @@
                     android:textAppearance="?android:attr/textAppearanceLarge" />
                 
                 
-             
                 <TextView
                     android:id="@+id/tv_entry"
                     android:layout_width="wrap_content"
@@ -285,30 +367,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linearLayout7"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_weight="2"
-                android:orientation="vertical"
-                android:weightSum="2" >
-
-                <Button
-                    android:id="@+id/bt_info_back"
-                    style="@style/HomeText"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@color/home_orange"
-                    android:text="@string/home_info" />
-
-                <View
-                    android:id="@+id/view_info_back"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#aa000000" />
-            </LinearLayout>
+           
         </LinearLayout>
     </FrameLayout>
 

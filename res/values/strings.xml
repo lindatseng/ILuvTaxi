@@ -10,7 +10,7 @@
     <string name="home_route">路線規劃\n\n暨\n\n資費預算</string>
     <string name="home_info">計費方式</string>
     <string name="home_pricer">行動計費器</string>
-    <string name="home_call">車隊查詢\n\n暨\n\n電話叫車</string>
+    <string name="home_call">電話叫車</string>
     <string name="time_normal">非夜間加成時段</string>
     <string name="time_night">夜間加成時段</string>
     <string name="time_special">特殊節日加成</string>
@@ -32,5 +32,6 @@
         <item >\n\n起程：100元 (1.25公里)\n\n續程：5元 (每250公尺)\n\n延滯計時：5元 \n(時速5公里以下\n 累計180秒)\n\n春節加成：請洽車行查詢\n\n(from 新竹市政府)</item>
         <item >\n\n起程：100元 (1.25公里)\n\n續程：5元 (每250公尺)\n\n延滯計時：5元 \n(時速5公里以下\n 累計180秒)\n\n夜間加成：加收20元\n\n春節加成：請洽車行查詢\n\n(from 新竹市政府)</item>
     </string-array>
+    <string name="home_checkin">安心搭車</string>
 
 </resources>
