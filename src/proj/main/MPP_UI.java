@@ -1806,9 +1806,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			Long minius = (spentTime / 1000) / 60; 
 			Long seconds = (spentTime / 1000) % 60;
 			
-			float spentDist = counter.getTotalDistance();
-			float meter = spentDist % 1000;
-			float kilo = spentDist / 1000;
+			int spentDist = (int)(counter.getTotalDistance()*1000);
+			int meter = spentDist % 1000;
+			int kilo = spentDist / 1000;
 			
 			if (onPricer) {
 				if (kilo > 0) {
