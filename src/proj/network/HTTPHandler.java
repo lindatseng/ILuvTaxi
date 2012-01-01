@@ -19,15 +19,16 @@ public class HTTPHandler {
 	
 	public static String doPost() {
 	    // Create HttpClient and Post Header
-	    String url = "http://lindayaaa.appspot.com/ggm";
+	    String url = "http://iluvtaxi.appspot.com/upload";
 		HttpClient httpclient = new DefaultHttpClient();
 	    HttpPost httppost = new HttpPost(url);
 
 	    try {
 	        // Add data
-	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-	        nameValuePairs.add(new BasicNameValuePair("number", "12345"));
-	        nameValuePairs.add(new BasicNameValuePair("content", "Linda yaaa"));
+	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+	        nameValuePairs.add(new BasicNameValuePair("deviceID", "12345"));
+	        nameValuePairs.add(new BasicNameValuePair("lat", "12345"));
+	        nameValuePairs.add(new BasicNameValuePair("lng", "Linda yaaa"));
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	        // Execute HTTP Post Request

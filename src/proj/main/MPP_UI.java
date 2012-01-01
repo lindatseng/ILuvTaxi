@@ -1497,7 +1497,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							.getJSONArray("legs").getJSONObject(0)
 							.getJSONObject("duration").getInt("value");
 					Log.d(getPackageName(), "time eeee " + polyline.length());
-					int delayTime = polyline.length() ;
+					int delayTime = polyline.length() / 3;
 					int price = counter.getPrice(infoID, dist, delayTime);
 					routeInfo.put("DISTANCE" + i, distance);
 					routeInfo.put("DURATION" + i, duration);
@@ -1822,9 +1822,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				Long minius = (spentTime / 1000) / 60; 
 				Long seconds = (spentTime / 1000) % 60;
 			
-				float spentDist = counter.getTotalDistance();
-				float meter = spentDist % 1000;
-				float kilo = spentDist / 1000;
+
+			int spentDist = (int)(counter.getTotalDistance()*1000);
+			int meter = spentDist % 1000;
+			int kilo = spentDist / 1000;
 			
 				if (onPricer) {
 					if (kilo > 0) {
@@ -1854,7 +1855,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				pricer_handler.postDelayed(this, 1000);
 			}
 			if(isDrawing){
-				pricer_handler.postDelayed(this, 1000);
+				
 			}
 		}
 	};
