@@ -150,8 +150,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		setTaxiInfo(this);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setID();
-		String res = HTTPHandler.doPost();
-		Log.e("debug",res);
 	}
 	public void setID(){
 		TelephonyManager tManager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -228,9 +226,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
+				Location mLocation = getLocation(MPP_UI.this);
+				Log.d(getPackageName(), String.valueOf(mLocation.getLatitude()));
+				String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
+				Log.d(getPackageName(),res);
 				isDrawing = true;
+				pricer_handler.postDelayed(updateServerRoute, 30000);
 			}
-			
+			 
 		});
 		home_bt_route.setOnClickListener(new Button.OnClickListener() {
 
@@ -309,15 +312,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			}
 		});
 		
-		home_bt_checkin.setOnClickListener(new Button.OnClickListener(){
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-		});
 
 		home_bt_call.setOnClickListener(new Button.OnClickListener() {
 
@@ -1810,7 +1804,21 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 
 	}
+	private Runnable updateServerRoute = new Runnable(){
 
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			if(isDrawing){
+				Location mLocation = getLocation(MPP_UI.this);
+				String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
+				Log.d(getPackageName(),res);
+				
+				pricer_handler.postDelayed(this, 30000);
+			}
+		}
+		
+	};
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
 			// final TextView time = (TextView)
@@ -1854,9 +1862,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							(int) counter.getTotalTime()/1000));
 				pricer_handler.postDelayed(this, 1000);
 			}
-			if(isDrawing){
-				
-			}
+			
 		}
 	};
 

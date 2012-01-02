@@ -17,7 +17,7 @@ import org.apache.http.util.EntityUtils;
 	
 public class HTTPHandler {
 	
-	public static String doPost() {
+	public static String doPost(String android_id, double lat, double lng) {
 	    // Create HttpClient and Post Header
 	    String url = "http://iluvtaxi.appspot.com/upload";
 		HttpClient httpclient = new DefaultHttpClient();
@@ -26,9 +26,9 @@ public class HTTPHandler {
 	    try {
 	        // Add data
 	        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
-	        nameValuePairs.add(new BasicNameValuePair("deviceID", "12345"));
-	        nameValuePairs.add(new BasicNameValuePair("lat", "12345"));
-	        nameValuePairs.add(new BasicNameValuePair("lng", "Linda yaaa"));
+	        nameValuePairs.add(new BasicNameValuePair("deviceID", android_id));
+	        nameValuePairs.add(new BasicNameValuePair("lat", String.valueOf(lat)));
+	        nameValuePairs.add(new BasicNameValuePair("lng", String.valueOf(lng)));
 	        httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
 	        // Execute HTTP Post Request
