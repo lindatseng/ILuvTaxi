@@ -43,6 +43,7 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
@@ -226,12 +227,21 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Location mLocation = getLocation(MPP_UI.this);
-				Log.d(getPackageName(), String.valueOf(mLocation.getLatitude()));
-				String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
-				Log.d(getPackageName(),res);
-				isDrawing = true;
-				pricer_handler.postDelayed(updateServerRoute, 30000);
+				if(!isDrawing){
+					Location mLocation = getLocation(MPP_UI.this);
+					//Log.d(getPackageName(), String.valueOf(mLocation.getLatitude()));
+					String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
+					//Log.d(getPackageName(),res);
+					isDrawing = true;
+					pricer_handler.postDelayed(updateServerRoute, 30000);
+					home_bt_checkin.setText("停止");
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+	                        + "0912181387")));
+				}
+				else if(isDrawing){
+					isDrawing = false;
+					home_bt_checkin.setText("安心搭車");
+				}
 			}
 			 
 		});
