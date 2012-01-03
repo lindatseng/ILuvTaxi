@@ -399,12 +399,16 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 				Location mLocation = getLocation(MPP_UI.this);
 
-//				if (mLocation == null) {
-//					Toast.makeText(MPP_UI.this, "location is null", Toast.LENGTH_LONG).show();
-//				}
-//				else{
+				if (mLocation == null) {
+					Toast.makeText(MPP_UI.this, "location is null", Toast.LENGTH_LONG).show();
+				}
+				else{
+					int spentDist = (int)(counter.getTotalDistance()*1000);
+					int meter = spentDist % 1000;
+					int kilo = spentDist / 1000;
 //					Toast.makeText(MPP_UI.this, "lat "+mLocation.getLatitude()+" lng "+mLocation.getLongitude(), Toast.LENGTH_LONG).show();
-//				}
+					Toast.makeText(MPP_UI.this, spentDist+","+meter+","+kilo, Toast.LENGTH_LONG).show();
+				}
 				
 			}
 
@@ -932,6 +936,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					price_status = PriceCounter.IDLE;
 					bt_pricer.setText(pricerState[price_status]);
 					counter.reset();
+					tv_pricer_dis.setText("距離： " + "0.0" + " 公尺");
+					tv_pricer_time.setText("時間： " + "0" + " 秒");
+					tv_pricer_price.setText("價錢： " + "0" + " 元");
 					break;
 				}
 			}
@@ -1224,18 +1231,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			counter.addLocation(location, System.currentTimeMillis());
 
 			/* refresh price counter view */
-			tv_pricer_price.setText("價錢： "
-					+ counter.getPrice(infoID,
-							(int) counter.getTotalDistance(),
-							(int) counter.getTotalTime()));
-			float dis = counter.getTotalDistance();
-			StringBuilder sb = new StringBuilder();
-			sb.append("距離： ");
-			if (dis / 1000 > 0) {
-				sb.append("" + dis / 1000 + " 公里 ");
-			}
-			sb.append("" + dis % 1000 + " 公尺");
-			tv_pricer_dis.setText(sb.toString());
+//			tv_pricer_price.setText("價錢： "
+//					+ counter.getPrice(infoID,
+//							(int) counter.getTotalDistance(),
+//							(int) counter.getTotalTime()));
+//			float dis = counter.getTotalDistance();
+//			StringBuilder sb = new StringBuilder();
+//			sb.append("距離： ");
+//			if (dis / 1000 > 0) {
+//				sb.append("" + dis / 1000 + " 公里 ");
+//			}
+//			sb.append("" + dis % 1000 + " 公尺");
+//			//tv_pricer_dis.setText(sb.toString());
 
 		}
 
