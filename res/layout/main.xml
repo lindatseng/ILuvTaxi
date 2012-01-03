@@ -365,10 +365,125 @@
                     android:layout_height="wrap_content"
                     android:text="..."
                     android:textAppearance="?android:attr/textAppearanceMedium" />
+            </LinearLayout>           
+        </LinearLayout>
+        
+        <LinearLayout
+            android:id="@+id/layout_checkin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:padding="4dp"
+            android:weightSum="3" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/layout_bg"
+                android:orientation="vertical"
+                android:padding="8dp" >
+
+                <TextView
+                    android:id="@+id/tv_safe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tv_safe"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+                
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+                <TableRow 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+
+                <Button
+                            android:id="@+id/bt_checkin_start"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:padding="4dp"
+                            android:text="開始紀錄" 
+                            android:background="@color/home_green"
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                </TableRow>
+                
+
+                 <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+                 <TableRow 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                 
+                <Button
+                            android:id="@+id/bt_checkin_message"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/home_green"
+                            android:padding="4dp"
+                            android:text="以簡訊發送" 
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                </TableRow>
+                
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="10dp" />
+                <TableRow 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                 
+                <Button
+                            android:id="@+id/bt_checkin_email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:background="@color/home_green"
+                            android:padding="4dp"
+                            android:text="以email發送" 
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                </TableRow>
+                
+
+                
             </LinearLayout>
 
-           
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical"
+                android:weightSum="2" >
+
+                <Button
+                    android:id="@+id/bt_checkin_back"
+                    style="@style/HomeText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/home_orange"
+                    android:text="@string/home_checkin" />
+
+                <View
+                    android:id="@+id/view_checkin_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#aa000000" />
+            </LinearLayout>
         </LinearLayout>
+        
+            
+            
+            
     </FrameLayout>
 
 </LinearLayout>
