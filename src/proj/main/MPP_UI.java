@@ -235,8 +235,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					isDrawing = true;
 					pricer_handler.postDelayed(updateServerRoute, 30000);
 					home_bt_checkin.setText("停止");
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-	                        + "0912181387")));
 				}
 				else if(isDrawing){
 					isDrawing = false;
