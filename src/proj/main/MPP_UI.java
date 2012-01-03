@@ -80,14 +80,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
 
 	Button home_bt_route, home_bt_call, bt_call_back, home_bt_info,home_bt_checkin,
-			bt_info_back, bt_pricer;
-	View view_map, view_call_back, view_info_back;
+			bt_info_back, bt_pricer,bt_checkin_back,bt_checkin_start,bt_checkin_message;
+	View view_map, view_call_back, view_info_back,bt_checkin_email;
 	MapView mapView;
 	Button bt_go, bt_next, bt_last;
 	ImageButton bt_start, bt_end, map_bt_start, map_bt_end;
 	int type_start = 0, type_end = 0;
 	LinearLayout layout_startend, layout_result, layout_call, layout_info,
-			home_bt_pricer;
+			home_bt_pricer,layout_checkin;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
 			tv_copyrights, tv_entry, tv_time, tv_city, tv_pricer_time,
 			tv_pricer_dis, tv_pricer_price, tv_special;
@@ -172,6 +172,10 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		tv_pricer_price = (TextView) findViewById(R.id.tv_pricer_price);
 		home_bt_call = (Button) findViewById(R.id.home_button_call);
 		bt_call_back = (Button) findViewById(R.id.bt_call_back);
+		bt_checkin_back = (Button) findViewById(R.id.bt_checkin_back);
+		bt_checkin_start = (Button) findViewById(R.id.bt_checkin_start);
+		bt_checkin_message = (Button) findViewById(R.id.bt_checkin_message);
+		bt_checkin_email = (Button) findViewById(R.id.bt_checkin_email);
 		home_bt_info = (Button) findViewById(R.id.home_bt_info);
 		bt_info_back = (Button) findViewById(R.id.bt_info_b);
 		view_call_back = (View) findViewById(R.id.view_call_back);
@@ -180,6 +184,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		view_map.setVisibility(View.GONE);
 		mapView = (MapView) view_map.findViewById(R.id.mapview);
 		bt_go = (Button) findViewById(R.id.bt_go);
+		layout_checkin = (LinearLayout) findViewById(R.id.layout_checkin);
 		layout_startend = (LinearLayout) view_map
 				.findViewById(R.id.layout_startend);
 		layout_result = (LinearLayout) view_map
@@ -227,24 +232,77 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if(!isDrawing){
-					Location mLocation = getLocation(MPP_UI.this);
-					//Log.d(getPackageName(), String.valueOf(mLocation.getLatitude()));
-					String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
-					//Log.d(getPackageName(),res);
-					isDrawing = true;
-					pricer_handler.postDelayed(updateServerRoute, 30000);
-					home_bt_checkin.setText("停止");
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-	                        + "0912181387")));
+				if(layout_checkin.getVisibility()==View.GONE){
+					layout_checkin.setVisibility(View.VISIBLE);
+					home_bt_route.setClickable(false);
+					home_bt_call.setClickable(false);
+					home_bt_pricer.setClickable(false);
+					home_bt_info.setClickable(false);
 				}
-				else if(isDrawing){
-					isDrawing = false;
-					home_bt_checkin.setText("安心搭車");
-				}
+
+
 			}
 			 
 		});
+		
+		bt_checkin_start.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(!isDrawing){
+					Location mLocation = getLocation(MPP_UI.this);
+					Log.d(getPackageName(), String.valueOf(mLocation.getLatitude()));
+					String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
+					Log.d(getPackageName(),res);
+					isDrawing = true;
+					pricer_handler.postDelayed(updateServerRoute, 30000);
+					bt_checkin_start.setText("停止記錄");
+				}
+				else if(isDrawing){
+					isDrawing = false;
+					bt_checkin_start.setText("開始記錄");
+				}
+				
+			}
+			
+		});
+		
+		bt_checkin_message.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                        + "0912181387"));
+				String sms = "我愛搭小黃 安心搭車服務\nhttp://iluvtaxi.appspot.com/route?id="+android_id ;
+				i.putExtra("sms_body", sms); 
+				startActivity(i);
+				
+			}
+			
+		});
+		
+		bt_checkin_email.setOnClickListener(new Button.OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent i = new Intent(Intent.ACTION_SEND);
+				i.setType("text/plain");
+				i.putExtra(Intent.EXTRA_SUBJECT, "我愛搭小黃 安心搭車服務");
+				String mail = "http://iluvtaxi.appspot.com/route?id="+android_id ;
+				i.putExtra(Intent.EXTRA_TEXT   , mail);
+				try {
+				    startActivity(Intent.createChooser(i, "Send mail..."));
+				} catch (android.content.ActivityNotFoundException ex) {
+				    Toast.makeText(MPP_UI.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+				}
+				
+			}
+			
+		});
+		
 		home_bt_route.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
@@ -340,12 +398,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 				Location mLocation = getLocation(MPP_UI.this);
 
-				if (mLocation == null) {
-					Toast.makeText(MPP_UI.this, "location is null", Toast.LENGTH_LONG).show();
-				}
-				else{
-					Toast.makeText(MPP_UI.this, "lat "+mLocation.getLatitude()+" lng "+mLocation.getLongitude(), Toast.LENGTH_LONG).show();
-				}
+//				if (mLocation == null) {
+//					Toast.makeText(MPP_UI.this, "location is null", Toast.LENGTH_LONG).show();
+//				}
+//				else{
+//					Toast.makeText(MPP_UI.this, "lat "+mLocation.getLatitude()+" lng "+mLocation.getLongitude(), Toast.LENGTH_LONG).show();
+//				}
 				
 			}
 
@@ -372,6 +430,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_route.setClickable(false);
 //				home_bt_call.setClickable(false);
 				home_bt_pricer.setClickable(false);
+				home_bt_checkin.setClickable(false);
 
 				if (isNight) {
 					tv_time.setText("夜間加成時段");
@@ -404,6 +463,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_route.setClickable(true);
 				home_bt_call.setClickable(true);
 				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
 			}
 
 		});
@@ -426,6 +486,21 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_route.setClickable(true);
 				home_bt_call.setClickable(true);
 				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
+			}
+		});
+		
+		bt_checkin_back.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_checkin.setVisibility(View.GONE);
+				home_bt_info.setClickable(true);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
 			}
 		});
 
@@ -1227,9 +1302,19 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			layout_call.setVisibility(View.GONE);
 		else if (layout_info.getVisibility() == View.VISIBLE) {
 			layout_info.setVisibility(View.GONE);
+			home_bt_info.setClickable(true);
 			home_bt_route.setClickable(true);
 			home_bt_call.setClickable(true);
 			home_bt_pricer.setClickable(true);
+			home_bt_checkin.setClickable(true);
+		}
+		else if (layout_checkin.getVisibility() == View.VISIBLE) {
+				layout_info.setVisibility(View.GONE);
+				home_bt_info.setClickable(true);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
 		} else
 			super.onBackPressed();
 

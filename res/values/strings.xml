@@ -33,5 +33,6 @@
         <item >\n\n起程：100元 (1.25公里)\n\n續程：5元 (每250公尺)\n\n延滯計時：5元 \n(時速5公里以下\n 累計180秒)\n\n夜間加成：加收20元\n\n春節加成：請洽車行查詢\n\n(from 新竹市政府)</item>
     </string-array>
     <string name="home_checkin">安心搭車</string>
+    <string name="tv_safe">本服務提供行車記錄功能，將您的位置資料儲存，並轉發給您的親友以保障您的安全</string>
 
 </resources>
