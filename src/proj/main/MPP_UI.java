@@ -28,6 +28,7 @@ import proj.tool.PhoneNumberAdapter;
 import proj.tool.PriceCounter;
 import proj.tool.TaxiData;
 import proj.main.R;
+import proj.main.R.color;
 import proj.network.HTTPHandler;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -76,18 +77,21 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+
 public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
 
-	Button home_bt_route, home_bt_call, bt_call_back, home_bt_info,home_bt_checkin,
-			bt_info_back, bt_pricer,bt_checkin_back,bt_checkin_start,bt_checkin_message;
-	View view_map, view_call_back, view_info_back,bt_checkin_email;
+	Button home_bt_route, home_bt_call, bt_call_back, home_bt_info,
+			home_bt_checkin, bt_info_back, bt_pricer, bt_checkin_back,
+			bt_checkin_start, bt_checkin_message, bt_checkin_route;
+	View view_map, view_call_back, view_info_back, bt_checkin_email,
+			view_checkin_back;
 	MapView mapView;
 	Button bt_go, bt_next, bt_last;
 	ImageButton bt_start, bt_end, map_bt_start, map_bt_end;
 	int type_start = 0, type_end = 0;
 	LinearLayout layout_startend, layout_result, layout_call, layout_info,
-			home_bt_pricer,layout_checkin;
+			home_bt_pricer, layout_checkin;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
 			tv_copyrights, tv_entry, tv_time, tv_city, tv_pricer_time,
 			tv_pricer_dis, tv_pricer_price, tv_special;
@@ -135,9 +139,9 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	private long pricer_start_time;
 	private Handler pricer_handler = new Handler();
 
-	
 	Boolean isDrawing;
 	String android_id;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -152,11 +156,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		setID();
 	}
-	public void setID(){
-		TelephonyManager tManager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+
+	public void setID() {
+		TelephonyManager tManager = (TelephonyManager) this
+				.getSystemService(Context.TELEPHONY_SERVICE);
 		android_id = tManager.getDeviceId();
 		isDrawing = false;
 	}
+
 	public void setPriceCounter() {
 		counter = new PriceCounter();
 		price_status = PriceCounter.IDLE;
@@ -176,10 +183,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		bt_checkin_start = (Button) findViewById(R.id.bt_checkin_start);
 		bt_checkin_message = (Button) findViewById(R.id.bt_checkin_message);
 		bt_checkin_email = (Button) findViewById(R.id.bt_checkin_email);
+		bt_checkin_route = (Button) findViewById(R.id.bt_checkin_route);
 		home_bt_info = (Button) findViewById(R.id.home_bt_info);
 		bt_info_back = (Button) findViewById(R.id.bt_info_b);
 		view_call_back = (View) findViewById(R.id.view_call_back);
 		view_info_back = (View) findViewById(R.id.view_info_back);
+		view_checkin_back = (View) findViewById(R.id.view_checkin_back);
 		view_map = (View) findViewById(R.id.view_map);
 		view_map.setVisibility(View.GONE);
 		mapView = (MapView) view_map.findViewById(R.id.mapview);
@@ -227,12 +236,12 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	}
 
 	private void setListener() {
-		home_bt_checkin.setOnClickListener(new Button.OnClickListener(){
+		home_bt_checkin.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				if(layout_checkin.getVisibility()==View.GONE){
+				if (layout_checkin.getVisibility() == View.GONE) {
 					layout_checkin.setVisibility(View.VISIBLE);
 					home_bt_route.setClickable(false);
 					home_bt_call.setClickable(false);
@@ -240,51 +249,107 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					home_bt_info.setClickable(false);
 				}
 
-
 			}
-			 
+
 		});
-		
-		bt_checkin_start.setOnClickListener(new Button.OnClickListener(){
+
+		bt_checkin_start.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(!isDrawing){
-					Location mLocation = getLocation(MPP_UI.this);
-					Log.d(getPackageName(), String.valueOf(mLocation.getLatitude()));
-					String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
-					Log.d(getPackageName(),res);
-					isDrawing = true;
-					pricer_handler.postDelayed(updateServerRoute, 30000);
+				if (!isDrawing) {
+					final AlertDialog.Builder builder = new AlertDialog.Builder(
+							MPP_UI.this);
 
-					bt_checkin_start.setText("停止記錄");
+					builder.setCancelable(false);
+					builder.setIcon(null);
+					builder.setMessage("本服務將定時上傳您的位置\n提醒您，\n到達目的地後請關閉本服務");
+					builder.setPositiveButton("確定",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+									Location mLocation = getLocation(MPP_UI.this);
+									Log.d(getPackageName(), String
+											.valueOf(mLocation.getLatitude()));
+									String res = HTTPHandler.doPost(android_id,
+											mLocation.getLatitude(),
+											mLocation.getLongitude());
+									Log.d(getPackageName(), res);
+									isDrawing = true;
+									pricer_handler.postDelayed(
+											updateServerRoute, 30000);
+
+									bt_checkin_start.setText("停止記錄");
+								}
+							});
+					builder.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+								}
+							});
+					builder.show();
+				} else if (isDrawing) {
+					final AlertDialog.Builder builder = new AlertDialog.Builder(
+							MPP_UI.this);
+
+					builder.setCancelable(false);
+					builder.setIcon(null);
+					builder.setMessage("即將停止安全到家服務");
+					builder.setPositiveButton("確定",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+									isDrawing = false;
+									bt_checkin_start.setText("開始記錄");
+								}
+							});
+					builder.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+								}
+							});
+					builder.show();
+
 				}
-				else if(isDrawing){
-					isDrawing = false;
-					bt_checkin_start.setText("開始記錄");
-				}
-				
+
 			}
-			
+
 		});
-		
-		bt_checkin_message.setOnClickListener(new Button.OnClickListener(){
+
+		bt_checkin_message.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
-                        + "0912181387"));
-				String sms = "我愛搭小黃 安心搭車服務\nhttp://iluvtaxi.appspot.com/route?id="+android_id ;
-				i.putExtra("sms_body", sms); 
+				Intent i = new Intent(Intent.ACTION_VIEW, Uri
+						.parse("sms:" + ""));
+				String sms = "我愛搭小黃 安心搭車服務\nhttp://iluvtaxi.appspot.com/route?id="
+						+ android_id;
+				i.putExtra("sms_body", sms);
 				startActivity(i);
-				
+
 			}
-			
+
 		});
-		
-		bt_checkin_email.setOnClickListener(new Button.OnClickListener(){
+
+		bt_checkin_email.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -292,26 +357,48 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				Intent i = new Intent(Intent.ACTION_SEND);
 				i.setType("text/plain");
 				i.putExtra(Intent.EXTRA_SUBJECT, "我愛搭小黃 安心搭車服務");
-				String mail = "http://iluvtaxi.appspot.com/route?id="+android_id ;
-				i.putExtra(Intent.EXTRA_TEXT   , mail);
+				String mail = "http://iluvtaxi.appspot.com/route?id="
+						+ android_id;
+				i.putExtra(Intent.EXTRA_TEXT, mail);
 				try {
-				    startActivity(Intent.createChooser(i, "Send mail..."));
+					startActivity(Intent.createChooser(i, "Send mail..."));
 				} catch (android.content.ActivityNotFoundException ex) {
-				    Toast.makeText(MPP_UI.this, "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(MPP_UI.this,
+							"There are no email clients installed.",
+							Toast.LENGTH_SHORT).show();
 				}
-				
+
 			}
-			
+
 		});
-		
+
+		bt_checkin_route.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				Uri uri = Uri.parse("http://iluvtaxi.appspot.com/route?id="
+						+ android_id);
+				intent.setData(uri);
+				startActivity(intent);
+			}
+
+		});
+
 		home_bt_route.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				view_map.setVisibility(View.VISIBLE);
-				layout_startend.setVisibility(View.VISIBLE);
-				bt_go.setText(">>開始規劃<<");
+				if (layout_result.getVisibility() == View.GONE) {
+					layout_startend.setVisibility(View.VISIBLE);
+					bt_go.setText(">>開始規劃<<");
+				} else {
+					layout_result.setVisibility(View.VISIBLE);
+					bt_go.setText(">>重新查詢<<");
+				}
 				bt_go.setBackgroundColor(getResources().getColor(
 						R.color.home_pink));
 				bt_go.setClickable(true);
@@ -350,24 +437,47 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							R.color.home_green));
 				} else {
 
-//					float dis = counter.getTotalDistance();
-//					StringBuilder sb = new StringBuilder();
-//					sb.append("距離： ");
-//					if (dis / 1000 > 0) {
-//						sb.append("" + dis / 1000 + " 公里 ");
-//					}
-//					sb.append("" + dis % 1000 + " 公尺");
-//					tv_pricer_dis.setText(sb.toString());
+					// float dis = counter.getTotalDistance();
+					// StringBuilder sb = new StringBuilder();
+					// sb.append("距離： ");
+					// if (dis / 1000 > 0) {
+					// sb.append("" + dis / 1000 + " 公里 ");
+					// }
+					// sb.append("" + dis % 1000 + " 公尺");
+					// tv_pricer_dis.setText(sb.toString());
 
 					if (price_status == PriceCounter.IDLE) {
-						tv_pricer_dis.setText("距離： " + "0.0" + " 公尺");
+						tv_pricer_dis.setText("距離： " + "0" + " 公尺");
 						tv_pricer_time.setText("時間： " + "0" + " 秒");
 						tv_pricer_price.setText("價錢： " + "0" + " 元");
 					} else {
+						Long spentTime = counter.getTotalTime();
+						Long minius = (spentTime / 1000) / 60;
+						Long seconds = (spentTime / 1000) % 60;
+
+						int spentDist = (int) (counter.getTotalDistance() * 1000);
+						int meter = spentDist % 1000;
+						int kilo = spentDist / 1000;
+
+						if (kilo > 0) {
+							tv_pricer_dis.setText("距離： " + kilo + " 公里 "
+									+ meter + " 公尺");
+						} else {
+							tv_pricer_dis.setText("距離： " + meter + " 公尺");
+						}
+
+						if (minius > 0) {
+							tv_pricer_time.setText("時間： " + minius + " 分 "
+									+ seconds + " 秒");
+						} else {
+							tv_pricer_time.setText("時間： " + seconds + " 秒");
+						}
+
 						tv_pricer_price.setText("價錢： "
 								+ counter.getPrice(infoID,
 										(int) counter.getTotalDistance(),
-										(int) counter.getTotalTime()));
+										(int) counter.getTotalTime() / 1000)
+								+ " 元");
 					}
 
 					onPricer = true;
@@ -380,36 +490,39 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 			}
 		});
-		
 
 		home_bt_call.setOnClickListener(new Button.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(layout_info.getVisibility()==View.VISIBLE)
+				if (layout_info.getVisibility() == View.VISIBLE)
 					layout_info.setVisibility(View.GONE);
 				layout_call.setVisibility(View.VISIBLE);
-				
-				
-				locationManager = (LocationManager) MPP_UI.this
-						.getSystemService(LOCATION_SERVICE);
-				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-						0, MPP_UI.this);
 
-				Location mLocation = getLocation(MPP_UI.this);
+				// locationManager = (LocationManager) MPP_UI.this
+				// .getSystemService(LOCATION_SERVICE);
+				// locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+				// 0,
+				// 0, MPP_UI.this);
+				//
+				// Location mLocation = getLocation(MPP_UI.this);
+				//
+				// if (mLocation == null) {
+				// Toast.makeText(MPP_UI.this, "location is null",
+				// Toast.LENGTH_LONG).show();
+				// }
+				// else{
+				// int spentDist = (int)(counter.getTotalDistance()*1000);
+				// int meter = spentDist % 1000;
+				// int kilo = spentDist / 1000;
+				// // Toast.makeText(MPP_UI.this,
+				// "lat "+mLocation.getLatitude()+" lng "+mLocation.getLongitude(),
+				// Toast.LENGTH_LONG).show();
+				// Toast.makeText(MPP_UI.this, spentDist+","+meter+","+kilo,
+				// Toast.LENGTH_LONG).show();
+				// }
 
-				if (mLocation == null) {
-					Toast.makeText(MPP_UI.this, "location is null", Toast.LENGTH_LONG).show();
-				}
-				else{
-					int spentDist = (int)(counter.getTotalDistance()*1000);
-					int meter = spentDist % 1000;
-					int kilo = spentDist / 1000;
-//					Toast.makeText(MPP_UI.this, "lat "+mLocation.getLatitude()+" lng "+mLocation.getLongitude(), Toast.LENGTH_LONG).show();
-					Toast.makeText(MPP_UI.this, spentDist+","+meter+","+kilo, Toast.LENGTH_LONG).show();
-				}
-				
 			}
 
 		});
@@ -429,11 +542,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if(layout_call.getVisibility()==View.VISIBLE)
+				if (layout_call.getVisibility() == View.VISIBLE)
 					layout_call.setVisibility(View.GONE);
 				layout_info.setVisibility(View.VISIBLE);
 				home_bt_route.setClickable(false);
-//				home_bt_call.setClickable(false);
+				// home_bt_call.setClickable(false);
 				home_bt_pricer.setClickable(false);
 				home_bt_checkin.setClickable(false);
 
@@ -479,6 +592,25 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				layout_call.setVisibility(View.GONE);
+				home_bt_info.setClickable(true);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
+			}
+		});
+
+		view_checkin_back.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_checkin.setVisibility(View.GONE);
+				home_bt_info.setClickable(true);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
 			}
 		});
 
@@ -494,7 +626,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_checkin.setClickable(true);
 			}
 		});
-		
+
 		bt_checkin_back.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -760,8 +892,6 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							Location mLocation = getLocation(MPP_UI.this);
 							Log.d(getPackageName(), "location decideeee");
 							if (mLocation == null) {
-//								 Toast.makeText(this, "location is null",
-//								 Toast.LENGTH_LONG).show();
 
 								final AlertDialog.Builder builder = new AlertDialog.Builder(
 										MPP_UI.this);
@@ -913,32 +1043,121 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			public void onClick(View v) {
 				switch (price_status) {
 				case PriceCounter.IDLE:
-					price_status = PriceCounter.COUNTING;
-					bt_pricer.setText(pricerState[price_status]);
-					tv_pricer_time.setText("時間： 0 秒");
-					counter.start();
-//					counter.reset();
-					pricer_start_time = System.currentTimeMillis();
-					pricer_handler.removeCallbacks(updateTimer);
-					pricer_handler.postDelayed(updateTimer, 1000);
-					tv_pricer_price.setText("價錢： "
-							+ counter.getPrice(infoID,
-									(int) counter.getTotalDistance(),
-									(int) counter.getTotalTime()));
+					final AlertDialog.Builder builder = new AlertDialog.Builder(
+							MPP_UI.this);
+
+					builder.setCancelable(false);
+					builder.setIcon(null);
+					builder.setMessage("開始模擬行車計費器");
+					builder.setPositiveButton("確定",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+									price_status = PriceCounter.COUNTING;
+									bt_pricer
+											.setText(pricerState[price_status]);
+									tv_pricer_time.setText("時間： 0 秒");
+									counter.start();
+									// counter.reset();
+									pricer_start_time = System
+											.currentTimeMillis();
+									pricer_handler.removeCallbacks(updateTimer);
+									pricer_handler.postDelayed(updateTimer,
+											1000);
+									tv_pricer_price.setText("價錢： "
+											+ counter
+													.getPrice(
+															infoID,
+															(int) counter
+																	.getTotalDistance(),
+															(int) counter
+																	.getTotalTime())
+											+ " 元");
+								}
+							});
+					builder.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+								}
+							});
+					builder.show();
 					break;
 				case PriceCounter.COUNTING:
-					price_status = PriceCounter.STOP;
-					pricer_handler.removeCallbacks(updateTimer);
-					bt_pricer.setText(pricerState[price_status]);
-					counter.stop();
+					final AlertDialog.Builder builder_c = new AlertDialog.Builder(
+							MPP_UI.this);
+					builder_c.setCancelable(false);
+					builder_c.setIcon(null);
+					builder_c.setMessage("即將停止模擬行車計費器");
+					builder_c.setPositiveButton("確認",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+									price_status = PriceCounter.STOP;
+									pricer_handler.removeCallbacks(updateTimer);
+									bt_pricer
+											.setText(pricerState[price_status]);
+									counter.stop();
+								}
+							});
+					builder_c.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+								}
+							});
+					builder_c.show();
 					break;
 				case PriceCounter.STOP:
-					price_status = PriceCounter.IDLE;
-					bt_pricer.setText(pricerState[price_status]);
-					counter.reset();
-					tv_pricer_dis.setText("距離： " + "0.0" + " 公尺");
-					tv_pricer_time.setText("時間： " + "0" + " 秒");
-					tv_pricer_price.setText("價錢： " + "0" + " 元");
+					final AlertDialog.Builder builder_s = new AlertDialog.Builder(
+							MPP_UI.this);
+					builder_s.setCancelable(false);
+					builder_s.setIcon(null);
+					builder_s.setMessage("即將重設計費器資料");
+					builder_s.setPositiveButton("確認",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+									price_status = PriceCounter.IDLE;
+									bt_pricer
+											.setText(pricerState[price_status]);
+									counter.reset();
+									tv_pricer_dis.setText("距離： " + "0" + " 公尺");
+									tv_pricer_time.setText("時間： " + "0" + " 秒");
+									tv_pricer_price
+											.setText("價錢： " + "0" + " 元");
+								}
+							});
+					builder_s.setNegativeButton("取消",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									// TODO Auto-generated method
+									// stub
+								}
+							});
+					builder_s.show();
 					break;
 				}
 			}
@@ -952,78 +1171,119 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			showDialog(DIALOG_LOADING);
 
-			Src_LATITUDE = startItem.getLat();
-			Src_LONGITUDE = startItem.getLon();
-			Dest_LATITUDE = endItem.getLat();
-			Dest_LONGITUDE = endItem.getLon();
-
-			if (inTaiwan(Src_LATITUDE, Src_LONGITUDE) == false
-					&& et_start.getText().length() != 0) {
-				getStartGeo();
-				Src_LATITUDE = startItem.getLat();
-				Src_LONGITUDE = startItem.getLon();
-			}
-
-			if (inTaiwan(Dest_LATITUDE, Dest_LONGITUDE) == false
-					&& et_end.getText().length() != 0) {
-				getEndGeo();
-				Dest_LATITUDE = endItem.getLat();
-				Dest_LONGITUDE = endItem.getLon();
-			}
-
-			if (inTaiwan(Src_LATITUDE, Src_LONGITUDE)
-					&& inTaiwan(Dest_LATITUDE, Dest_LONGITUDE)) {
-				if (Src_LATITUDE == Dest_LATITUDE
-						&& Src_LONGITUDE == Dest_LONGITUDE) {
-					Toast toast = Toast.makeText(mapView.getContext(),
-							"請設定不同的起點和終點", Toast.LENGTH_SHORT);
-					toast.setGravity(Gravity.CENTER, 0, 0);
-					toast.show();
-				} else {
-					double srcLat = Src_LATITUDE / 1E6;
-					double srcLon = Src_LONGITUDE / 1E6;
-					double desLat = Dest_LATITUDE / 1E6;
-					double desLon = Dest_LONGITUDE / 1E6;
-
-					try {
-						getInfo(srcLat, srcLon, desLat, desLon);
-						Log.d(getPackageName(), routeInfo.toString());
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-
-					if (routeNum != 0) {
-						drawMyPath();
-						setResultText();
-						selMyPath(routeNow);
-						mc.setCenter(new GeoPoint(
-								(Src_LATITUDE + Dest_LATITUDE) / 2,
-								(Src_LONGITUDE + Dest_LONGITUDE) / 2));
-						mc.setZoom(15);
-						layout_startend.setVisibility(View.GONE);
-						layout_result.setVisibility(View.VISIBLE);
-						bt_go.setOnClickListener(resetPath);
-						bt_go.setText(">>重新查詢<<");
-					} else {
-						Toast toast = Toast.makeText(mapView.getContext(),
-								"請輸入正確的起點及終點查詢\n若無地圖顯示，\n請開啟3G或wifi以獲取地圖資料",
-								Toast.LENGTH_SHORT);
-						toast.setGravity(Gravity.CENTER, 0, 0);
-						toast.show();
-					}
-				}
-			} else {
+			if (et_start.getText().length()==0 || et_end.getText().length()==0 ) {
 				Toast toast = Toast.makeText(mapView.getContext(),
-						"請輸入正確的起點及終點查詢\n若無地圖顯示\n請開啟3G或wifi以獲取地圖資料",
-						Toast.LENGTH_SHORT);
+						"請輸入正確的起點及終點查詢", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
 				toast.show();
-			}
-			dismissDialog(DIALOG_LOADING);
+			} else {
+				final AlertDialog.Builder builder = new AlertDialog.Builder(
+						MPP_UI.this);
 
+				builder.setCancelable(false);
+				builder.setIcon(null);
+				builder.setMessage("開始從\n>> " + et_start.getText()
+						+ " <<\n到\n>> " + et_end.getText() + " <<\n的路徑規劃及費用試算");
+				builder.setPositiveButton("確定",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method
+								// stub
+								Src_LATITUDE = startItem.getLat();
+								Src_LONGITUDE = startItem.getLon();
+								Dest_LATITUDE = endItem.getLat();
+								Dest_LONGITUDE = endItem.getLon();
+
+								if (inTaiwan(Src_LATITUDE, Src_LONGITUDE) == false
+										&& et_start.getText().length() != 0) {
+									getStartGeo();
+									Src_LATITUDE = startItem.getLat();
+									Src_LONGITUDE = startItem.getLon();
+								}
+
+								if (inTaiwan(Dest_LATITUDE, Dest_LONGITUDE) == false
+										&& et_end.getText().length() != 0) {
+									getEndGeo();
+									Dest_LATITUDE = endItem.getLat();
+									Dest_LONGITUDE = endItem.getLon();
+								}
+
+								if (inTaiwan(Src_LATITUDE, Src_LONGITUDE)
+										&& inTaiwan(Dest_LATITUDE,
+												Dest_LONGITUDE)) {
+									if (Src_LATITUDE == Dest_LATITUDE
+											&& Src_LONGITUDE == Dest_LONGITUDE) {
+										Toast toast = Toast.makeText(
+												mapView.getContext(),
+												"請設定不同的起點和終點",
+												Toast.LENGTH_SHORT);
+										toast.setGravity(Gravity.CENTER, 0, 0);
+										toast.show();
+									} else {
+										double srcLat = Src_LATITUDE / 1E6;
+										double srcLon = Src_LONGITUDE / 1E6;
+										double desLat = Dest_LATITUDE / 1E6;
+										double desLon = Dest_LONGITUDE / 1E6;
+
+										try {
+											getInfo(srcLat, srcLon, desLat,
+													desLon);
+											Log.d(getPackageName(),
+													routeInfo.toString());
+										} catch (JSONException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+
+										if (routeNum != 0) {
+											drawMyPath();
+											setResultText();
+											selMyPath(routeNow);
+											mc.setCenter(new GeoPoint(
+													(Src_LATITUDE + Dest_LATITUDE) / 2,
+													(Src_LONGITUDE + Dest_LONGITUDE) / 2));
+											mc.setZoom(15);
+											layout_startend
+													.setVisibility(View.GONE);
+											layout_result
+													.setVisibility(View.VISIBLE);
+											bt_go.setOnClickListener(resetPath);
+											bt_go.setText(">>重新查詢<<");
+										} else {
+											Toast toast = Toast.makeText(
+													mapView.getContext(),
+													"請輸入正確的起點及終點查詢\n若無地圖顯示，\n請開啟3G或wifi以獲取地圖資料",
+													Toast.LENGTH_SHORT);
+											toast.setGravity(Gravity.CENTER, 0,
+													0);
+											toast.show();
+										}
+									}
+								} else {
+									Toast toast = Toast.makeText(
+											mapView.getContext(),
+											"請輸入正確的起點及終點查詢\n若無地圖顯示\n請開啟3G或wifi以獲取地圖資料",
+											Toast.LENGTH_SHORT);
+									toast.setGravity(Gravity.CENTER, 0, 0);
+									toast.show();
+								}
+							}
+						});
+				builder.setNegativeButton("取消",
+						new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								// TODO Auto-generated method
+								// stub
+							}
+						});
+				builder.show();
+			}
 		}
 	};
 
@@ -1032,17 +1292,43 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
+			
+			final AlertDialog.Builder builder = new AlertDialog.Builder(
+					MPP_UI.this);
 
-			mapOverlays.clear();
-			mapOverlays.add(startItem);
-			mapOverlays.add(endItem);
+			builder.setCancelable(false);
+			builder.setIcon(null);
+			builder.setMessage("重新設定起點和終點？");
+			builder.setPositiveButton("確定",
+					new DialogInterface.OnClickListener() {
 
-			layout_startend.setVisibility(View.VISIBLE);
-			layout_result.setVisibility(View.GONE);
-			bt_go.setOnClickListener(goPath);
-			bt_go.setText(">>開始規劃<<");
+						@Override
+						public void onClick(DialogInterface dialog,
+								int which) {
+							// TODO Auto-generated method
+							// stub
+							mapOverlays.clear();
+							mapOverlays.add(startItem);
+							mapOverlays.add(endItem);
 
-			routeNow = 1;
+							layout_startend.setVisibility(View.VISIBLE);
+							layout_result.setVisibility(View.GONE);
+							bt_go.setOnClickListener(goPath);
+							bt_go.setText(">>開始規劃<<");
+
+							routeNow = 1;
+						}
+					});
+			builder.setNegativeButton("取消",
+					new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog,
+								int which) {
+							// TODO Auto-generated method
+							// stub
+						}
+					});
+			builder.show();
 		}
 	};
 
@@ -1053,12 +1339,13 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		mc.setCenter(new GeoPoint(25047924, 121517081));
 		mc.setZoom(INITIAL_ZOOM_LEVEL);
 
-		locationManager = (LocationManager) this
-				.getSystemService(LOCATION_SERVICE);
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0,
-				0, this);
-
+		// locationManager = (LocationManager) this
+		// .getSystemService(LOCATION_SERVICE);
+		// locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+		// 0,
+		// 0, this);
 		Location mLocation = getLocation(this);
+		// locationManager.removeUpdates(this);
 
 		if (mLocation == null) {
 			Toast.makeText(this, "location is null", Toast.LENGTH_LONG).show();
@@ -1187,6 +1474,45 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				else
 					infoID = 12;
 			}
+		} else if (city.equals("宜蘭縣") ) {
+			city = "宜蘭地區";
+			if (isNight) {
+				if (isSpecial)
+					infoID = 19;
+				else
+					infoID = 17;
+			} else {
+				if (isSpecial)
+					infoID = 18;
+				else
+					infoID = 16;
+			}
+		} else if (city.equals("桃園縣") ) {
+			city = "桃園地區";
+			if (isNight) {
+				if (isSpecial)
+					infoID = 23;
+				else
+					infoID = 21;
+			} else {
+				if (isSpecial)
+					infoID = 22;
+				else
+					infoID = 20;
+			}
+		} else if (city.equals("台南市") ) {
+			city = "台南市";
+			if (isNight) {
+				if (isSpecial)
+					infoID = 27;
+				else
+					infoID = 25;
+			} else {
+				if (isSpecial)
+					infoID = 26;
+				else
+					infoID = 24;
+			}
 		} else {
 			infoID = 0;
 		}
@@ -1214,12 +1540,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	public Location getLocation(Context context) {
 		LocationManager locMan = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
+		
 		Location location = locMan
 				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (location == null) {
 			location = locMan
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
+//		Toast toast = Toast.makeText(
+//				mapView.getContext(),
+//				"lat " + location.getLatitude() + "lng"
+//						+ location.getLongitude(), Toast.LENGTH_SHORT);
+//		toast.show();
 		return location;
 	}
 
@@ -1231,18 +1563,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			counter.addLocation(location, System.currentTimeMillis());
 
 			/* refresh price counter view */
-//			tv_pricer_price.setText("價錢： "
-//					+ counter.getPrice(infoID,
-//							(int) counter.getTotalDistance(),
-//							(int) counter.getTotalTime()));
-//			float dis = counter.getTotalDistance();
-//			StringBuilder sb = new StringBuilder();
-//			sb.append("距離： ");
-//			if (dis / 1000 > 0) {
-//				sb.append("" + dis / 1000 + " 公里 ");
-//			}
-//			sb.append("" + dis % 1000 + " 公尺");
-//			//tv_pricer_dis.setText(sb.toString());
+			// tv_pricer_price.setText("價錢： "
+			// + counter.getPrice(infoID,
+			// (int) counter.getTotalDistance(),
+			// (int) counter.getTotalTime()));
+			// float dis = counter.getTotalDistance();
+			// StringBuilder sb = new StringBuilder();
+			// sb.append("距離： ");
+			// if (dis / 1000 > 0) {
+			// sb.append("" + dis / 1000 + " 公里 ");
+			// }
+			// sb.append("" + dis % 1000 + " 公尺");
+			// //tv_pricer_dis.setText(sb.toString());
 
 		}
 
@@ -1256,7 +1588,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	@Override
 	public void onLocationChanged(Location arg0) {
-		LocationCallBack();
+		// LocationCallBack();
 	}
 
 	@Override
@@ -1315,14 +1647,13 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			home_bt_call.setClickable(true);
 			home_bt_pricer.setClickable(true);
 			home_bt_checkin.setClickable(true);
-		}
-		else if (layout_checkin.getVisibility() == View.VISIBLE) {
-				layout_info.setVisibility(View.GONE);
-				home_bt_info.setClickable(true);
-				home_bt_route.setClickable(true);
-				home_bt_call.setClickable(true);
-				home_bt_pricer.setClickable(true);
-				home_bt_checkin.setClickable(true);
+		} else if (layout_checkin.getVisibility() == View.VISIBLE) {
+			layout_info.setVisibility(View.GONE);
+			home_bt_info.setClickable(true);
+			home_bt_route.setClickable(true);
+			home_bt_call.setClickable(true);
+			home_bt_pricer.setClickable(true);
+			home_bt_checkin.setClickable(true);
 		} else
 			super.onBackPressed();
 
@@ -1907,65 +2238,86 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		}
 
 	}
-	private Runnable updateServerRoute = new Runnable(){
+
+	private Runnable updateServerRoute = new Runnable() {
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			if(isDrawing){
+			if (isDrawing) {
 				Location mLocation = getLocation(MPP_UI.this);
-				String res = HTTPHandler.doPost(android_id,mLocation.getLatitude(),mLocation.getLongitude());
-				Log.d(getPackageName(),res);
-				
-				pricer_handler.postDelayed(this, 30000);
+				if (mLocation == null) {
+
+					Toast toast = Toast.makeText(MPP_UI.this, "無GPS資訊",
+							Toast.LENGTH_SHORT);
+					toast.show();
+				} else {
+					String res = HTTPHandler.doPost(android_id,
+							mLocation.getLatitude(), mLocation.getLongitude());
+					Log.d(getPackageName(), res);
+
+					pricer_handler.postDelayed(this, 30000);
+				}
 			}
 		}
-		
+
 	};
 	private Runnable updateTimer = new Runnable() {
 		public void run() {
 			// final TextView time = (TextView)
 			// findViewById(R.id.tv_pricer_time);
-			if(price_status==PriceCounter.COUNTING){
+			if (price_status == PriceCounter.COUNTING) {
 				Location mLocation = getLocation(MPP_UI.this);
+				if (mLocation == null) {
+
+					Toast toast = Toast.makeText(MPP_UI.this, "無GPS資訊",
+							Toast.LENGTH_SHORT);
+					toast.show();
+				}
 				counter.timeChange(mLocation);
 				Long spentTime = counter.getTotalTime();
-				Long minius = (spentTime / 1000) / 60; 
+				Long minius = (spentTime / 1000) / 60;
 				Long seconds = (spentTime / 1000) % 60;
-			
 
-			int spentDist = (int)(counter.getTotalDistance()*1000);
-			int meter = spentDist % 1000;
-			int kilo = spentDist / 1000;
-			
+				int spentDist = (int) (counter.getTotalDistance() * 1000);
+				int meter = spentDist % 1000;
+				int kilo = spentDist / 1000;
+
 				if (onPricer) {
 					if (kilo > 0) {
 						tv_pricer_dis.setText("距離： " + kilo + " 公里 " + meter
-							+ " 公尺");
+								+ " 公尺");
 					} else {
 						tv_pricer_dis.setText("距離： " + meter + " 公尺");
 					}
 				} else {
 					tv_pricer_dis.setText("");
 				}
-			
+
 				if (onPricer) {
 					if (minius > 0) {
-						tv_pricer_time.setText("時間： " + minius + " 分 " + seconds
-							+ " 秒");
+						tv_pricer_time.setText("時間： " + minius + " 分 "
+								+ seconds + " 秒");
 					} else {
 						tv_pricer_time.setText("時間： " + seconds + " 秒");
 					}
 				} else {
 					tv_pricer_time.setText("行動計費器");
 				}
-				tv_pricer_price.setText("價錢： "
-					+ counter.getPrice(infoID,
-							(int) counter.getTotalDistance(),
-							(int) counter.getTotalTime()/1000));
+
+				if (onPricer) {
+					tv_pricer_price
+							.setText("價錢： "
+									+ counter.getPrice(infoID,
+											(int) counter.getTotalDistance(),
+											(int) counter.getTotalTime() / 1000)
+									+ " 元");
+				} else {
+					tv_pricer_price.setText("計費中...");
+				}
 				pricer_handler.postDelayed(this, 1000);
 			}
-			
+
 		}
 	};
 

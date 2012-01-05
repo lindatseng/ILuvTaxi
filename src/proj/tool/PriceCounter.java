@@ -235,6 +235,93 @@ Log.d("proj.main", "lat "+location.getLatitude()+" lng "+location.getLongitude()
 				break;
 			}
 			break;
+		case 4:
+			price_init = 120;
+			switch (type % 4) {
+			case 0:
+				dis_threshold = 1500;
+				price_plus = 0;
+				price_mul = 0;
+				time_per = 120;
+				break;
+			case 1:
+				dis_threshold = 1250;
+				price_plus = 20;
+				price_mul = 2;
+				time_per = 100;
+				break;
+			case 2:
+				dis_threshold = 1500;
+				price_plus = 0;
+				price_mul = 0;
+				time_per = 120;
+				break;
+			case 3:
+				dis_threshold = 1250;
+				price_plus = 20;
+				price_mul = 2;
+				time_per = 100;
+				break;
+			default:
+				break;
+			}
+			break;
+		case 5:
+			dis_threshold = 1500;
+			time_per = 150;
+			price_init = 80;
+			switch (type % 4) {
+			case 0:
+				price_plus = 0;
+				price_mul = 0;
+				break;
+			case 1:
+				price_plus = 20;
+				price_mul = 0;
+				break;
+			case 2:
+				price_plus = 0;
+				price_mul = 0;
+				break;
+			case 3:
+				price_plus = 20;
+				price_mul = 0;
+				break;
+			default:
+				break;
+			}
+			break;
+		case 6:
+			price_init = 85;
+			switch (type % 4) {
+			case 0:
+				dis_threshold = 1500;
+				time_per = 180;
+				price_plus = 0;
+				price_mul = 0;
+				break;
+			case 1:
+				dis_threshold = 1250;
+				time_per = 150;
+				price_plus = 0;
+				price_mul = 2;
+				break;
+			case 2:
+				dis_threshold = 1500;
+				time_per = 180;
+				price_plus = 0;
+				price_mul = 0;
+				break;
+			case 3:
+				dis_threshold = 1250;
+				time_per = 150;
+				price_plus = 0;
+				price_mul = 2;
+				break;
+			default:
+				break;
+			}
+			break;
 		default:
 			time_per = 100;
 			break;

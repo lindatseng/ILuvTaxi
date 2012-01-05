@@ -46,6 +46,7 @@
             android:clickable="false"
             android:padding="5dp"
             android:text=""
+            android:textSize="16sp"
             android:textColor="#ffffffff" />
     </LinearLayout>
     </LinearLayout>
@@ -449,6 +450,26 @@
                             android:background="@color/home_green"
                             android:padding="4dp"
                             android:text="以email發送" 
+                            android:textAppearance="?android:attr/textAppearanceLarge"/>
+                </TableRow>
+                
+                    <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp" />
+                <TableRow 
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1">
+                 
+                <Button
+                            android:id="@+id/bt_checkin_route"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:background="@color/home_blue"
+                            android:padding="4dp"
+                            android:text="觀看我的位置" 
                             android:textAppearance="?android:attr/textAppearanceLarge"/>
                 </TableRow>
                 

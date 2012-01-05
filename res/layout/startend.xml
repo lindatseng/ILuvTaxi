@@ -28,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="起點" />
+                android:hint="起點，請輸入地址搜尋" />
 
             <RelativeLayout
                 android:id="@+id/relativeLayout1"
@@ -80,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="終點" >
+                android:hint="終點，請輸入地址搜尋" >
 
                 <requestFocus />
             </EditText>

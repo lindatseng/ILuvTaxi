@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string-array name="region">
-	    <item>MPP</item>
 		<item>全區</item>
 		<item>全區</item>
 		<item>基隆市</item>
@@ -160,7 +159,6 @@
 		<item>屏東縣潮州鎮</item>
 	</string-array>
 	<string-array name="name">
-	    <item>Demo</item>
 		<item>台灣大車隊</item>
 		<item>大都會</item>
 		<item>基隆義交無線電計程車</item>
@@ -319,7 +317,6 @@
 		<item>潮州計程車</item>
 	</string-array>
 	<string-array name="phoneNum">
-	    <item>07-790-1825</item>
 		<item>55688</item>
 		<item>55178</item>
 		<item>02-2423-7700</item>
