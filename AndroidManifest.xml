@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.iluvtaxi.main"
-    android:versionCode="4"
-    android:versionName="1.65" >
+    android:versionCode="5"
+    android:versionName="1.66" >
     
 	<supports-screens android:largeScreens="true"/>
     <uses-sdk android:minSdkVersion="3" />

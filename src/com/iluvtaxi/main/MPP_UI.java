@@ -1244,6 +1244,25 @@ public class MPP_UI extends MapActivity implements LocationListener {
 										if (routeNum != 0) {
 											drawMyPath();
 											setResultText();
+											final AlertDialog.Builder remind = new AlertDialog.Builder(
+													MPP_UI.this);
+
+											remind.setCancelable(false);
+											remind.setIcon(null);
+											remind.setMessage("提醒您，\n本服務採用距離以及路口數估算延滯時間\n遇交通狀況繁忙時可能有較大誤差\n" +
+													"計費以計程車實際跳表為準，\n請尊重辛苦的司機大哥大姊噢:)");
+											remind.setPositiveButton("確定", new DialogInterface.OnClickListener(){
+
+												@Override
+												public void onClick(
+														DialogInterface dialog,
+														int which) {
+													// TODO Auto-generated method stub
+													
+												}
+												
+											});
+											remind.show();
 											selMyPath(routeNow);
 											mc.setCenter(new GeoPoint(
 													(Src_LATITUDE + Dest_LATITUDE) / 2,
