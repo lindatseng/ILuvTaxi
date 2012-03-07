@@ -738,7 +738,6 @@ containing a value of this type.
     public static final class id {
         public static final int app_title=0x7f050033;
         public static final int bottom=0x7f050008;
-        public static final int bt_call=0x7f05007e;
         public static final int bt_call_back=0x7f05004b;
         public static final int bt_checkin_back=0x7f05005c;
         public static final int bt_checkin_email=0x7f05005a;
@@ -1073,12 +1072,12 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #ActionBar_dividerDrawable proj.main:dividerDrawable}</code></td><td></td></tr>
-           <tr><td><code>{@link #ActionBar_dividerWidth proj.main:dividerWidth}</code></td><td></td></tr>
-           <tr><td><code>{@link #ActionBar_homeDrawable proj.main:homeDrawable}</code></td><td></td></tr>
-           <tr><td><code>{@link #ActionBar_maxItems proj.main:maxItems}</code></td><td></td></tr>
-           <tr><td><code>{@link #ActionBar_title proj.main:title}</code></td><td></td></tr>
-           <tr><td><code>{@link #ActionBar_type proj.main:type}</code></td><td></td></tr>
+           <tr><td><code>{@link #ActionBar_dividerDrawable com.iluvtaxi.main:dividerDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #ActionBar_dividerWidth com.iluvtaxi.main:dividerWidth}</code></td><td></td></tr>
+           <tr><td><code>{@link #ActionBar_homeDrawable com.iluvtaxi.main:homeDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #ActionBar_maxItems com.iluvtaxi.main:maxItems}</code></td><td></td></tr>
+           <tr><td><code>{@link #ActionBar_title com.iluvtaxi.main:title}</code></td><td></td></tr>
+           <tr><td><code>{@link #ActionBar_type com.iluvtaxi.main:type}</code></td><td></td></tr>
            </table>
            @see #ActionBar_dividerDrawable
            @see #ActionBar_dividerWidth
@@ -1092,7 +1091,7 @@ containing a value of this type.
             0x7f01004e, 0x7f01004f
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dividerDrawable}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dividerDrawable}
           attribute's value can be found in the {@link #ActionBar} array.
 
 
@@ -1102,7 +1101,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int ActionBar_dividerDrawable = 0;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dividerWidth}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dividerWidth}
           attribute's value can be found in the {@link #ActionBar} array.
 
 
@@ -1118,7 +1117,7 @@ containing a value of this type.
         */
         public static final int ActionBar_dividerWidth = 1;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#homeDrawable}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#homeDrawable}
           attribute's value can be found in the {@link #ActionBar} array.
 
 
@@ -1128,7 +1127,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int ActionBar_homeDrawable = 4;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#maxItems}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#maxItems}
           attribute's value can be found in the {@link #ActionBar} array.
 
 
@@ -1142,7 +1141,7 @@ containing a value of this type.
         */
         public static final int ActionBar_maxItems = 5;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#title}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#title}
           attribute's value can be found in the {@link #ActionBar} array.
 
 
@@ -1156,7 +1155,7 @@ containing a value of this type.
         */
         public static final int ActionBar_title = 2;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#type}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#type}
           attribute's value can be found in the {@link #ActionBar} array.
 
 
@@ -1179,9 +1178,9 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #AsyncImageView_defaultSrc proj.main:defaultSrc}</code></td><td></td></tr>
-           <tr><td><code>{@link #AsyncImageView_inDensity proj.main:inDensity}</code></td><td></td></tr>
-           <tr><td><code>{@link #AsyncImageView_url proj.main:url}</code></td><td></td></tr>
+           <tr><td><code>{@link #AsyncImageView_defaultSrc com.iluvtaxi.main:defaultSrc}</code></td><td></td></tr>
+           <tr><td><code>{@link #AsyncImageView_inDensity com.iluvtaxi.main:inDensity}</code></td><td></td></tr>
+           <tr><td><code>{@link #AsyncImageView_url com.iluvtaxi.main:url}</code></td><td></td></tr>
            </table>
            @see #AsyncImageView_defaultSrc
            @see #AsyncImageView_inDensity
@@ -1191,7 +1190,7 @@ containing a value of this type.
             0x7f010050, 0x7f010051, 0x7f010052
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#defaultSrc}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#defaultSrc}
           attribute's value can be found in the {@link #AsyncImageView} array.
 
 
@@ -1201,7 +1200,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int AsyncImageView_defaultSrc = 0;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#inDensity}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#inDensity}
           attribute's value can be found in the {@link #AsyncImageView} array.
 
 
@@ -1220,7 +1219,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int AsyncImageView_inDensity = 2;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#url}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#url}
           attribute's value can be found in the {@link #AsyncImageView} array.
 
 
@@ -1244,7 +1243,7 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #DrawableItem_drawable proj.main:drawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #DrawableItem_drawable com.iluvtaxi.main:drawable}</code></td><td></td></tr>
            </table>
            @see #DrawableItem_drawable
          */
@@ -1252,7 +1251,7 @@ containing a value of this type.
             0x7f010043
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#drawable}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#drawable}
           attribute's value can be found in the {@link #DrawableItem} array.
 
 
@@ -1270,7 +1269,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #Item_enabled proj.main:enabled}</code></td><td></td></tr>
+           <tr><td><code>{@link #Item_enabled com.iluvtaxi.main:enabled}</code></td><td></td></tr>
            </table>
            @see #Item_enabled
          */
@@ -1278,7 +1277,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
             0x7f010040
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#enabled}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#enabled}
           attribute's value can be found in the {@link #Item} array.
 
 
@@ -1302,12 +1301,12 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #PageIndicator_activeDot proj.main:activeDot}</code></td><td></td></tr>
-           <tr><td><code>{@link #PageIndicator_dotCount proj.main:dotCount}</code></td><td></td></tr>
-           <tr><td><code>{@link #PageIndicator_dotDrawable proj.main:dotDrawable}</code></td><td></td></tr>
-           <tr><td><code>{@link #PageIndicator_dotSpacing proj.main:dotSpacing}</code></td><td></td></tr>
-           <tr><td><code>{@link #PageIndicator_dotType proj.main:dotType}</code></td><td></td></tr>
-           <tr><td><code>{@link #PageIndicator_gravity proj.main:gravity}</code></td><td></td></tr>
+           <tr><td><code>{@link #PageIndicator_activeDot com.iluvtaxi.main:activeDot}</code></td><td></td></tr>
+           <tr><td><code>{@link #PageIndicator_dotCount com.iluvtaxi.main:dotCount}</code></td><td></td></tr>
+           <tr><td><code>{@link #PageIndicator_dotDrawable com.iluvtaxi.main:dotDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #PageIndicator_dotSpacing com.iluvtaxi.main:dotSpacing}</code></td><td></td></tr>
+           <tr><td><code>{@link #PageIndicator_dotType com.iluvtaxi.main:dotType}</code></td><td></td></tr>
+           <tr><td><code>{@link #PageIndicator_gravity com.iluvtaxi.main:gravity}</code></td><td></td></tr>
            </table>
            @see #PageIndicator_activeDot
            @see #PageIndicator_dotCount
@@ -1321,7 +1320,7 @@ containing a value of this type.
             0x7f010057, 0x7f010058
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#activeDot}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#activeDot}
           attribute's value can be found in the {@link #PageIndicator} array.
 
 
@@ -1335,7 +1334,7 @@ containing a value of this type.
         */
         public static final int PageIndicator_activeDot = 1;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dotCount}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dotCount}
           attribute's value can be found in the {@link #PageIndicator} array.
 
 
@@ -1349,7 +1348,7 @@ containing a value of this type.
         */
         public static final int PageIndicator_dotCount = 0;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dotDrawable}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dotDrawable}
           attribute's value can be found in the {@link #PageIndicator} array.
 
 
@@ -1359,7 +1358,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int PageIndicator_dotDrawable = 2;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dotSpacing}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dotSpacing}
           attribute's value can be found in the {@link #PageIndicator} array.
 
 
@@ -1375,7 +1374,7 @@ containing a value of this type.
         */
         public static final int PageIndicator_dotSpacing = 3;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dotType}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dotType}
           attribute's value can be found in the {@link #PageIndicator} array.
 
 
@@ -1392,7 +1391,7 @@ containing a value of this type.
         */
         public static final int PageIndicator_dotType = 5;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#gravity}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#gravity}
           attribute's value can be found in the {@link #PageIndicator} array.
 
 
@@ -1419,7 +1418,7 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #ProgressItem_isInProgress proj.main:isInProgress}</code></td><td></td></tr>
+           <tr><td><code>{@link #ProgressItem_isInProgress com.iluvtaxi.main:isInProgress}</code></td><td></td></tr>
            </table>
            @see #ProgressItem_isInProgress
          */
@@ -1427,7 +1426,7 @@ containing a value of this type.
             0x7f010042
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#isInProgress}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#isInProgress}
           attribute's value can be found in the {@link #ProgressItem} array.
 
 
@@ -1446,8 +1445,8 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #SegmentedBar_dividerDrawable proj.main:dividerDrawable}</code></td><td></td></tr>
-           <tr><td><code>{@link #SegmentedBar_dividerWidth proj.main:dividerWidth}</code></td><td></td></tr>
+           <tr><td><code>{@link #SegmentedBar_dividerDrawable com.iluvtaxi.main:dividerDrawable}</code></td><td></td></tr>
+           <tr><td><code>{@link #SegmentedBar_dividerWidth com.iluvtaxi.main:dividerWidth}</code></td><td></td></tr>
            </table>
            @see #SegmentedBar_dividerDrawable
            @see #SegmentedBar_dividerWidth
@@ -1456,7 +1455,7 @@ containing a value of this type.
             0x7f010048, 0x7f010049
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dividerDrawable}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dividerDrawable}
           attribute's value can be found in the {@link #SegmentedBar} array.
 
 
@@ -1466,7 +1465,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int SegmentedBar_dividerDrawable = 0;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#dividerWidth}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#dividerWidth}
           attribute's value can be found in the {@link #SegmentedBar} array.
 
 
@@ -1487,8 +1486,8 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #SegmentedHost_segmentedBar proj.main:segmentedBar}</code></td><td></td></tr>
-           <tr><td><code>{@link #SegmentedHost_segmentedContentView proj.main:segmentedContentView}</code></td><td></td></tr>
+           <tr><td><code>{@link #SegmentedHost_segmentedBar com.iluvtaxi.main:segmentedBar}</code></td><td></td></tr>
+           <tr><td><code>{@link #SegmentedHost_segmentedContentView com.iluvtaxi.main:segmentedContentView}</code></td><td></td></tr>
            </table>
            @see #SegmentedHost_segmentedBar
            @see #SegmentedHost_segmentedContentView
@@ -1497,7 +1496,7 @@ containing a value of this type.
             0x7f01004a, 0x7f01004b
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#segmentedBar}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#segmentedBar}
           attribute's value can be found in the {@link #SegmentedHost} array.
 
 
@@ -1507,7 +1506,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int SegmentedHost_segmentedBar = 0;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#segmentedContentView}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#segmentedContentView}
           attribute's value can be found in the {@link #SegmentedHost} array.
 
 
@@ -1527,7 +1526,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #SubtextItem_subtext proj.main:subtext}</code></td><td></td></tr>
+           <tr><td><code>{@link #SubtextItem_subtext com.iluvtaxi.main:subtext}</code></td><td></td></tr>
            </table>
            @see #SubtextItem_subtext
          */
@@ -1535,7 +1534,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
             0x7f010045
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#subtext}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#subtext}
           attribute's value can be found in the {@link #SubtextItem} array.
 
 
@@ -1554,7 +1553,7 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #SubtitleItem_subtitle proj.main:subtitle}</code></td><td></td></tr>
+           <tr><td><code>{@link #SubtitleItem_subtitle com.iluvtaxi.main:subtitle}</code></td><td></td></tr>
            </table>
            @see #SubtitleItem_subtitle
          */
@@ -1562,7 +1561,7 @@ containing a value of this type.
             0x7f010044
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#subtitle}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#subtitle}
           attribute's value can be found in the {@link #SubtitleItem} array.
 
 
@@ -1581,7 +1580,7 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #TextItem_text proj.main:text}</code></td><td></td></tr>
+           <tr><td><code>{@link #TextItem_text com.iluvtaxi.main:text}</code></td><td></td></tr>
            </table>
            @see #TextItem_text
          */
@@ -1589,7 +1588,7 @@ containing a value of this type.
             0x7f010041
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#text}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#text}
           attribute's value can be found in the {@link #TextItem} array.
 
 
@@ -1608,8 +1607,8 @@ containing a value of this type.
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #ThumbnailItem_thumbnail proj.main:thumbnail}</code></td><td></td></tr>
-           <tr><td><code>{@link #ThumbnailItem_thumbnailURL proj.main:thumbnailURL}</code></td><td></td></tr>
+           <tr><td><code>{@link #ThumbnailItem_thumbnail com.iluvtaxi.main:thumbnail}</code></td><td></td></tr>
+           <tr><td><code>{@link #ThumbnailItem_thumbnailURL com.iluvtaxi.main:thumbnailURL}</code></td><td></td></tr>
            </table>
            @see #ThumbnailItem_thumbnail
            @see #ThumbnailItem_thumbnailURL
@@ -1618,7 +1617,7 @@ containing a value of this type.
             0x7f010046, 0x7f010047
         };
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#thumbnail}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#thumbnail}
           attribute's value can be found in the {@link #ThumbnailItem} array.
 
 
@@ -1628,7 +1627,7 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         */
         public static final int ThumbnailItem_thumbnail = 0;
         /**
-          <p>This symbol is the offset where the {@link proj.main.R.attr#thumbnailURL}
+          <p>This symbol is the offset where the {@link com.iluvtaxi.main.R.attr#thumbnailURL}
           attribute's value can be found in the {@link #ThumbnailItem} array.
 
 

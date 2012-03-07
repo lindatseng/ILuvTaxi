@@ -1,15 +1,15 @@
-package proj.main;
+package com.iluvtaxi.main;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import proj.tool.LoggerHelper;
-import proj.tool.MyAdapter;
-import proj.tool.PhoneNumberAdapter;
-import proj.tool.TaxiData;
-import proj.main.R;
+import com.iluvtaxi.tool.LoggerHelper;
+import com.iluvtaxi.tool.MyAdapter;
+import com.iluvtaxi.tool.PhoneNumberAdapter;
+import com.iluvtaxi.tool.TaxiData;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;

@@ -1,4 +1,4 @@
-package proj.tool;
+package com.iluvtaxi.tool;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import proj.main.R;
+import com.iluvtaxi.main.R;
 
 
 import android.content.Context;

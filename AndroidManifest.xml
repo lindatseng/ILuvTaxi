@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="proj.main"
+    package="com.iluvtaxi.main"
     android:versionCode="4"
-    android:versionName="1.51" >
+    android:versionName="1.65" >
     
 	<supports-screens android:largeScreens="true"/>
     <uses-sdk android:minSdkVersion="3" />
@@ -22,7 +22,7 @@
         </activity>
         	<uses-library android:name="com.google.android.maps" />
         	<activity android:name="Route"></activity>
-        	<activity android:name="proj.main.Pricer"></activity>
+        	<activity android:name="com.iluvtaxi.main.Pricer"></activity>
         <service android:name="com.android.gps.UserLocation">
             <intent-filter>
                 <action android:name="com.android.gps.UserLocation" />

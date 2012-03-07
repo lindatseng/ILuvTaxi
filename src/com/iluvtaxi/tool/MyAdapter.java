@@ -1,4 +1,4 @@
-package proj.tool;
+package com.iluvtaxi.tool;
 
 import com.cyrilmottier.android.greendroid.R;
 

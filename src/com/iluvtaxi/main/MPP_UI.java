@@ -1,4 +1,4 @@
-package proj.main;
+package com.iluvtaxi.main;
 
 import greendroid.widget.QuickActionBar;
 import greendroid.widget.QuickActionWidget;
@@ -24,12 +24,6 @@ import org.apache.http.entity.BasicHttpEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import proj.tool.PhoneNumberAdapter;
-import proj.tool.PriceCounter;
-import proj.tool.TaxiData;
-import proj.main.R;
-import proj.main.R.color;
-import proj.network.HTTPHandler;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -77,6 +71,10 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.iluvtaxi.network.HTTPHandler;
+import com.iluvtaxi.tool.PhoneNumberAdapter;
+import com.iluvtaxi.tool.PriceCounter;
+import com.iluvtaxi.tool.TaxiData;
 
 public class MPP_UI extends MapActivity implements LocationListener {
 	/** Called when the activity is first created. */
@@ -118,6 +116,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	Boolean isNight, isSpecial;
 	String city = "台北市";
 	int infoID = 0;
+	int positionCounter = 0;
 	private LocationManager locationManager;
 	private List<GeoPoint> routePoints = new ArrayList<GeoPoint>();
 
@@ -278,7 +277,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 											.valueOf(mLocation.getLatitude()));
 									String res = HTTPHandler.doPost(android_id,
 											mLocation.getLatitude(),
-											mLocation.getLongitude());
+											mLocation.getLongitude(),
+											positionCounter);
 									Log.d(getPackageName(), res);
 									isDrawing = true;
 									pricer_handler.postDelayed(
@@ -313,6 +313,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 									// TODO Auto-generated method
 									// stub
 									isDrawing = false;
+									positionCounter=0;
 									bt_checkin_start.setText("開始記錄");
 								}
 							});
@@ -1172,7 +1173,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
 
-			if (et_start.getText().length()==0 || et_end.getText().length()==0 ) {
+			if (et_start.getText().length() == 0
+					|| et_end.getText().length() == 0) {
 				Toast toast = Toast.makeText(mapView.getContext(),
 						"請輸入正確的起點及終點查詢", Toast.LENGTH_SHORT);
 				toast.setGravity(Gravity.CENTER, 0, 0);
@@ -1292,7 +1294,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		@Override
 		public void onClick(View v) {
 			// TODO Auto-generated method stub
-			
+
 			final AlertDialog.Builder builder = new AlertDialog.Builder(
 					MPP_UI.this);
 
@@ -1303,8 +1305,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					new DialogInterface.OnClickListener() {
 
 						@Override
-						public void onClick(DialogInterface dialog,
-								int which) {
+						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method
 							// stub
 							mapOverlays.clear();
@@ -1322,8 +1323,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			builder.setNegativeButton("取消",
 					new DialogInterface.OnClickListener() {
 						@Override
-						public void onClick(DialogInterface dialog,
-								int which) {
+						public void onClick(DialogInterface dialog, int which) {
 							// TODO Auto-generated method
 							// stub
 						}
@@ -1417,9 +1417,11 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			city = getCity();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			Log.d(getPackageName(), "getcity io");
 			e.printStackTrace();
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
+			Log.d(getPackageName(), "getcity json");
 			e.printStackTrace();
 		}
 
@@ -1474,7 +1476,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				else
 					infoID = 12;
 			}
-		} else if (city.equals("宜蘭縣") ) {
+		} else if (city.equals("宜蘭縣")) {
 			city = "宜蘭地區";
 			if (isNight) {
 				if (isSpecial)
@@ -1487,7 +1489,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				else
 					infoID = 16;
 			}
-		} else if (city.equals("桃園縣") ) {
+		} else if (city.equals("桃園縣")) {
 			city = "桃園地區";
 			if (isNight) {
 				if (isSpecial)
@@ -1500,7 +1502,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				else
 					infoID = 20;
 			}
-		} else if (city.equals("台南市") ) {
+		} else if (city.equals("台南市")) {
 			city = "台南市";
 			if (isNight) {
 				if (isSpecial)
@@ -1516,6 +1518,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		} else {
 			infoID = 0;
 		}
+		Log.d(getPackageName(), "infoID=" + infoID);
 	}
 
 	private void setTaxiInfo(Context context) {
@@ -1540,18 +1543,18 @@ public class MPP_UI extends MapActivity implements LocationListener {
 	public Location getLocation(Context context) {
 		LocationManager locMan = (LocationManager) context
 				.getSystemService(Context.LOCATION_SERVICE);
-		
+
 		Location location = locMan
 				.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 		if (location == null) {
 			location = locMan
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 		}
-//		Toast toast = Toast.makeText(
-//				mapView.getContext(),
-//				"lat " + location.getLatitude() + "lng"
-//						+ location.getLongitude(), Toast.LENGTH_SHORT);
-//		toast.show();
+		// Toast toast = Toast.makeText(
+		// mapView.getContext(),
+		// "lat " + location.getLatitude() + "lng"
+		// + location.getLongitude(), Toast.LENGTH_SHORT);
+		// toast.show();
 		return location;
 	}
 
@@ -1807,23 +1810,35 @@ public class MPP_UI extends MapActivity implements LocationListener {
 		Log.d(getPackageName(), urlJSON);
 
 		if (urlJSON.equals("null")) {
-			return "台北市";
+			Log.d(getPackageName(), "location nullllll");
+			return "高雄市";
 		} else {
 			JSONObject myCity = new JSONObject(urlJSON);
 			int num = myCity.getJSONArray("results").getJSONObject(0)
 					.getJSONArray("address_components").length();
-			for (int i = 0; i < num; i++) {
-				if (myCity.getJSONArray("results").getJSONObject(0)
-						.getJSONArray("address_components").getJSONObject(i)
-						.getJSONArray("types").getString(0)
-						.equals("administrative_area_level_2")) {
-					return myCity.getJSONArray("results").getJSONObject(0)
+			if (num > 0) {
+				for (int i = 0; i < num; i++) {
+					if (myCity.getJSONArray("results").getJSONObject(0)
 							.getJSONArray("address_components")
-							.getJSONObject(i).getString("long_name");
+							.getJSONObject(i).getJSONArray("types")
+							.getString(0).equals("administrative_area_level_2")) {
+						Log.d(getPackageName(),
+								"testtest   "
+										+ myCity.getJSONArray("results")
+												.getJSONObject(0)
+												.getJSONArray(
+														"address_components")
+												.getJSONObject(i)
+												.getString("long_name"));
+						return myCity.getJSONArray("results").getJSONObject(0)
+								.getJSONArray("address_components")
+								.getJSONObject(i).getString("long_name");
+					}
 				}
 			}
+			return "高雄市";
 		}
-		return null;
+		// return null;
 	}
 
 	private Boolean getGeo(String searchText) throws JSONException, IOException {
@@ -2252,11 +2267,21 @@ public class MPP_UI extends MapActivity implements LocationListener {
 							Toast.LENGTH_SHORT);
 					toast.show();
 				} else {
-					String res = HTTPHandler.doPost(android_id,
-							mLocation.getLatitude(), mLocation.getLongitude());
-					Log.d(getPackageName(), res);
+					if (positionCounter > 3) {
+						isDrawing = false;
+						positionCounter=0;
+						bt_checkin_start.setText("開始記錄");
+						Log.d(getPackageName(), "yaaaaaaaaaaa");
+					} else {
+						positionCounter++;
+						String res = HTTPHandler.doPost(android_id,
+								mLocation.getLatitude(),
+								mLocation.getLongitude(),
+								positionCounter);
+						Log.d(getPackageName(), res);
 
-					pricer_handler.postDelayed(this, 30000);
+						pricer_handler.postDelayed(this, 30000);
+					}
 				}
 			}
 		}

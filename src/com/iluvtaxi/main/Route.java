@@ -1,4 +1,4 @@
-package proj.main;
+package com.iluvtaxi.main;
 
 import greendroid.widget.QuickAction;
 import greendroid.widget.QuickActionBar;
@@ -24,8 +24,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
-
-import proj.main.R;
 
 import android.content.Context;
 import android.graphics.Canvas;

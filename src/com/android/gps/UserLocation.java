@@ -1,7 +1,7 @@
 package com.android.gps;
 
-import proj.tool.LoggerHelper;
-import proj.tool.PriceCounter;
+import com.iluvtaxi.tool.LoggerHelper;
+import com.iluvtaxi.tool.PriceCounter;
 
 import android.app.Service;
 import android.content.Context;

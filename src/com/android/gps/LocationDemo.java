@@ -2,9 +2,9 @@ package com.android.gps;
 
 import java.util.List;
 
-import proj.main.R; 
-import proj.main.R.id;
-import proj.main.R.layout; 
+import com.iluvtaxi.main.R; 
+import com.iluvtaxi.main.R.id;
+import com.iluvtaxi.main.R.layout; 
 
 import android.app.Activity;
 import android.location.Criteria;
