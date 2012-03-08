@@ -20,12 +20,12 @@
                 android:id="@+id/mapview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:apiKey="0fSZ-xyT3gzskqheL3GnY0JlxeAqzd8RvRrOdkw"
+                android:apiKey="0ypXxewh4D2KWByitBwgEdRAUyvnbLERdhweYZQ"
                 android:clickable="true" />
             <!-- market key: 0fSZ-xyT3gzskqheL3GnY0JlxeAqzd8RvRrOdkw -->
             <!-- linda key: 0fSZ-xyT3gztbsef7icIEtS_9OAhzX-C8Pchoig -->
             <!-- chiu key: 0WtK_7nOt5RYPSaYq-RoADuam-r_dBU6PnEvePw -->
-
+			<!-- suiting key: 0ypXxewh4D2KWByitBwgEdRAUyvnbLERdhweYZQ -->
             <ImageView
                 android:id="@+id/drag_start"
                 android:layout_width="wrap_content"
