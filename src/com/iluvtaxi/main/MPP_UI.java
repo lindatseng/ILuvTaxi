@@ -83,13 +83,13 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			home_bt_checkin, bt_info_back, bt_pricer, bt_checkin_back,
 			bt_checkin_start, bt_checkin_message, bt_checkin_route;
 	View view_map, view_call_back, view_info_back, bt_checkin_email,
-			view_checkin_back;
+			view_checkin_back,view_checkin_back2;
 	MapView mapView;
 	Button bt_go, bt_next, bt_last;
 	ImageButton bt_start, bt_end, map_bt_start, map_bt_end;
 	int type_start = 0, type_end = 0;
 	LinearLayout layout_startend, layout_result, layout_call, layout_info,
-			home_bt_pricer, layout_checkin;
+			 layout_checkin;
 	TextView tv_routeNum, tv_routeDist, tv_routeTime, tv_routePrice,
 			tv_copyrights, tv_entry, tv_time, tv_city, tv_pricer_time,
 			tv_pricer_dis, tv_pricer_price, tv_special;
@@ -170,24 +170,25 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 	private void findView() {
 		home_bt_route = (Button) findViewById(R.id.home_bt_route);
-		home_bt_pricer = (LinearLayout) findViewById(R.id.home_bt_pricer);
+//		home_bt_pricer = (Button) findViewById(R.id.home_bt_pricer);
 		home_bt_checkin = (Button) findViewById(R.id.home_bt_checkin);
-		bt_pricer = (Button) findViewById(R.id.bt_pricer);
-		tv_pricer_dis = (TextView) findViewById(R.id.tv_pricer_dis);
-		tv_pricer_time = (TextView) findViewById(R.id.tv_pricer_time);
-		tv_pricer_price = (TextView) findViewById(R.id.tv_pricer_price);
+//		bt_pricer = (Button) findViewById(R.id.bt_pricer);
+//		tv_pricer_dis = (TextView) findViewById(R.id.tv_pricer_dis);
+//		tv_pricer_time = (TextView) findViewById(R.id.tv_pricer_time);
+//		tv_pricer_price = (TextView) findViewById(R.id.tv_pricer_price);
 		home_bt_call = (Button) findViewById(R.id.home_button_call);
 		bt_call_back = (Button) findViewById(R.id.bt_call_back);
-		bt_checkin_back = (Button) findViewById(R.id.bt_checkin_back);
+		view_checkin_back = (View) findViewById(R.id.view_checkin_back);
+		view_checkin_back2 = (View) findViewById(R.id.view_checkin_back2);
 		bt_checkin_start = (Button) findViewById(R.id.bt_checkin_start);
 		bt_checkin_message = (Button) findViewById(R.id.bt_checkin_message);
 		bt_checkin_email = (Button) findViewById(R.id.bt_checkin_email);
 		bt_checkin_route = (Button) findViewById(R.id.bt_checkin_route);
 		home_bt_info = (Button) findViewById(R.id.home_bt_info);
-		bt_info_back = (Button) findViewById(R.id.bt_info_b);
+		bt_info_back = (Button) findViewById(R.id.bt_info_back);
 		view_call_back = (View) findViewById(R.id.view_call_back);
 		view_info_back = (View) findViewById(R.id.view_info_back);
-		view_checkin_back = (View) findViewById(R.id.view_checkin_back);
+//		view_checkin_back = (View) findViewById(R.id.view_checkin_back);
 		view_map = (View) findViewById(R.id.view_map);
 		view_map.setVisibility(View.GONE);
 		mapView = (MapView) view_map.findViewById(R.id.mapview);
@@ -244,7 +245,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					layout_checkin.setVisibility(View.VISIBLE);
 					home_bt_route.setClickable(false);
 					home_bt_call.setClickable(false);
-					home_bt_pricer.setClickable(false);
+//					home_bt_pricer.setClickable(false);
 					home_bt_info.setClickable(false);
 				}
 
@@ -408,89 +409,89 @@ public class MPP_UI extends MapActivity implements LocationListener {
 
 		});
 
-		home_bt_pricer.setOnClickListener(new Button.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-
-				// Intent intent = new Intent();
-				// intent.setClass(MPP_UI.this, Pricer.class);
-				// startActivity(intent);
-				RotateAnimation rotate = new RotateAnimation(0, 180,
-						home_bt_pricer.getWidth() / 2.0f, home_bt_pricer
-								.getHeight() / 2.0f);
-				rotate.setDuration(500);
-				home_bt_pricer.startAnimation(rotate);
-
-				if (onPricer) {
-					tv_pricer_dis.setText("");
-					tv_pricer_time.setText("行動計費器");
-					if (price_status == PriceCounter.COUNTING) {
-						tv_pricer_price.setText("計費中..");
-					} else {
-						tv_pricer_price.setText("");
-					}
-					onPricer = false;
-					bt_pricer.setText("");
-					bt_pricer.setClickable(false);
-					bt_pricer.setBackgroundColor(getResources().getColor(
-							R.color.home_green));
-				} else {
-
-					// float dis = counter.getTotalDistance();
-					// StringBuilder sb = new StringBuilder();
-					// sb.append("距離： ");
-					// if (dis / 1000 > 0) {
-					// sb.append("" + dis / 1000 + " 公里 ");
-					// }
-					// sb.append("" + dis % 1000 + " 公尺");
-					// tv_pricer_dis.setText(sb.toString());
-
-					if (price_status == PriceCounter.IDLE) {
-						tv_pricer_dis.setText("距離： " + "0" + " 公尺");
-						tv_pricer_time.setText("時間： " + "0" + " 秒");
-						tv_pricer_price.setText("價錢： " + "0" + " 元");
-					} else {
-						Long spentTime = counter.getTotalTime();
-						Long minius = (spentTime / 1000) / 60;
-						Long seconds = (spentTime / 1000) % 60;
-
-						int spentDist = (int) (counter.getTotalDistance() * 1000);
-						int meter = spentDist % 1000;
-						int kilo = spentDist / 1000;
-
-						if (kilo > 0) {
-							tv_pricer_dis.setText("距離： " + kilo + " 公里 "
-									+ meter + " 公尺");
-						} else {
-							tv_pricer_dis.setText("距離： " + meter + " 公尺");
-						}
-
-						if (minius > 0) {
-							tv_pricer_time.setText("時間： " + minius + " 分 "
-									+ seconds + " 秒");
-						} else {
-							tv_pricer_time.setText("時間： " + seconds + " 秒");
-						}
-
-						tv_pricer_price.setText("價錢： "
-								+ counter.getPrice(infoID,
-										(int) counter.getTotalDistance(),
-										(int) counter.getTotalTime() / 1000)
-								+ " 元");
-					}
-
-					onPricer = true;
-					Log.d(getPackageName(), "  state  " + price_status);
-					bt_pricer.setText(pricerState[price_status]);
-					bt_pricer.setBackgroundColor(getResources().getColor(
-							R.color.home_blue));
-					bt_pricer.setClickable(true);
-				}
-
-			}
-		});
+//		home_bt_pricer.setOnClickListener(new Button.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//
+//				// Intent intent = new Intent();
+//				// intent.setClass(MPP_UI.this, Pricer.class);
+//				// startActivity(intent);
+//				RotateAnimation rotate = new RotateAnimation(0, 180,
+//						home_bt_pricer.getWidth() / 2.0f, home_bt_pricer
+//								.getHeight() / 2.0f);
+//				rotate.setDuration(500);
+//				home_bt_pricer.startAnimation(rotate);
+//
+//				if (onPricer) {
+//					tv_pricer_dis.setText("");
+//					tv_pricer_time.setText("行動計費器");
+//					if (price_status == PriceCounter.COUNTING) {
+//						tv_pricer_price.setText("計費中..");
+//					} else {
+//						tv_pricer_price.setText("");
+//					}
+//					onPricer = false;
+//					bt_pricer.setText("");
+//					bt_pricer.setClickable(false);
+//					bt_pricer.setBackgroundColor(getResources().getColor(
+//							R.color.home_green));
+//				} else {
+//
+//					// float dis = counter.getTotalDistance();
+//					// StringBuilder sb = new StringBuilder();
+//					// sb.append("距離： ");
+//					// if (dis / 1000 > 0) {
+//					// sb.append("" + dis / 1000 + " 公里 ");
+//					// }
+//					// sb.append("" + dis % 1000 + " 公尺");
+//					// tv_pricer_dis.setText(sb.toString());
+//
+//					if (price_status == PriceCounter.IDLE) {
+//						tv_pricer_dis.setText("距離： " + "0" + " 公尺");
+//						tv_pricer_time.setText("時間： " + "0" + " 秒");
+//						tv_pricer_price.setText("價錢： " + "0" + " 元");
+//					} else {
+//						Long spentTime = counter.getTotalTime();
+//						Long minius = (spentTime / 1000) / 60;
+//						Long seconds = (spentTime / 1000) % 60;
+//
+//						int spentDist = (int) (counter.getTotalDistance() * 1000);
+//						int meter = spentDist % 1000;
+//						int kilo = spentDist / 1000;
+//
+//						if (kilo > 0) {
+//							tv_pricer_dis.setText("距離： " + kilo + " 公里 "
+//									+ meter + " 公尺");
+//						} else {
+//							tv_pricer_dis.setText("距離： " + meter + " 公尺");
+//						}
+//
+//						if (minius > 0) {
+//							tv_pricer_time.setText("時間： " + minius + " 分 "
+//									+ seconds + " 秒");
+//						} else {
+//							tv_pricer_time.setText("時間： " + seconds + " 秒");
+//						}
+//
+//						tv_pricer_price.setText("價錢： "
+//								+ counter.getPrice(infoID,
+//										(int) counter.getTotalDistance(),
+//										(int) counter.getTotalTime() / 1000)
+//								+ " 元");
+//					}
+//
+//					onPricer = true;
+//					Log.d(getPackageName(), "  state  " + price_status);
+//					bt_pricer.setText(pricerState[price_status]);
+//					bt_pricer.setBackgroundColor(getResources().getColor(
+//							R.color.home_blue));
+//					bt_pricer.setClickable(true);
+//				}
+//
+//			}
+//		});
 
 		home_bt_call.setOnClickListener(new Button.OnClickListener() {
 
@@ -547,8 +548,8 @@ public class MPP_UI extends MapActivity implements LocationListener {
 					layout_call.setVisibility(View.GONE);
 				layout_info.setVisibility(View.VISIBLE);
 				home_bt_route.setClickable(false);
-				// home_bt_call.setClickable(false);
-				home_bt_pricer.setClickable(false);
+				 home_bt_call.setClickable(false);
+//				home_bt_pricer.setClickable(false);
 				home_bt_checkin.setClickable(false);
 
 				if (isNight) {
@@ -581,7 +582,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				layout_info.setVisibility(View.GONE);
 				home_bt_route.setClickable(true);
 				home_bt_call.setClickable(true);
-				home_bt_pricer.setClickable(true);
+//				home_bt_pricer.setClickable(true);
 				home_bt_checkin.setClickable(true);
 			}
 
@@ -596,7 +597,7 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_info.setClickable(true);
 				home_bt_route.setClickable(true);
 				home_bt_call.setClickable(true);
-				home_bt_pricer.setClickable(true);
+//				home_bt_pricer.setClickable(true);
 				home_bt_checkin.setClickable(true);
 			}
 		});
@@ -610,7 +611,20 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				home_bt_info.setClickable(true);
 				home_bt_route.setClickable(true);
 				home_bt_call.setClickable(true);
-				home_bt_pricer.setClickable(true);
+//				home_bt_pricer.setClickable(true);
+				home_bt_checkin.setClickable(true);
+			}
+		});
+		view_checkin_back2.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				layout_checkin.setVisibility(View.GONE);
+				home_bt_info.setClickable(true);
+				home_bt_route.setClickable(true);
+				home_bt_call.setClickable(true);
+//				home_bt_pricer.setClickable(true);
 				home_bt_checkin.setClickable(true);
 			}
 		});
@@ -623,24 +637,38 @@ public class MPP_UI extends MapActivity implements LocationListener {
 				layout_info.setVisibility(View.GONE);
 				home_bt_route.setClickable(true);
 				home_bt_call.setClickable(true);
-				home_bt_pricer.setClickable(true);
+//				home_bt_pricer.setClickable(true);
 				home_bt_checkin.setClickable(true);
 			}
 		});
 
-		bt_checkin_back.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				layout_checkin.setVisibility(View.GONE);
-				home_bt_info.setClickable(true);
-				home_bt_route.setClickable(true);
-				home_bt_call.setClickable(true);
-				home_bt_pricer.setClickable(true);
-				home_bt_checkin.setClickable(true);
-			}
-		});
+//		bt_checkin_back.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				layout_checkin.setVisibility(View.GONE);
+//				home_bt_info.setClickable(true);
+//				home_bt_route.setClickable(true);
+//				home_bt_call.setClickable(true);
+////				home_bt_pricer.setClickable(true);
+//				home_bt_checkin.setClickable(true);
+//			}
+//		});
+//		
+//		bt_checkin_back2.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				layout_checkin.setVisibility(View.GONE);
+//				home_bt_info.setClickable(true);
+//				home_bt_route.setClickable(true);
+//				home_bt_call.setClickable(true);
+////				home_bt_pricer.setClickable(true);
+//				home_bt_checkin.setClickable(true);
+//			}
+//		});
 
 		prepareQuickActionGrid();
 
@@ -1038,132 +1066,132 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			}
 		});
 
-		bt_pricer.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				switch (price_status) {
-				case PriceCounter.IDLE:
-					final AlertDialog.Builder builder = new AlertDialog.Builder(
-							MPP_UI.this);
-
-					builder.setCancelable(false);
-					builder.setIcon(null);
-					builder.setMessage("開始模擬行車計費器");
-					builder.setPositiveButton("確定",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method
-									// stub
-									price_status = PriceCounter.COUNTING;
-									bt_pricer
-											.setText(pricerState[price_status]);
-									tv_pricer_time.setText("時間： 0 秒");
-									counter.start();
-									// counter.reset();
-									pricer_start_time = System
-											.currentTimeMillis();
-									pricer_handler.removeCallbacks(updateTimer);
-									pricer_handler.postDelayed(updateTimer,
-											1000);
-									tv_pricer_price.setText("價錢： "
-											+ counter
-													.getPrice(
-															infoID,
-															(int) counter
-																	.getTotalDistance(),
-															(int) counter
-																	.getTotalTime())
-											+ " 元");
-								}
-							});
-					builder.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method
-									// stub
-								}
-							});
-					builder.show();
-					break;
-				case PriceCounter.COUNTING:
-					final AlertDialog.Builder builder_c = new AlertDialog.Builder(
-							MPP_UI.this);
-					builder_c.setCancelable(false);
-					builder_c.setIcon(null);
-					builder_c.setMessage("即將停止模擬行車計費器");
-					builder_c.setPositiveButton("確認",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method
-									// stub
-									price_status = PriceCounter.STOP;
-									pricer_handler.removeCallbacks(updateTimer);
-									bt_pricer
-											.setText(pricerState[price_status]);
-									counter.stop();
-								}
-							});
-					builder_c.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method
-									// stub
-								}
-							});
-					builder_c.show();
-					break;
-				case PriceCounter.STOP:
-					final AlertDialog.Builder builder_s = new AlertDialog.Builder(
-							MPP_UI.this);
-					builder_s.setCancelable(false);
-					builder_s.setIcon(null);
-					builder_s.setMessage("即將重設計費器資料");
-					builder_s.setPositiveButton("確認",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method
-									// stub
-									price_status = PriceCounter.IDLE;
-									bt_pricer
-											.setText(pricerState[price_status]);
-									counter.reset();
-									tv_pricer_dis.setText("距離： " + "0" + " 公尺");
-									tv_pricer_time.setText("時間： " + "0" + " 秒");
-									tv_pricer_price
-											.setText("價錢： " + "0" + " 元");
-								}
-							});
-					builder_s.setNegativeButton("取消",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-									// TODO Auto-generated method
-									// stub
-								}
-							});
-					builder_s.show();
-					break;
-				}
-			}
-
-		});
+//		bt_pricer.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				switch (price_status) {
+//				case PriceCounter.IDLE:
+//					final AlertDialog.Builder builder = new AlertDialog.Builder(
+//							MPP_UI.this);
+//
+//					builder.setCancelable(false);
+//					builder.setIcon(null);
+//					builder.setMessage("開始模擬行車計費器");
+//					builder.setPositiveButton("確定",
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									// TODO Auto-generated method
+//									// stub
+//									price_status = PriceCounter.COUNTING;
+//									bt_pricer
+//											.setText(pricerState[price_status]);
+//									tv_pricer_time.setText("時間： 0 秒");
+//									counter.start();
+//									// counter.reset();
+//									pricer_start_time = System
+//											.currentTimeMillis();
+//									pricer_handler.removeCallbacks(updateTimer);
+//									pricer_handler.postDelayed(updateTimer,
+//											1000);
+//									tv_pricer_price.setText("價錢： "
+//											+ counter
+//													.getPrice(
+//															infoID,
+//															(int) counter
+//																	.getTotalDistance(),
+//															(int) counter
+//																	.getTotalTime())
+//											+ " 元");
+//								}
+//							});
+//					builder.setNegativeButton("取消",
+//							new DialogInterface.OnClickListener() {
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									// TODO Auto-generated method
+//									// stub
+//								}
+//							});
+//					builder.show();
+//					break;
+//				case PriceCounter.COUNTING:
+//					final AlertDialog.Builder builder_c = new AlertDialog.Builder(
+//							MPP_UI.this);
+//					builder_c.setCancelable(false);
+//					builder_c.setIcon(null);
+//					builder_c.setMessage("即將停止模擬行車計費器");
+//					builder_c.setPositiveButton("確認",
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									// TODO Auto-generated method
+//									// stub
+//									price_status = PriceCounter.STOP;
+//									pricer_handler.removeCallbacks(updateTimer);
+//									bt_pricer
+//											.setText(pricerState[price_status]);
+//									counter.stop();
+//								}
+//							});
+//					builder_c.setNegativeButton("取消",
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									// TODO Auto-generated method
+//									// stub
+//								}
+//							});
+//					builder_c.show();
+//					break;
+//				case PriceCounter.STOP:
+//					final AlertDialog.Builder builder_s = new AlertDialog.Builder(
+//							MPP_UI.this);
+//					builder_s.setCancelable(false);
+//					builder_s.setIcon(null);
+//					builder_s.setMessage("即將重設計費器資料");
+//					builder_s.setPositiveButton("確認",
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									// TODO Auto-generated method
+//									// stub
+//									price_status = PriceCounter.IDLE;
+//									bt_pricer
+//											.setText(pricerState[price_status]);
+//									counter.reset();
+//									tv_pricer_dis.setText("距離： " + "0" + " 公尺");
+//									tv_pricer_time.setText("時間： " + "0" + " 秒");
+//									tv_pricer_price
+//											.setText("價錢： " + "0" + " 元");
+//								}
+//							});
+//					builder_s.setNegativeButton("取消",
+//							new DialogInterface.OnClickListener() {
+//
+//								@Override
+//								public void onClick(DialogInterface dialog,
+//										int which) {
+//									// TODO Auto-generated method
+//									// stub
+//								}
+//							});
+//					builder_s.show();
+//					break;
+//				}
+//			}
+//
+//		});
 
 	}
 
@@ -1667,14 +1695,14 @@ public class MPP_UI extends MapActivity implements LocationListener {
 			home_bt_info.setClickable(true);
 			home_bt_route.setClickable(true);
 			home_bt_call.setClickable(true);
-			home_bt_pricer.setClickable(true);
+//			home_bt_pricer.setClickable(true);
 			home_bt_checkin.setClickable(true);
 		} else if (layout_checkin.getVisibility() == View.VISIBLE) {
 			layout_info.setVisibility(View.GONE);
 			home_bt_info.setClickable(true);
 			home_bt_route.setClickable(true);
 			home_bt_call.setClickable(true);
-			home_bt_pricer.setClickable(true);
+//			home_bt_pricer.setClickable(true);
 			home_bt_checkin.setClickable(true);
 		} else
 			super.onBackPressed();
